@@ -1,0 +1,47 @@
+.cell {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+    background-color: var(--tg-theme-bg-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cell:hover {
+    background-color: var(--tg-theme-secondary-bg-color);
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
+}
+
+.content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color);
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--tg-theme-hint-color);
+}
+
+.extraContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.text {
+    font-size: 14px;
+    color: var(--tg-theme-text-color);
+}

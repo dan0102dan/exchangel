@@ -1,0 +1,13 @@
+.section {
+    margin-top: 16px;
+    border-radius: 8px;
+    background-color: var(--tg-theme-bg-color);
+}
+
+.title {
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color);
+    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+}
