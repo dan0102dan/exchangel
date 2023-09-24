@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build and deploy
+      run: |
+        npm run build
+        git checkout --orphan gh-pages
+        git --work-tree build add --all
+        git --work-tree build commit -m "GitHub Pages deployment"
+        git push origin HEAD:gh-pages --force
+
+    - name: Cleanup
+      run: |
+        git checkout -
+        git branch -D gh-pages
