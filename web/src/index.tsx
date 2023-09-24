@@ -10,7 +10,7 @@ import { ErrorPage, Root } from "./routes/index"
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/exchangel",
     element: <Root />,
     errorElement: <ErrorPage />
   },
