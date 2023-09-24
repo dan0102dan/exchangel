@@ -28,6 +28,8 @@ jobs:
     - name: Build and deploy
       run: |
         npm run build
+        git config --global user.email "me@dan0102dan.ru"
+        git config --global user.name "dan0102dan"
         git checkout --orphan gh-pages
         git --work-tree build add --all
         git --work-tree build commit -m "GitHub Pages deployment"
