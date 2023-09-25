@@ -1,0 +1,37 @@
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    padding: 16px;
+    background-color: var(--tg-theme-bg-color);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.icon {
+    width: 56px;
+    height: 56px;
+    color: var(--tg-theme-text-color);
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color);
+    margin-bottom: 8px;
+}
+
+.description {
+    font-size: 16px;
+    color: var(--tg-theme-hint-color);
+    margin-bottom: 8px;
+}
+
+.errorInfo {
+    font-size: 16px;
+    color: var(--tg-theme-hint-color);
+    font-style: oblique;
+    margin-bottom: 16px;
+}

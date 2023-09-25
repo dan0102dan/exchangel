@@ -10,11 +10,11 @@ import { ErrorPage, Root } from "./routes/index"
 
 const router = createBrowserRouter([
   {
-    path: "/exchangel",
+    path: '/',
     element: <Root />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-])
+], { basename: '/exchangel' })
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
