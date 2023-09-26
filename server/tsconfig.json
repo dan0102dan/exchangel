@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"downlevelIteration": true,
+		"removeComments": true,
+		"outDir": "./dist",
+		"skipLibCheck": true
+	},
+	"exclude": [
+		"build"
+	]
+}

@@ -34,7 +34,3 @@ jobs:
         git --work-tree build add --all
         git --work-tree build commit -m "GitHub Pages deployment"
         git push origin HEAD:gh-pages --force
-
-    - name: Cleanup
-      run: |
-        git checkout main

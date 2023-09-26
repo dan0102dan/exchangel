@@ -1,12 +1,19 @@
 import React from 'react'
 import { Section, Search, Cell } from '../../Components/index'
 import img from '../../test/bitcoin.png'
+import { server } from '../../API'
 
 const Root = () => {
     const param = 'cur'
 
-    const handleInputChange = (e) => {
+    const handleInputChange = async (e) => {
         console.log(e.target.value)
+        try {
+            console.log(await server.get('/search'))
+        }
+        catch (e) {
+            console.error(e)
+        }
     }
 
     const cur = [1, 2, 3, 1, 2, 32, 1, 3, 12, 3, 1, 2, 31, 2, 3, 1, 2, 3, 1, 2, 3, 12,]
