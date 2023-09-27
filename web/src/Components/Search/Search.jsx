@@ -1,26 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSearchParams } from "react-router-dom"
 import styles from './Search.module.css'
 import { ReactComponent as SearchIcon } from './SearchIcon.svg'
-import { ReactComponent as CancelIcon } from './CancelIcon.svg'
 
-const Search = ({ onChange, param }) => {
+const Search = ({ setInput, setDebounceInput, param }) => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const info = searchParams.get(param) || ''
+    const [prevParam, setPrevParam] = useState('')
+    const [typingTimeout, setTypingTimeout] = useState()
+
+    useEffect(() => {
+        const paramValue = searchParams.get(param) || ''
+
+        if (prevParam !== paramValue) {
+            setInput && setInput(paramValue)
+
+            if (!typingTimeout)
+                setDebounceInput && setDebounceInput(paramValue)
+        }
+    })
 
     const handleInputChange = (e) => {
-        if (e.target.value) {
-            searchParams.set(param, e.target.value)
-            setSearchParams(searchParams)
-        }
-        else
-            handleClearSearch()
+        setPrevParam(searchParams.get(param))
 
-        onChange && onChange(e)
-    }
-    const handleClearSearch = () => {
-        searchParams.delete(param)
+        const { value } = e.target
+
+        if (value)
+            searchParams.set(param, value)
+        else
+            searchParams.delete(param)
         setSearchParams(searchParams)
+
+        // debounce
+        if (typingTimeout) {
+            clearTimeout(typingTimeout)
+        }
+        setTypingTimeout(
+            setTimeout(() => {
+                setDebounceInput(value)
+            }, 400)
+        )
     }
 
     return (
@@ -29,18 +47,13 @@ const Search = ({ onChange, param }) => {
                 <SearchIcon />
             </div>
             <input
-                type="text"
-                name="q"
-                placeholder="Search"
-                value={info}
+                type='search'
+                name='q'
+                placeholder='Search'
+                value={searchParams.get(param) || ''}
                 onChange={handleInputChange}
                 className={styles.searchInput}
             />
-            {info && (
-                <div className={styles.clearIcon} onClick={handleClearSearch}>
-                    <CancelIcon />
-                </div>
-            )}
         </div>
     )
 }

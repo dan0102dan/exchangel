@@ -1,19 +1,20 @@
 import mongoose from 'mongoose'
 
 const { Schema } = mongoose
-const currencySchema = {
-	id: {
+const coinSchema = {
+	ccy: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	name: {
 		type: String,
 		required: true
 	},
-	baseCcy: {
-		type: String,
-		required: true
-	},
-	quoteCcy: {
+	logoLink: {
 		type: String,
 		required: true
 	}
 }
 
-export default mongoose.model('Currency', new Schema(currencySchema))
+export default mongoose.model('Coin', new Schema(coinSchema))

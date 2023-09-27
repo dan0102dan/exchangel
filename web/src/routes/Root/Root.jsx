@@ -1,32 +1,106 @@
-import React from 'react'
-import { Section, Search, Cell } from '../../Components/index'
-import img from '../../test/bitcoin.png'
+import React, { useState, useEffect } from 'react'
+import { Section, Search, Cell, Placeholder } from '../../Components/index'
 import { server } from '../../API'
 
 const Root = () => {
-    const param = 'cur'
+    const [loading, setLoading] = useState(false)
+    const [homeData, setHomeData] = useState({})
+    const [fetching, setFetching] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [searchResult, setSearchResult] = useState([])
 
-    const handleInputChange = async (e) => {
-        console.log(e.target.value)
+    const getData = async () => {
+        setLoading(true)
         try {
-            console.log(await server.get('/search'))
+            const { data } = await server.get('/home')
+            setHomeData(data)
         }
         catch (e) {
             console.error(e)
         }
+        setLoading(false)
+    }
+    useEffect(() => {
+        if (!Object.keys(homeData).length)
+            getData()
+    }, [homeData])
+
+    const searchData = async (query) => {
+        setFetching(true)
+        try {
+            const { data } = await server.get('/search', { params: { query } })
+            setSearchResult(data)
+        }
+        catch (e) {
+            console.error(e)
+        }
+        setFetching(false)
     }
 
-    const cur = [1, 2, 3, 1, 2, 32, 1, 3, 12, 3, 1, 2, 31, 2, 3, 1, 2, 3, 1, 2, 3, 12,]
+    useEffect(() => {
+        if (searchQuery)
+            searchData(searchQuery)
+    }, [searchQuery])
 
     return (
         <>
-            <Search onChange={handleInputChange} param={param} />
-            <Section title='Favorite'>
-                {cur.map((e, i) => (< Cell icon={img} title='BTCUSDT' subtitle='123' info1='+1232%' info2={'12321321rub'} />))}
-            </ Section>
-            <Section title='Top'>
-                {cur.map(e => (< Cell icon={img} title='uuuppi' subtitle='123' info2={-232132} />))}
-            </ Section>
+            <Search setDebounceInput={setSearchQuery} param={'cur'} />
+            {searchQuery
+                ? !searchResult.length
+                    ? fetching
+                        ?
+                        <Placeholder
+                            title={'Searhing...'}
+                            description={'Looking for information on the server.'}
+                            icon={'👀'}
+                        />
+                        :
+                        <Placeholder
+                            title={'Empty'}
+                            description={'Unfortunately, nothing was found.'}
+                            icon={'😔'}
+                        />
+                    :
+                    searchResult.map((e, i) => (
+                        <Cell
+                            key={i}
+                            icon={e.baseCcy.logoLink}
+                            title={e.instId}
+                            subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
+                            info1={e.last}
+                            info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
+                        />
+                    ))
+                : loading
+                    ?
+                    <Placeholder
+                        title={'Loading...'}
+                        description={'Getting basic information.'}
+                        icon={'🔍'}
+                    />
+                    : !Object.keys(homeData).length
+                        ?
+                        <Placeholder
+                            title={'Empty'}
+                            description={'Unfortunately, nothing was found.'}
+                            icon={'😔'}
+                        />
+                        :
+                        Object.keys(homeData).map((key, i) => (
+                            <Section title={homeData[key].name} key={i}>
+                                {homeData[key].data.map((e, i) => (
+                                    <Cell
+                                        key={i}
+                                        icon={e.baseCcy.logoLink}
+                                        title={e.instId}
+                                        subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
+                                        info1={e.last}
+                                        info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
+                                    />
+                                ))}
+                            </ Section >
+                        ))
+            }
         </>
     )
 }

@@ -1,8 +1,8 @@
-import { User } from '../../classes/index'
+import { User } from '../../classes'
 import { Telegraf } from 'telegraf'
 import { mainBot } from '../../config'
 
-import { helloMes } from './commands/responses/index'
+import { helloMes } from './commands/responses'
 
 const bot = new Telegraf(mainBot.id + ':' + mainBot.token)
 

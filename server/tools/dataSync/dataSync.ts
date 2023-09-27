@@ -1,0 +1,60 @@
+import { db } from '../../tools/index'
+import { okxAxios } from "../API/index"
+
+const updateCurrency = async () => {
+    const { data } = (await okxAxios.get('/api/v5/asset/currencies')).data
+    for (const cur of data) {
+        await db.Coin.findOneAndUpdate(
+            { ccy: cur.ccy },
+            { ...cur },
+            { upsert: true, new: true }
+        ).lean()
+    }
+}
+
+const searchPair = async () => {
+    const { data } = (await okxAxios.get('/api/v5/public/instruments', { params: { instType: 'SPOT' } })).data
+    for (const item of data) {
+        const { _id: baseCcy } = await db.Coin.findOne({ ccy: item.baseCcy }, { _id: 1 })
+        const { _id: quoteCcy } = await db.Coin.findOne({ ccy: item.quoteCcy }, { _id: 1 })
+
+        await db.Tickers.findOneAndUpdate(
+            { instId: item.instId },
+            {
+                ...item,
+                baseCcy,
+                quoteCcy
+            },
+            { upsert: true, new: true }
+        ).lean()
+    }
+}
+
+const updateData = async () => {
+    const { data } = (await okxAxios.get('/api/v5/market/tickers', { params: { instType: 'SPOT' } })).data
+    for (const item of data) {
+        // console.log(item)
+        await db.Tickers.findOneAndUpdate(
+            { instId: item.instId },
+            { ...item }
+        ).lean()
+        // console.log(await db.Tickers.findOne({ instId: item.instId }))
+    }
+}
+
+const updater = async (period) => {
+    try {
+        await updateCurrency()
+
+        await searchPair()
+
+        await updateData()
+    }
+    catch (e) {
+        console.error(e.message)
+    }
+
+    setTimeout(updater, period)
+}
+
+export default updater

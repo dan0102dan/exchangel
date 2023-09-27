@@ -18,16 +18,11 @@
     background: transparent;
 }
 
-.searchIcon, .clearIcon {
+.searchIcon {
     width: 20px;
     height: 20px;
     color: var(--tg-theme-text-color);
     animation: appearance 0.3s ease;
-}
-
-.clearIcon:hover {
-    cursor: pointer;
-    color: var(--tg-theme-hint-color);
 }
 
 @keyframes appearance {

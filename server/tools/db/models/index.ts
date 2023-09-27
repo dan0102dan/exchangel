@@ -1,2 +1,3 @@
-export { default as Currency } from './Currency'
+export { default as Coin } from './Coin'
+export { default as Tickers } from './Tickers'
 export { default as Users } from './Users'

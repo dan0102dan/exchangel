@@ -1,14 +1,6 @@
 import { app } from './tools/index'
-import { OKX } from './tools/API'
+import { dataSync } from './tools/index'
 
-// (async () => {
-// 	try {
-// 		console.log((await OKX.get('/api/v5/public/instruments', { params: { instType: 'SPOT' } })).data)
-// 	}
-// 	catch (e) {
-// 		console.error(e.message)
-// 	}
-
-// })()
+dataSync(60 * 60 * 1000)
 
 app.listen(2096)

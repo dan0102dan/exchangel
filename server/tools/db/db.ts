@@ -1,4 +1,4 @@
-import { Currency, Users } from './models/index'
+import { Coin, Tickers, Users } from './models'
 import mongoose from 'mongoose'
 
 mongoose.set('strictQuery', false)
@@ -7,4 +7,4 @@ mongoose.connect('mongodb://localhost/exchangel', {
 })
 mongoose.connection.on('error', console.error)
 
-export default { Currency, Users }
+export default { Coin, Tickers, Users }

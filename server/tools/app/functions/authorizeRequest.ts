@@ -1,24 +1,22 @@
 import { createHmac } from 'crypto'
 
-export default (initData, botId, botToken) => {
-    const searchParams = new URLSearchParams(initData)
-
+export default (initData = '', botId: number, botToken: string): boolean => {
+    const params = {}
     let hash = ''
-    const pairs = []
 
-    searchParams.forEach((value, key) => {
+    initData.split('&').forEach(param => {
+        const [key, value] = param.split('=')
         if (key === 'hash') {
             hash = value
             return
         }
-
-        pairs.push(`${key}=${value}`)
+        params[key] = decodeURIComponent(value)
     })
 
-    pairs.sort()
+    const sortedKeys = Object.keys(params).sort()
 
     const computedHash = createHmac('sha256', createHmac('sha256', 'WebAppData').update(botId + ':' + botToken).digest())
-        .update(pairs.join('\n'))
+        .update(sortedKeys.map(key => `${key}=${params[key]}`).join('\n'))
         .digest()
         .toString('hex')
 
