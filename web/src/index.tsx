@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-} from "react-router-dom"
+} from 'react-router-dom'
 import './index.css'
 
-import { ErrorPage, Root } from "./routes/index"
+import { ErrorPage, Root, Swap } from "./routes/index"
 
 const router = createBrowserRouter([
   {
@@ -14,6 +14,10 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: 'ccy/:instId',
+    element: <Swap />
+  }
 ], { basename: '/exchangel' })
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

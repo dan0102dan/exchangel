@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Section, Search, Cell, Placeholder } from '../../Components/index'
 import { server } from '../../API'
 
 const Root = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [homeData, setHomeData] = useState({})
     const [fetching, setFetching] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
     const [searchResult, setSearchResult] = useState([])
+    const navigate = useNavigate()
 
     const getData = async () => {
         setLoading(true)
@@ -42,6 +44,18 @@ const Root = () => {
             searchData(searchQuery)
     }, [searchQuery])
 
+    const mapCell = (arr) => arr.map((e, i) => (
+        <Cell
+            key={i}
+            icon={e.baseCcy.logoLink}
+            title={e.instId}
+            subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
+            info1={e.last}
+            info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
+            onClick={() => navigate(`ccy/${e.instId}`)}
+        />
+    ))
+
     return (
         <>
             <Search setDebounceInput={setSearchQuery} param={'cur'} />
@@ -61,16 +75,7 @@ const Root = () => {
                             icon={'😔'}
                         />
                     :
-                    searchResult.map((e, i) => (
-                        <Cell
-                            key={i}
-                            icon={e.baseCcy.logoLink}
-                            title={e.instId}
-                            subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
-                            info1={e.last}
-                            info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
-                        />
-                    ))
+                    mapCell(searchResult)
                 : loading
                     ?
                     <Placeholder
@@ -88,16 +93,7 @@ const Root = () => {
                         :
                         Object.keys(homeData).map((key, i) => (
                             <Section title={homeData[key].name} key={i}>
-                                {homeData[key].data.map((e, i) => (
-                                    <Cell
-                                        key={i}
-                                        icon={e.baseCcy.logoLink}
-                                        title={e.instId}
-                                        subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
-                                        info1={e.last}
-                                        info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
-                                    />
-                                ))}
+                                {mapCell(homeData[key].data)}
                             </ Section >
                         ))
             }

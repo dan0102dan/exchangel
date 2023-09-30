@@ -1,8 +1,9 @@
 {
 	"scripts": {
-		"start": "npx tsc; node ./dist/exchangelBot.js; node ./dist/exchangelAPI.js"
+		"start": "npx tsc && node ./dist/exchangelAPI.js & node ./dist/exchangelBot.js"
 	},
 	"dependencies": {
+		"@koa/cors": "^4.0.0",
 		"axios": "^0.24.0",
 		"koa": "^2.13.4",
 		"koa-body": "^4.2.0",

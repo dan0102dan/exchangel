@@ -1,12 +1,12 @@
-import { useRouteError, useNavigate } from "react-router-dom"
+import React from 'react'
+import { useRouteError, useNavigate } from 'react-router-dom'
 import { Button, Placeholder } from '../../Components/index'
-// import { ReactComponent as GhostIcon } from './GhostIcon.svg'
 
 const ErrorPage = () => {
+    const navigate = useNavigate()
+
     const error = useRouteError()
     console.error(error)
-
-    const navigate = useNavigate()
 
     return (
         <Placeholder
@@ -15,9 +15,7 @@ const ErrorPage = () => {
             errorInfo={error.statusText || error.message}
             icon={'👻'}
             action={
-                <Button
-                    onClick={() => navigate('/')}
-                >
+                <Button onClick={() => navigate('/')}>
                     Restart
                 </Button>
             }

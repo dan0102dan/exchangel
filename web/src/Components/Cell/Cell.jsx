@@ -1,9 +1,12 @@
 import React from 'react'
 import styles from './Cell.module.css'
 
-const Cell = ({ title, subtitle, icon, info1, info2 }) => {
+const Cell = ({ onClick, title, subtitle, icon, info1, info2 }) => {
     return (
-        <div className={styles.cell}>
+        <div
+            className={onClick ? styles.cellAble : styles.cell}
+            onClick={onClick}
+        >
             {icon && <img className={styles.icon} src={icon} alt="Icon" />}
             <div className={styles.content}>
                 <div className={styles.title}>{title}</div>

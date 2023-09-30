@@ -1,14 +1,17 @@
-.cell {
+.cell, .cellAble {
     display: flex;
     align-items: center;
     padding: 12px;
     border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
     background-color: var(--tg-theme-bg-color);
-    cursor: pointer;
     transition: background-color 0.2s;
 }
 
-.cell:hover {
+.cellAble {
+    cursor: pointer;
+}
+
+.cellAble:hover {
     background-color: var(--tg-theme-secondary-bg-color);
 }
 
