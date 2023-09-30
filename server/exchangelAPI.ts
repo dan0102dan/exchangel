@@ -3,4 +3,4 @@ import { dataSync } from './tools/index'
 
 dataSync(60 * 60 * 1000)
 
-app.listen(2096)
+app.listen(49300)
