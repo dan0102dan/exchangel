@@ -44,17 +44,23 @@ const Root = () => {
             searchData(searchQuery)
     }, [searchQuery])
 
-    const mapCell = (arr) => arr.map((e, i) => (
-        <Cell
+    const mapCell = (arr) => arr.map((e, i) => {
+        const isPositive = (e.last - e.open24h) > 0
+        const plusFor24 = (isPositive ? '+' : '-') + Math.abs((e.last - e.open24h).toFixed(2))
+        const percFor24 = (isPositive ? '+' : '-') + Math.abs(((e.last - e.open24h) / 100).toFixed(2)) + '%'
+
+        return <Cell
             key={i}
             icon={e.baseCcy.logoLink}
             title={e.instId}
             subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
             info1={e.last}
-            info2={(e.last - e.open24h).toFixed(2) + ' ' + (e.last * 100 / e.open24h - 100).toFixed(2) + '%'}
+            info2={plusFor24}
+            info3={percFor24}
+            isPositive={isPositive}
             onClick={() => navigate(`ccy/${e.instId}`)}
         />
-    ))
+    })
 
     return (
         <>

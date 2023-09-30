@@ -11,7 +11,7 @@
     cursor: pointer;
 }
 
-.cellAble:hover {
+.cellAble:active {
     background-color: var(--tg-theme-secondary-bg-color);
 }
 
@@ -44,7 +44,15 @@
     align-items: flex-end;
 }
 
-.text {
+.text, .textPositive, .textNegative {
     font-size: 14px;
     color: var(--tg-theme-text-color);
+}
+
+.textPositive {
+    color: green
+}
+
+.textNegative {
+    color: red
 }

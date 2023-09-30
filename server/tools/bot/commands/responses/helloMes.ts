@@ -6,7 +6,7 @@ export default async (ctx) => {
 		{
 			parse_mode: 'HTML',
 			...Markup.inlineKeyboard([
-				[Markup.button.webApp('MiniApp', 'https://192.168.1.107:3000/exchangel')],
+				[Markup.button.webApp('MiniApp', 'https://dan0102dan.github.io/exchangel')],
 			])
 		}
 	)
