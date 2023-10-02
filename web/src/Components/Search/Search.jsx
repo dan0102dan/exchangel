@@ -47,7 +47,7 @@ const Search = ({ setInput, setDebounceInput, param }) => {
                 <SearchIcon />
             </div>
             <input
-                type='search'
+                type='text'
                 name='q'
                 placeholder='Search'
                 value={searchParams.get(param) || ''}

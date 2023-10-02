@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Section, Search, Cell, Placeholder } from '../../Components/index'
+import { Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
 
 const Root = () => {
@@ -95,6 +95,7 @@ const Root = () => {
                             title={'Empty'}
                             description={'Unfortunately, nothing was found.'}
                             icon={'😔'}
+                            action={<Button onClick={() => getData()}>Reload</Button >}
                         />
                         :
                         Object.keys(homeData).map((key, i) => (

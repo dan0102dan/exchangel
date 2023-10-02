@@ -51,6 +51,22 @@ router.get('/home', async (ctx) => {
     }
 })
 
+router.get('/getCcy', async (ctx) => {
+    try {
+        const { instId } = ctx.query
+        const ccy = await db.Tickers.findOne({ instId })
+            .populate('baseCcy')
+            .populate('quoteCcy')
+            .lean()
+        ctx.status = 200
+        ctx.body = ccy
+    } catch (e) {
+        console.log(e)
+        ctx.status = 500
+        ctx.body = { error: e.message }
+    }
+})
+
 router.get('/search', async (ctx) => {
     try {
         const { query } = ctx.query

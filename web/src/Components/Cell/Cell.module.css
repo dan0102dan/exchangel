@@ -50,9 +50,9 @@
 }
 
 .textPositive {
-    color: green
+    color: rgba(26, 197, 112, 0.775);
 }
 
 .textNegative {
-    color: red
+    color: rgba(241, 66, 66, 0.775);
 }

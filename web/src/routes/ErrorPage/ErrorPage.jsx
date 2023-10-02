@@ -14,11 +14,7 @@ const ErrorPage = () => {
             description={'Sorry, an unexpected error has occurred.'}
             errorInfo={error.statusText || error.message}
             icon={'👻'}
-            action={
-                <Button onClick={() => navigate('/')}>
-                    Restart
-                </Button>
-            }
+            action={<Button onClick={() => navigate('/')}>Restart</Button>}
         />
     )
 }
