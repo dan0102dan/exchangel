@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { server } from '../../API'
-import styles from './Swap.module.css'
 
 const Swap = () => {
     let { instId } = useParams()
