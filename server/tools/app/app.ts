@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import Router from 'koa-router'
-import cors from '@koa/cors'
+import cors from 'koa2-cors'
 import koaBody from 'koa-body'
 import { RateLimit } from 'koa2-ratelimit'
 import { mainBot } from '../../config'
