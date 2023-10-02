@@ -10,27 +10,12 @@ defaults:
     working-directory: './web'
 
 jobs:
-  deploy:
+  build:
+
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 20
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build and deploy
-      run: |
-        npm run build
-        git config --global user.email "me@dan0102dan.ru"
-        git config --global user.name "dan0102dan"
-        git checkout --orphan gh-pages
-        git --work-tree build add --all
-        git --work-tree build commit -m "GitHub Pages deployment"
-        git push origin HEAD:gh-pages --force
+    - name: Build and Deploy React app to GitHub Pages
+      uses: omkartapale/react-deployment-gh-pages@v1.0.0

@@ -10,7 +10,7 @@ import { db } from '../../tools/index'
 const app = new Koa()
 const router = new Router()
 
-app.use(cors())
+app.use(cors({ origin: '*' }))
 app.use(koaBody())
 
 const limiter = RateLimit.middleware({
