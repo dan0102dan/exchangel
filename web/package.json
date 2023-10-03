@@ -1,7 +1,7 @@
 {
   "name": "exchangel",
   "author": "dan0102dan",
-  "homepage": "https://dan0102dan.github.io/exchangel/#",
+  "homepage": "https://dan0102dan.github.io/exchangel",
   "version": "0.1.0",
   "dependencies": {
     "@types/node": "^16.18.54",

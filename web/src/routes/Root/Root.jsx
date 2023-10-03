@@ -58,7 +58,7 @@ const Root = () => {
             info2={plusFor24}
             info3={percFor24}
             isPositive={isPositive}
-            onClick={() => navigate(`ccy/${e.instId}`)}
+            onClick={() => navigate(`/ccy/${e.instId}`)}
         />
     })
 

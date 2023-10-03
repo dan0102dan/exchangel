@@ -1,14 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from 'react-router-dom'
 import './index.css'
 
 import { ErrorPage, Root, Swap } from "./routes/index"
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     path: '/ccy/:instId',
     element: <Swap />
   }
-], { basename: '/exchangel' })
+])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
