@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'ccy/:instId',
+    path: '/ccy/:instId',
     element: <Swap />
   }
 ], { basename: '/exchangel' })
