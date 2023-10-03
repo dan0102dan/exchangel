@@ -7,7 +7,7 @@ const Cell = ({ onClick, title, subtitle, icon, info1, info2, info3, isPositive 
             className={onClick ? styles.cellAble : styles.cell}
             onClick={onClick}
         >
-            {icon && <img className={styles.icon} src={icon} alt="Icon" />}
+            {icon && <img className={styles.icon} src={icon} alt="Icon" loading="lazy" />}
             <div className={styles.content}>
                 <div className={styles.title}>{title}</div>
                 {subtitle && <div className={styles.subtitle}>{subtitle}</div>}

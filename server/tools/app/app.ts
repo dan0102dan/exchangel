@@ -42,8 +42,16 @@ router.get('/home', async (ctx) => {
                 .populate('quoteCcy')
                 .lean()
         }
+
+        const all = {
+            name: 'All',
+            data: await db.Tickers.find()
+                .populate('baseCcy')
+                .populate('quoteCcy')
+                .lean()
+        }
         ctx.status = 200
-        ctx.body = { popular }
+        ctx.body = { popular, all }
     } catch (e) {
         console.log(e)
         ctx.status = 500

@@ -1,5 +1,7 @@
 export { default as Button } from './Button/Button'
 export { default as Cell } from './Cell/Cell'
+export { default as MiniCell } from './MiniCell/MiniCell'
+export { default as InputNumber } from './InputNumber/InputNumber'
 export { default as Placeholder } from './Placeholder/Placeholder'
 export { default as Search } from './Search/Search'
 export { default as Section } from './Section/Section'

@@ -29,7 +29,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 router.subscribe((state) => {
   const BackButton = (window as any).Telegram.WebApp.BackButton
 
-  console.log(state.matches.at(0)?.pathname)
   if (state.matches.at(0)?.pathname === '/')
     BackButton.hide()
   else {

@@ -1,0 +1,15 @@
+.coinInput {
+    display: flex;
+    border: none;
+    font-size: 56px;
+    margin: 0 12px 0 12px;
+    outline: none;
+    background-color: transparent;
+    color: var(--tg-theme-text-color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
