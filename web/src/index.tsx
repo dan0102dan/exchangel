@@ -32,7 +32,7 @@ router.subscribe((state) => {
   if (state.matches.at(0)?.pathname === '/')
     BackButton.hide()
   else {
-    BackButton.onClick(() => router.navigate(-1))
+    BackButton.onClick(() => router.navigate('/'))
     BackButton.show()
   }
 })

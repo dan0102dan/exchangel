@@ -7,23 +7,19 @@ const Swap = () => {
     const { state } = useLocation()
     const { instId } = useParams()
 
-    const [loading, setLoading] = useState(true)
-    const [ccy, setCcy] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [ccy, setCcy] = useState({ ...state })
 
     const getCcy = async () => {
         setLoading(true)
-        if (state)
-            setCcy(state)
-        else
-            try {
-                const { data } = await server.get('/getCcy', { params: { instId } })
-                setCcy(data)
-            }
-            catch (e) {
-                console.error(e)
-            }
+        try {
+            const { data } = await server.get('/getCcy', { params: { instId } })
+            setCcy(data)
+        }
+        catch (e) {
+            console.error(e)
+        }
         setLoading(false)
-        console.log(state)
     }
 
     useEffect(() => {
