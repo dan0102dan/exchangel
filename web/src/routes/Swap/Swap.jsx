@@ -66,7 +66,7 @@ const Swap = () => {
                         <MiniCell title={ccy.quoteCcy.name} icon={ccy.quoteCcy.logoLink} />
                         <InputNumber value={quoteCcy} onChange={quoteSwap} />
                     </Section>
-                    <HorizontalList>
+                    <HorizontalList title='Info'>
                         <InfoBlock text="last" number={ccy.last} />
                         <InfoBlock text="24'highest" number={ccy.high24h} />
                         <InfoBlock text="24'lowest" number={ccy.low24h} />

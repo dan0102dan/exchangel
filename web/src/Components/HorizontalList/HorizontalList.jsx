@@ -2,9 +2,9 @@ import React from 'react'
 import styles from './HorizontalList.module.css'
 import { Section } from '../index'
 
-const HorizontalList = ({ children }) => {
+const HorizontalList = ({ title, children }) => {
     return (
-        <Section>
+        <Section title={title}>
             <div className={styles.horizontal}>
                 {children}
             </div>
