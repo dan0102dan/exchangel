@@ -26,13 +26,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </React.StrictMode>
 )
 
+const BackButton = (window as any).Telegram.WebApp.BackButton
+BackButton.onClick(() => router.navigate(-1))
 router.subscribe((state) => {
-  const BackButton = (window as any).Telegram.WebApp.BackButton
-
   if (state.matches.at(0)?.pathname === '/')
     BackButton.hide()
-  else {
-    BackButton.onClick(() => router.navigate('/'))
+  else
     BackButton.show()
-  }
 })
