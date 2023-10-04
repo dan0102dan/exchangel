@@ -47,7 +47,7 @@ const Root = () => {
     const mapCell = (arr) => arr.map((e, i) => {
         const isPositive = (e.last - e.open24h) > 0
         const plusFor24 = (isPositive ? '+' : '-') + Math.abs((e.last - e.open24h).toFixed(2))
-        const percFor24 = (isPositive ? '+' : '-') + Math.abs(((e.last - e.open24h) / 100).toFixed(2)) + '%'
+        const percFor24 = (isPositive ? '+' : '-') + Math.abs((e.last * 100 / e.open24h - 100).toFixed(2)) + '%'
 
         return <Cell
             key={i}

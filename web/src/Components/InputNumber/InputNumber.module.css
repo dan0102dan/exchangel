@@ -1,16 +1,26 @@
 .coinInput {
     display: flex;
-    border: none;
-    font-size: 56px;
-    margin: 0 12px 0 12px;
-    padding: 0;
-    outline: none;
-    background-color: transparent;
-    color: var(--tg-theme-text-color);
+    overflow-x: hidden;
+    align-items: center;
+    background-color: var(--tg-theme-bg-color);
+    border-radius: 0 0 8px 8px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 12px 0 12px;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+.coinInput input {
+    font-size: 56px;
+    flex: 1;
+    border: none;
+    padding: 0;
+    outline: none;
+    color: var(--tg-theme-text-color);
+    background: transparent;
+}
+
+.coinInput input::-webkit-outer-spin-button,
+.coinInput input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }

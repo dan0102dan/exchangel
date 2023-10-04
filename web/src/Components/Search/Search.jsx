@@ -52,7 +52,6 @@ const Search = ({ setInput, setDebounceInput, param }) => {
                 placeholder='Search'
                 value={searchParams.get(param) || ''}
                 onChange={handleInputChange}
-                className={styles.searchInput}
             />
         </div>
     )
