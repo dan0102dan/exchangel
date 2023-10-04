@@ -5,6 +5,7 @@ const InputNumber = ({ value, onChange }) => {
     return (
         <input
             type="number"
+            pattern='[0-9]*'
             min="0"
             value={value}
             onChange={onChange}
