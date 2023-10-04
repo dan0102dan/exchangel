@@ -5,12 +5,12 @@ const InputNumber = ({ value, onChange }) => {
     return (
         <input
             type="number"
-            pattern='[0-9]*'
+            inputMode="decimal"
             min="0"
             value={value}
             onChange={onChange}
             className={styles.coinInput}
-            placeholder='Enter amount'
+            placeholder='0'
         />
     )
 }

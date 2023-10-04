@@ -1,5 +1,6 @@
 .searchContainer {
     display: flex;
+    overflow-x: hidden;
     align-items: center;
     background-color: var(--tg-theme-bg-color);
     border-radius: 0 0 8px 8px;

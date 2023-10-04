@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { Section, InputNumber, MiniCell } from '../../Components/index'
+import { Section, InputNumber, MiniCell, Placeholder, Button } from '../../Components/index'
 
 const Swap = () => {
-    let { instId } = useParams()
+    const { state } = useLocation()
+    const { instId } = useParams()
 
+    const [loading, setLoading] = useState(true)
     const [ccy, setCcy] = useState({})
 
     const getCcy = async () => {
-        try {
-            const { data } = await server.get('/getCcy', { params: { instId } })
-            setCcy(data)
-            console.log(data)
-        }
-        catch (e) {
-            console.error(e)
-        }
+        setLoading(true)
+        if (state)
+            setCcy(state)
+        else
+            try {
+                const { data } = await server.get('/getCcy', { params: { instId } })
+                setCcy(data)
+            }
+            catch (e) {
+                console.error(e)
+            }
+        setLoading(false)
+        console.log(state)
     }
 
     useEffect(() => {
@@ -24,36 +31,45 @@ const Swap = () => {
             getCcy()
     })
 
+    const [baseCcy, setBaseCcy] = useState('')
+    const [quoteCcy, setQuoteCcy] = useState('')
 
-    const [amount1, setAmount1] = useState('')
-    const [amount2, setAmount2] = useState('')
-
-    const handleSwap = () => {
-        // Обмен значениями amount1 и amount2
-        const temp = amount1
-        setAmount1(amount2)
-        setAmount2(temp)
+    const baseSwap = (e) => {
+        setBaseCcy(e.target.value)
+        setQuoteCcy(e.target.value * ccy.last || '')
+    }
+    const quoteSwap = (e) => {
+        setQuoteCcy(e.target.value)
+        setBaseCcy(e.target.value / ccy.last || '')
     }
 
     return (
-        Object.keys(ccy).length
+        loading
             ?
-            <>
-                <div>
+            <Placeholder
+                title={'Loading...'}
+                description={'Getting basic information.'}
+                icon={'🔍'}
+            />
+            : !Object.keys(ccy).length
+                ?
+                <Placeholder
+                    title={'Empty'}
+                    description={'Unfortunately, nothing was found.'}
+                    icon={'😔'}
+                    action={<Button onClick={() => getCcy()}>Reload</Button >}
+                />
+                :
+                <>
                     <Section>
                         <MiniCell title={ccy.baseCcy.name} icon={ccy.baseCcy.logoLink} />
-                        <InputNumber value={amount1} onChange={(e) => setAmount1(e.target.value)} />
+                        <InputNumber value={baseCcy} onChange={baseSwap} />
                     </Section>
-                    <button onClick={handleSwap}>
-                        ⟳
-                    </button>
                     <Section>
                         <MiniCell title={ccy.quoteCcy.name} icon={ccy.quoteCcy.logoLink} />
-                        <InputNumber value={amount2} onChange={(e) => setAmount2(e.target.value)} />
+                        <InputNumber value={quoteCcy} onChange={quoteSwap} />
                     </Section>
-                </div>
-            </>
-            : <></>
+                </>
     )
 }
 
