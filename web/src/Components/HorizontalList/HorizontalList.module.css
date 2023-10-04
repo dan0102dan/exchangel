@@ -1,0 +1,12 @@
+.horizontal {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+    border-top: 1px solid var(--tg-theme-secondary-bg-color);
+    -webkit-overflow-scrolling: touch;
+}
+
+.horizontal::-webkit-scrollbar {
+    display: none;
+}
