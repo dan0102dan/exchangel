@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
 import { Section, InputNumber, MiniCell, Placeholder, Button, HorizontalList, InfoBlock } from '../../Components/index'
@@ -9,9 +9,8 @@ const Swap = () => {
 
     const [loading, setLoading] = useState(false)
     const [ccy, setCcy] = useState({ ...state })
-    console.log(ccy)
 
-    const getCcy = async () => {
+    const getCcy = useCallback(async () => {
         setLoading(true)
         try {
             const { data } = await server.get('/getCcy', { params: { instId } })
@@ -21,12 +20,12 @@ const Swap = () => {
             console.error(e)
         }
         setLoading(false)
-    }
+    }, [instId])
 
     useEffect(() => {
         if (!Object.keys(ccy).length)
             getCcy()
-    })
+    }, [ccy, getCcy])
 
     const [baseCcy, setBaseCcy] = useState('')
     const [quoteCcy, setQuoteCcy] = useState('')

@@ -10,7 +10,6 @@
     width: 56px;
     height: 56px;
     color: var(--tg-theme-text-color);
-    margin-bottom: 16px;
     font-size: 3em;
 }
 
@@ -18,18 +17,18 @@
     font-size: 20px;
     font-weight: bold;
     color: var(--tg-theme-text-color);
-    margin-bottom: 8px;
+    margin-top: 16px;
 }
 
 .description {
     font-size: 16px;
     color: var(--tg-theme-hint-color);
-    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .errorInfo {
     font-size: 16px;
     color: var(--tg-theme-hint-color);
     font-style: oblique;
-    margin-bottom: 16px;
+    margin-top: 8px;
 }

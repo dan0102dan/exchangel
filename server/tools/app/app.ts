@@ -20,23 +20,23 @@ const limiter = RateLimit.middleware({
 })
 app.use(limiter)
 
-// app.use(async (ctx, next) => {
-//     const isAuthorized = authorizeRequest(ctx.headers.Authorization, mainBot.id, mainBot.token)
+app.use(async (ctx, next) => {
+    const isAuthorized = authorizeRequest(ctx.headers.Authorization, mainBot.id, mainBot.token)
 
-//     if (isAuthorized) {
-//         await next()
-//     } else {
-//         ctx.status = 401
-//         ctx.body = 'Authorization failed'
-//     }
-// })
+    if (isAuthorized) {
+        await next()
+    } else {
+        ctx.status = 401
+        ctx.body = 'Authorization failed'
+    }
+})
 
 router.get('/home', async (ctx) => {
     try {
         const popular = {
             name: 'Popular',
             data: await db.Tickers.find({
-                instId: { $in: ['TON-USDT', 'BTC-USDT', 'ETH-USDT'] }
+                instId: { $in: ['TON-USDT', 'BTC-USDT', 'ETH-USDT', 'LTC-USDT', 'DOGE-USDT'] }
             })
                 .populate('baseCcy')
                 .populate('quoteCcy')
@@ -50,10 +50,11 @@ router.get('/home', async (ctx) => {
                 .populate('quoteCcy')
                 .lean()
         }
+
         ctx.status = 200
         ctx.body = { popular, all }
     } catch (e) {
-        console.log(e)
+        console.error(e)
         ctx.status = 500
         ctx.body = { error: e.message }
     }
@@ -69,7 +70,7 @@ router.get('/getCcy', async (ctx) => {
         ctx.status = 200
         ctx.body = ccy
     } catch (e) {
-        console.log(e)
+        console.error(e)
         ctx.status = 500
         ctx.body = { error: e.message }
     }
@@ -89,7 +90,6 @@ router.get('/search', async (ctx) => {
         console.log(query.replaceAll('[^a-zA-Z0-9]', ''), tickers)
         const regexQuery = new RegExp('^' + query.replaceAll('[^a-zA-Z0-9]', ''), 'i')
 
-        // Разделить элементы на совпадающие и несовпадающие
         const matchingTickers = []
         const nonMatchingTickers = []
 
@@ -101,7 +101,6 @@ router.get('/search', async (ctx) => {
             }
         }
 
-        // Объединить их так, чтобы сначала шли совпадающие элементы
         const sortedTickers = matchingTickers.concat(nonMatchingTickers)
 
         console.log(query, sortedTickers.map(e => e.instId))
@@ -109,7 +108,7 @@ router.get('/search', async (ctx) => {
         ctx.status = 200
         ctx.body = sortedTickers
     } catch (e) {
-        console.log(e)
+        console.error(e)
         ctx.status = 500
         ctx.body = { error: e.message }
     }

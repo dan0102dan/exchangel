@@ -8,6 +8,7 @@ import './index.css'
 
 import { ErrorPage, Root, Swap } from "./routes/index"
 
+// Create a router instance with defined routes
 const router = createHashRouter([
   {
     path: '/',
@@ -20,12 +21,14 @@ const router = createHashRouter([
   }
 ])
 
+// Render the router within the application's root element
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
 )
 
+// Configure the BackButton behavior
 const BackButton = (window as any).Telegram.WebApp.BackButton
 BackButton.onClick(() => router.navigate(-1))
 router.subscribe((state) => {
