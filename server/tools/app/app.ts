@@ -21,7 +21,7 @@ const limiter = RateLimit.middleware({
 app.use(limiter)
 
 app.use(async (ctx, next) => {
-    const isAuthorized = authorizeRequest(ctx.headers.Authorization, mainBot.id, mainBot.token)
+    const isAuthorized = authorizeRequest(ctx.headers.authorization, mainBot.id, mainBot.token)
 
     if (isAuthorized) {
         await next()
