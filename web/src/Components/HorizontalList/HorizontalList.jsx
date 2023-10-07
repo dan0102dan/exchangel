@@ -1,14 +1,11 @@
 import React from 'react'
 import styles from './HorizontalList.module.css'
-import { Section } from '../index'
 
-const HorizontalList = ({ title, children }) => {
+const HorizontalList = ({ children }) => {
     return (
-        <Section title={title}>
-            <div className={styles.horizontal}>
-                {children}
-            </div>
-        </Section>
+        <div className={styles.horizontal}>
+            {children}
+        </div>
     )
 }
 

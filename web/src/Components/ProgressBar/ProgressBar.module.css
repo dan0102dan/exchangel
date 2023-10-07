@@ -1,0 +1,62 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+}
+
+.label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.minValue, .maxValue {
+    color: var(--tg-theme-text-color);
+}
+
+.title {
+    color: var(--tg-theme-hint-color);
+}
+
+.progressBar {
+    position: relative;
+    height: 10px;
+    background-color: rgba(215, 215, 215, 0.8);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progressFill, .progressFillPositive, .progressFillNegative {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 100%;
+    background-color: var(--tg-theme-link-color);
+}
+
+.progressFillPositive {
+    background-color: rgba(44, 171, 44, 0.775);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: fillAnimation 0.3s ease-in-out forwards;
+}
+
+.progressFillNegative {
+    background-color: rgba(243, 72, 72, 0.775);
+    transform: scaleX(0);
+    transform-origin: right;
+    animation: fillAnimation 0.3s ease-in-out forwards;
+}
+
+@keyframes fillAnimation {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}

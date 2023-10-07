@@ -166,7 +166,7 @@ The [`Swap`](./src/routes/Swap/Swap.jsx) page within the Exchangel web applicati
 
 - **MiniCell Components**: MiniCell components are used to display the logos and names of the base and quote currencies, providing users with a visual reference for the selected cryptocurrencies.
 
-- **HorizontalList for Additional Information**: The `Swap` page includes a horizontal list of InfoBlock components to showcase additional cryptocurrency data, such as the last known price, the highest and lowest prices in the last 24 hours, and the 24-hour trading volume.
+- **HorizontalList and ProgressBar for Additional Information**: The `Swap` page incorporates a horizontal list of InfoBlock components to present supplementary cryptocurrency data. This information encompasses details such as the most recent price, the highest and lowest price points observed in the last 24 hours, and the 24-hour trading volume. Additionally, a `ProgressBar` component is utilized to provide visual feedback and progress indication when necessary.
 
 - **Loading Handling**: To maintain a user-friendly experience, the page incorporates loading placeholders that inform users about the ongoing data retrieval process. These placeholders ensure users are aware of the current status, whether data is still being fetched, or the page is ready for interaction.
 

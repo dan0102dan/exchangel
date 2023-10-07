@@ -4,9 +4,8 @@ import {
   createHashRouter,
   RouterProvider,
 } from 'react-router-dom'
+import { ErrorPage, Root, Swap } from './routes/index'
 import './index.css'
-
-import { ErrorPage, Root, Swap } from "./routes/index"
 
 // Create a router instance with defined routes
 const router = createHashRouter([
