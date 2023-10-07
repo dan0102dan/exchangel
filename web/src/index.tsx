@@ -16,7 +16,8 @@ const router = createHashRouter([
   },
   {
     path: '/ccy/:instId',
-    element: <Swap />
+    element: <Swap />,
+    errorElement: <ErrorPage />,
   }
 ])
 
