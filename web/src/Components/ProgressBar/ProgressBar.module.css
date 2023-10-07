@@ -24,7 +24,7 @@
 .progressBar {
     position: relative;
     height: 10px;
-    background-color: rgba(215, 215, 215, 0.8);
+    background-color: rgba(215, 215, 215, 0.7);
     border-radius: 6px;
     overflow: hidden;
 }
