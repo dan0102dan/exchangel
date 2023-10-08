@@ -32,14 +32,11 @@ const searchPair = async () => {
 
 const updateData = async () => {
     const { data } = (await okxAxios.get('/api/v5/market/tickers', { params: { instType: 'SPOT' } })).data
-    for (const item of data) {
-        // console.log(item)
+    for (const item of data)
         await db.Tickers.findOneAndUpdate(
             { instId: item.instId },
             { ...item }
         ).lean()
-        // console.log(await db.Tickers.findOne({ instId: item.instId }))
-    }
 }
 
 const updater = async (period) => {

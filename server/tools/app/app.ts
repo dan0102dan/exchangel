@@ -4,7 +4,7 @@ import cors from 'koa2-cors'
 import koaBody from 'koa-body'
 import { RateLimit } from 'koa2-ratelimit'
 import { mainBot } from '../../config'
-import { authorizeRequest } from './functions'
+import { authorizeRequest, getTopData } from './functions'
 import { db } from '../../tools/index'
 
 const app = new Koa()
@@ -43,6 +43,16 @@ router.get('/home', async (ctx) => {
                 .lean()
         }
 
+        const gainers = {
+            name: 'Gainers',
+            data: await getTopData(-1)
+        }
+
+        const losers = {
+            name: 'Losers',
+            data: await getTopData(1)
+        }
+
         const all = {
             name: 'All',
             data: await db.Tickers.find()
@@ -52,7 +62,8 @@ router.get('/home', async (ctx) => {
         }
 
         ctx.status = 200
-        ctx.body = { popular, all }
+        ctx.body = { popular, gainers, losers, all }
+
     } catch (e) {
         console.error(e)
         ctx.status = 500
@@ -87,7 +98,6 @@ router.get('/search', async (ctx) => {
             .populate('quoteCcy')
             .lean()
 
-        console.log(query.replaceAll('[^a-zA-Z0-9]', ''), tickers)
         const regexQuery = new RegExp('^' + query.replaceAll('[^a-zA-Z0-9]', ''), 'i')
 
         const matchingTickers = []
@@ -102,8 +112,6 @@ router.get('/search', async (ctx) => {
         }
 
         const sortedTickers = matchingTickers.concat(nonMatchingTickers)
-
-        console.log(query, sortedTickers.map(e => e.instId))
 
         ctx.status = 200
         ctx.body = sortedTickers
