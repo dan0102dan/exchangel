@@ -1,3 +1,4 @@
+export { AppProvider, useAppState } from './AppProvider/AppProvider'
 export { default as Button } from './Button/Button'
 export { default as Cell } from './Cell/Cell'
 export { default as MiniCell } from './MiniCell/MiniCell'

@@ -11,7 +11,7 @@
     2. [API](#api)
     3. [dataSync](#datasync)
     4. [db models](#db-models)
-    5. [bot](#botts)
+    5. [bot](#bot)
 
 ---
 
@@ -67,7 +67,7 @@ In your Exchangel project, you will find a sample configuration file named `conf
 
 1. **Create OKX API Key**:
 
-   To integrate with the OKX API, you need to create an API key on the OKX platform. Here's how you can do it:
+   To integrate with the OKX API, you need to create an API key on the OKX platform. Here's how to do it:
 
    - Visit the [OKX API Management](https://www.okx.com/account/my-api) page.
    - Log in to your OKX account.

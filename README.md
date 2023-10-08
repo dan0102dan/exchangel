@@ -1,7 +1,7 @@
 ### Exchangel
 
 #### Description
-Exchangel is an application for collecting cryptocurrency data, enabling you to quickly view information in [Telegram Mini Apps](https://core.telegram.org/bots/webapps) and calculate the value of cryptocurrencies in multiple currencies, including USDT and other digital assets.
+Exchangel is an application for collecting cryptocurrency data enabling users to quickly view information in [Telegram Mini Apps](https://core.telegram.org/bots/webapps) and calculate values of cryptocurrencies in multiple currencies, including USDT and other digital assets.
 
 #### Installation
 1. Download the Exchangel repository.

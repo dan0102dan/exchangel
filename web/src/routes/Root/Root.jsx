@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Section, Search, Cell, Placeholder, Button } from '../../Components/index'
+import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
 
 const Root = () => {
-    const [loading, setLoading] = useState(true)
-    const [homeData, setHomeData] = useState({})
-    const [fetching, setFetching] = useState(true)
-    const [searchQuery, setSearchQuery] = useState('')
-    const [searchResult, setSearchResult] = useState([])
+    const { homeData, setHomeData, searchQuery, setSearchQuery, searchResult, setSearchResult } = useAppState()
+    const [loading, setLoading] = useState(false)
+    const [fetching, setFetching] = useState(false)
     const navigate = useNavigate()
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         setLoading(true)
         try {
             const { data } = await server.get('/home')
@@ -21,13 +19,13 @@ const Root = () => {
             console.error(e)
         }
         setLoading(false)
-    }
+    }, [setHomeData])
     useEffect(() => {
         if (!Object.keys(homeData).length)
             getData()
-    }, [homeData])
+    }, [homeData, getData])
 
-    const searchData = async (query) => {
+    const searchData = useCallback(async (query) => {
         setFetching(true)
         try {
             const { data } = await server.get('/search', { params: { query } })
@@ -37,12 +35,12 @@ const Root = () => {
             console.error(e)
         }
         setFetching(false)
-    }
+    }, [setSearchResult])
 
     useEffect(() => {
         if (searchQuery)
             searchData(searchQuery)
-    }, [searchQuery])
+    }, [searchQuery, searchData])
 
     const mapCell = (arr) => arr.map((e, i) => {
         const getSign = () => {

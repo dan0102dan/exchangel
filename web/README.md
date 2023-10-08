@@ -13,7 +13,7 @@
     4. [Routes Directory](#routes-directory)
 
 3. [Description of pages](#description-of-pages)
-    1. [Root](#root-page)
+    1. [Root](#root)
     2. [Swap](#swap-page)
     3. [ErrorPage](#errorpage)
 
@@ -100,7 +100,7 @@ This modular organization of components and pages allows for easy development, m
 
 ---
 
-### Root
+## Root
 
 The [`Root`](./src/routes/Root/Root.jsx) page is a central component in the Exchangel web application. It serves as the main landing page for users to interact with cryptocurrency data and search for information. This documentation will provide an overview of how the `Root` page functions and interacts with various components.
 
@@ -111,10 +111,10 @@ The [`Root`](./src/routes/Root/Root.jsx) page is a central component in the Exch
 - **Data Loading Handling**: The `Root` page efficiently handles data loading and displaying various placeholders to keep users informed about the current status:
   - **Loading Placeholder**: When the page is initially loaded, a loading placeholder with a search icon (`🔍`) is displayed as the basic information is retrieved from the server.
   - **Search Placeholder**: When users enter a search query, different placeholders are shown based on the search results:
-    - If no results are found and data is still being fetched, a placeholder with the title "Searching..." and a description ("Looking for information on the server.") is displayed with an eye icon (`👀`).
-    - If no results are found after fetching, a placeholder with the title "Empty" and a description ("Unfortunately, nothing was found.") is displayed with a sad face icon (`😔`).
+    - If no results are found and data is still being fetched, a placeholder with the title "Searching..." and a description "Looking for information on the server." is displayed with an eye icon (`👀`).
+    - If no results are found after fetching, a placeholder with the title "Empty" and a description "Unfortunately, nothing was found." is displayed with a sad face icon (`😔`).
     - If search results are found, they are mapped to `Cell` components for display.
-  - **Basic Data Loading Placeholder**: When the page is initially loaded, but no data is retrieved, a placeholder with the title "Empty" and a description ("Unfortunately, nothing was found.") is displayed with a reload button.
+  - **Basic Data Loading Placeholder**: When the page is initially loaded, but no data is retrieved, a placeholder with the title "Empty" and a description "Unfortunately, nothing was found." is displayed with a reload button.
 
 - **Data Retrieval**: The `Root` page retrieves cryptocurrency data from the server when it is initially loaded. This data is organized into sections based on the provided information. Each section contains `Cell` components that display cryptocurrency information.
 
@@ -137,7 +137,7 @@ The [`Root`](./src/routes/Root/Root.jsx) page is a central component in the Exch
 
 - **Data Fetching**: When a search query is entered, the `searchData` function fetches data from the server based on the query. The fetched results are displayed as `Cell` components.
 
-- **Navigation**: Users can click on a `Cell` component to navigate to a detailed view of the selected cryptocurrency, with its additional information displayed.
+- **Navigation**: Users can click on a `Cell` component to navigate to a detailed view of the selected cryptocurrency, with additional information about it displayed.
 
 ### Data Dependencies
 
@@ -154,9 +154,9 @@ The `Root` page relies on data retrieved from the server, specifically from the 
 [Back to Table of Contents](#table-of-contents)
 ---
 
-### Swap Page
+## Swap Page
 
-The [`Swap`](./src/routes/Swap/Swap.jsx) page within the Exchangel web application is dedicated to providing users with detailed information about a selected cryptocurrency, facilitating seamless exchanges, and enhancing user interaction with cryptocurrency data. Below is a comprehensive overview of the page's components and functionality:
+The [`Swap`](./src/routes/Swap/Swap.jsx) page within the Exchangel web application is dedicated to providing users with detailed information about a selected cryptocurrency, facilitating seamless exchanges, and enhancing user handling of cryptocurrency data. Below is a comprehensive overview of the page's components and functionality:
 
 ### Component Structure
 
@@ -182,7 +182,7 @@ The `Swap` page relies on data fetched from the server, specifically from the `/
 
 ### Error Handling
 
-- **Server Errors**: The `Swap` page is equipped with error handling capabilities to gracefully manage situations where data retrieval from the server encounters issues. These errors are logged to the console for debugging purposes.
+- **Server Errors**: The `Swap` page is equipped with error handling capabilities to resolve situations where data retrieval from the server encounters issues. These errors are logged to the console for debugging purposes.
 
 ### Code Reusability
 
@@ -191,15 +191,15 @@ The `Swap` page relies on data fetched from the server, specifically from the `/
 [Back to Table of Contents](#table-of-contents)
 ---
 
-### ErrorPage
+## ErrorPage
 
-The `ErrorPage` within the Exchangel web application serves as a vital component for handling unexpected errors gracefully. It ensures that users receive clear error messages and provides an option to restart the application to recover from errors. Here's an overview of its components and functionality:
+The `ErrorPage` within the Exchangel web application serves as a vital component for handling and resolving unexpected errors. It ensures that users receive clear error messages and provides an option to restart the application to recover from errors. Here's an overview of its components and functionality:
 
 ### Component Structure
 
 - **Error Message**: The central component of the `ErrorPage` is the error message, which conveys detailed information about the encountered error. This message may include the error status, a custom error description, or any relevant error details.
 
-- **Restart Button**: To facilitate user recovery from errors, the `ErrorPage` includes a restart button. Users can click this button to reload the application, providing an opportunity to potentially resolve the error.
+- **Restart Button**: To facilitate recovery from errors, the `ErrorPage` includes a restart button. Users can click this button to reload the application, providing an opportunity to potentially resolve the error.
 
 ### Functionality
 
