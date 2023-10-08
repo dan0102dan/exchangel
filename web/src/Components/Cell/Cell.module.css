@@ -19,26 +19,6 @@
     width: 32px;
     height: 32px;
     margin-right: 16px;
-    transform-style: preserve-3d;
-    transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.icon:hover {
-    animation: spin 2s linear forwards;
-}
-
-.icon:not(:hover) {
-    transform: rotateY(360deg);
-}
-
-@keyframes spin {
-    0% {
-        transform: rotateY(0deg);
-    }
-
-    100% {
-        transform: rotateY(360deg);
-    }
 }
 
 .content {

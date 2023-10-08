@@ -17,6 +17,8 @@
     2. [Swap](#swap-page)
     3. [ErrorPage](#errorpage)
 
+4. [AppProvider](#appprovider)
+
 ---
 
 #### Description
@@ -50,6 +52,7 @@ By following these steps, you will configure the front-end component to communic
 3. Start the web application with `npm start`.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ### Application Structure
@@ -94,6 +97,7 @@ The "routes" directory contains all the pages of the application. Each page is r
 This modular organization of components and pages allows for easy development, maintenance, and scalability of the Exchangel web application. Developers can focus on building and enhancing individual components and pages while ensuring a consistent and organized codebase.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ### Description of pages
@@ -152,6 +156,7 @@ The `Root` page relies on data retrieved from the server, specifically from the 
 - The code for the `Root` page is designed to be modular and reusable, making it a valuable example for developers building Mini Apps for Telegram.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Swap Page
@@ -189,6 +194,7 @@ The `Swap` page relies on data fetched from the server, specifically from the `/
 - The code for the `Swap` page is designed to be modular and reusable, adhering to the principles of code efficiency and maintainability. Developers can draw inspiration from this page when building similar features in their Mini Apps.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## ErrorPage
@@ -212,4 +218,47 @@ The `ErrorPage` within the Exchangel web application serves as a vital component
 The `ErrorPage` primarily relies on error information provided by the application when an unexpected error occurs.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
+
+### AppProvider
+
+The [`AppProvider`](./src/Components/AppProvider/AppProvider.jsx) component is a crucial part of Exchangel's web application, designed to preserve and manage state data across different pages. Its primary purpose is to ensure that specific state variables, such as `homeData` and `searchResult`, remain accessible and persistent when navigating using React Router.
+
+### Implementation
+
+To utilize the `AppProvider` component, follow these steps:
+
+1. Import `AppProvider` into your application:
+
+```jsx
+import { AppProvider } from './AppProvider';
+```
+
+2. Wrap your application's root component with `AppProvider`:
+
+```jsx
+<AppProvider>
+  <RouterProvider router={router} />
+</AppProvider>
+```
+
+### Using `AppProvider` State
+
+To access and utilize the state managed by `AppProvider`, follow these steps:
+
+1. Import the `useAppState` hook at the beginning of your component file:
+
+```jsx
+import { useAppState } from './AppProvider';
+```
+
+2. Within your component, destructure the necessary state variables and functions using the `useAppState` hook:
+
+```jsx
+const { homeData, setHomeData, searchResult, setSearchResult } = useAppState();
+```
+
+Now, you have direct access to the state variables and functions managed by `AppProvider`. You can use these variables to read and modify the state data across different parts of your application, ensuring a consistent and seamless user experience.
+
+[Back to Table of Contents](#table-of-contents)

@@ -97,6 +97,7 @@ Your bot is now configured with the correct API token obtained from BotFather, a
 3. Start the application with `npm start`.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Application Structure
@@ -138,6 +139,7 @@ The heart of the Exchangel web application is the router, which is configured in
 - **BackButton Configuration**: The BackButton component from the Telegram WebApp is configured to handle navigation. It listens for clicks and uses the router to navigate back and forth between pages. Additionally, it hides the button when the user is on the root path to provide a seamless user experience.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## API
@@ -244,6 +246,7 @@ ctx.body = { error: e.message }
 [`app.ts`](./tools/app/app.ts) is the core of the Exchangel server, handling HTTP requests, setting up middleware, and defining routes. Understanding its structure and functionality is essential for effectively developing and maintaining the server-side of your application.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## dataSync
@@ -311,6 +314,7 @@ updater(synchronizationInterval);
 [`dataSync.ts`](./tools/dataSync/dataSync.ts) plays a crucial role in keeping your Exchangel server up-to-date with cryptocurrency data from the OKX exchange. Understanding its functions and automated data update process is vital for maintaining accurate and timely information.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## db models
@@ -362,4 +366,5 @@ The [`bot.ts`](./tools/bot/bot.ts) file contains the configuration and setup for
 This setup ensures that when users start a conversation with the bot by sending the `/start` command, they receive a welcoming message with a convenient link to the Exchangel Mini App.
 
 [Back to Table of Contents](#table-of-contents)
+
 ---
