@@ -90,28 +90,49 @@ router.get('/getCcy', async (ctx) => {
 router.get('/search', async (ctx) => {
     try {
         const { query } = ctx.query
+        const regexQuery = new RegExp(query.split('').join('-?'), 'i')
 
         const tickers = await db.Tickers.find(
-            { instId: { $regex: query, $options: 'i' } }
+            { instId: regexQuery }
         )
             .populate('baseCcy')
             .populate('quoteCcy')
             .lean()
 
-        const regexQuery = new RegExp('^' + query.replaceAll('[^a-zA-Z0-9]', ''), 'i')
-
-        const matchingTickers = []
-        const nonMatchingTickers = []
+        const firstMatches = []
+        const otherMatches = []
 
         for (const ticker of tickers) {
             if (regexQuery.test(ticker.instId)) {
-                matchingTickers.push(ticker)
-            } else {
-                nonMatchingTickers.push(ticker)
+                if (ticker.instId.toLowerCase().indexOf(query.toLowerCase()) === 0) {
+                    firstMatches.push(ticker)
+                } else {
+                    otherMatches.push(ticker)
+                }
             }
         }
 
-        const sortedTickers = matchingTickers.concat(nonMatchingTickers)
+        const sortedTickers = firstMatches.concat(otherMatches).sort((a, b) => {
+            const aMatch = regexQuery.test(a.instId)
+            const bMatch = regexQuery.test(b.instId)
+
+            if (aMatch && !bMatch) {
+                return -1
+            } else if (!aMatch && bMatch) {
+                return 1
+            }
+
+            const aHasUsdt = a.instId.toLowerCase().includes('usdt')
+            const bHasUsdt = b.instId.toLowerCase().includes('usdt')
+
+            if (aHasUsdt && !bHasUsdt) {
+                return -1
+            } else if (!aHasUsdt && bHasUsdt) {
+                return 1
+            }
+
+            return 0
+        })
 
         ctx.status = 200
         ctx.body = sortedTickers
