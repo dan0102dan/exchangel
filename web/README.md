@@ -199,7 +199,7 @@ The `Swap` page relies on data fetched from the server, specifically from the `/
 
 ## ErrorPage
 
-The `ErrorPage` within the Exchangel web application serves as a vital component for handling and resolving unexpected errors. It ensures that users receive clear error messages and provides an option to restart the application to recover from errors. Here's an overview of its components and functionality:
+The [`ErrorPage`](./src/routes/ErrorPage/ErrorPage.jsx) within the Exchangel web application serves as a vital component for handling and resolving unexpected errors. It ensures that users receive clear error messages and provides an option to restart the application to recover from errors. Here's an overview of its components and functionality:
 
 ### Component Structure
 
