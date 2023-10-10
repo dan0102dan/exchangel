@@ -223,7 +223,7 @@ The `ErrorPage` primarily relies on error information provided by the applicatio
 
 ### AppProvider
 
-The [`AppProvider`](./src/Components/AppProvider/AppProvider.jsx) component is a crucial part of Exchangel's web application, designed to preserve and manage state data across different pages. Its primary purpose is to ensure that specific state variables, such as `homeData` and `searchResult`, remain accessible and persistent when navigating using React Router.
+The [`AppProvider`](./src/Components/AppProvider/AppProvider.jsx) component is a crucial part of Exchangel's web application designed to preserve and manage state data across different pages. Its primary purpose is to ensure that specific state variables, such as `homeData` and `searchResult`, remain accessible and persistent when navigating using React Router.
 
 ### Implementation
 
