@@ -15,18 +15,23 @@ const updateCurrency = async () => {
 const searchPair = async () => {
     const { data } = (await okxAxios.get('/api/v5/public/instruments', { params: { instType: 'SPOT' } })).data
     for (const item of data) {
-        const { _id: baseCcy } = await db.Coin.findOne({ ccy: item.baseCcy }, { _id: 1 })
-        const { _id: quoteCcy } = await db.Coin.findOne({ ccy: item.quoteCcy }, { _id: 1 })
+        try {
+            const { _id: baseCcy } = await db.Coin.findOne({ ccy: item.baseCcy }, { _id: 1 })
+            const { _id: quoteCcy } = await db.Coin.findOne({ ccy: item.quoteCcy }, { _id: 1 })
 
-        await db.Tickers.findOneAndUpdate(
-            { instId: item.instId },
-            {
-                ...item,
-                baseCcy,
-                quoteCcy
-            },
-            { upsert: true, new: true }
-        ).lean()
+            await db.Tickers.findOneAndUpdate(
+                { instId: item.instId },
+                {
+                    ...item,
+                    baseCcy,
+                    quoteCcy
+                },
+                { upsert: true, new: true }
+            ).lean()
+        }
+        catch (e) {
+            console.error(e)
+        }
     }
 }
 
