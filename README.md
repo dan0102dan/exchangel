@@ -1,5 +1,7 @@
 ### Exchangel
 
+🏆 **Award-Winning Project at the [Telegram Mini Apps Contest](https://t.me/contest/327)!**
+
 #### Description
 Exchangel is an application for collecting cryptocurrency data enabling users to quickly view information in [Telegram Mini Apps](https://core.telegram.org/bots/webapps) and calculate values of cryptocurrencies in multiple currencies, including USDT and other digital assets.
 

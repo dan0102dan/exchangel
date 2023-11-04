@@ -16,11 +16,11 @@ const tickersSchema = {
 		unique: true
 	},
 	instType: String,
-	last: String,
-	open24h: String,
-	high24h: String,
-	low24h: String,
-	vol24h: String
+	last: Number,
+	open24h: Number,
+	high24h: Number,
+	low24h: Number,
+	vol24h: Number
 }
 
 export default mongoose.model('Tickers', new Schema(tickersSchema))

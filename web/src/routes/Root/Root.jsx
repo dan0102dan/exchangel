@@ -51,7 +51,7 @@ const Root = () => {
 
         const plusOrMinus = getSign()
 
-        const plusFor24 = plusOrMinus + Math.abs((e.last - e.open24h).toFixed(Math.max(e.last?.split('.')[1]?.length || 2, e.open24h?.split('.')[1]?.length || 2)))
+        const plusFor24 = plusOrMinus + Math.abs((e.last - e.open24h).toFixed(Math.max(e.last?.toString().split('.')[1]?.length || 2, e.open24h?.toString().split('.')[1]?.length || 2)))
         const percFor24 = plusOrMinus + Math.abs((e.last * 100 / e.open24h - 100).toFixed(2)) + '%'
 
         return <Cell
