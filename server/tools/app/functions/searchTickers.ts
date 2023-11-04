@@ -1,6 +1,6 @@
 import { db } from '../../../tools/index'
 
-export default async (query) => {
+export default async (query, offset = 0, tgLimit = 0) => {
     const regexQuery = new RegExp(query.split('').join('-?'), 'i')
 
     const tickers = await db.Tickers.find(
@@ -8,6 +8,8 @@ export default async (query) => {
     )
         .populate('baseCcy')
         .populate('quoteCcy')
+        .skip(offset)
+        .limit(tgLimit)
         .lean()
 
     const firstMatches = []

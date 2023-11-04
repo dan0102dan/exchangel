@@ -3,6 +3,7 @@ import { Telegraf } from 'telegraf'
 import { mainBot } from '../../config'
 
 import { helloMes } from './commands/responses'
+import { search } from './commands/inlineQuery'
 
 const bot = new Telegraf(mainBot.id + ':' + mainBot.token)
 
@@ -16,5 +17,7 @@ bot.use(async (ctx, next) => {
 })
 
 bot.start(helloMes)
+
+bot.on('inline_query', search)
 
 export default bot
