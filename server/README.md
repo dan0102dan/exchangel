@@ -94,7 +94,20 @@ Your bot is now configured with the correct API token obtained from BotFather, a
 
 1. Navigate to the "server" directory.
 2. Install the necessary dependencies using `npm install`.
-3. Start the application with `npm start`.
+
+##### In Production Mode
+Start the application with `npm start`. This will compile the TypeScript files and start the server in production mode.
+   ```sh
+   npm start
+   ```
+
+##### In Test Mode
+To run the server in test mode, where certain checks like authorization may be bypassed or mocked, use the following command:
+   ```sh
+   npm run test
+   ```
+
+*Note: Test mode should only be used for development purposes and never in a production environment.*
 
 [Back to Table of Contents](#table-of-contents)
 

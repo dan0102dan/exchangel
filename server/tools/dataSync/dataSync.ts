@@ -30,7 +30,7 @@ const searchPair = async () => {
             ).lean()
         }
         catch (e) {
-            console.error(e)
+            console.error(item.instId, e)
         }
     }
 }

@@ -31,15 +31,19 @@ The "web" directory contains the front-end component of Exchangel. It provides a
 To configure the front-end component of Exchangel (located in the "web" directory), follow these steps:
 
 1. Open the [`web/src/API.ts`](./src/API.ts) file.
-2. Update the `baseURL` variable to the appropriate server URL. For local development with the default server port (49300), set it to `http://localhost:49300`.
+2. Update the `baseURL` variable to the appropriate server URL.
 
 ```typescript
 import axios from 'axios'
 
+const baseURL = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:49300'
+    : 'https://exchangel.dan0102dan.ru' // update this baseURL
+
 export const server = axios.create({
-    baseURL: 'https://exchangel.dan0102dan.ru', // update this baseURL
+    baseURL,
     headers: {
-        Authorization: (window as any).Telegram.WebApp.initData
+        authorization: (window as any).Telegram.WebApp.initData
     }
 })
 ```

@@ -2,17 +2,17 @@
   "name": "exchangel",
   "author": "dan0102dan",
   "homepage": "https://dan0102dan.github.io/exchangel",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "dependencies": {
-    "@types/node": "^16.18.54",
-    "@types/react": "^18.2.22",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.35",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
     "react-scripts": "^5.0.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "start": "HTTPS=false react-scripts start",
