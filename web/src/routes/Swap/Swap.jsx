@@ -52,13 +52,12 @@ const Swap = () => {
         const HapticFeedback = window.Telegram.WebApp.HapticFeedback
 
         try {
+            HapticFeedback.selectionChanged()
             const { data } = await server.get('/toggleFavorite', { params: { instId } })
             if (data)
                 setFavorites([ccy, ...favorites])
             else
                 setFavorites(favorites.filter(e => e.instId !== ccy.instId))
-
-            HapticFeedback.selectionChanged()
         }
         catch (e) {
             console.error(e)
