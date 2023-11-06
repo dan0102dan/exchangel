@@ -101,7 +101,6 @@ const Root = () => {
                         description={'Unfortunately, nothing was found.'}
                         icon={'😔'}
                         action={<Button onClick={() => getData()}>Reload</Button >}
-                        loading={loading}
                     />
                     :
                     <>
