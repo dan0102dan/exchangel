@@ -52,7 +52,7 @@ const Swap = () => {
         try {
             const { data } = await server.get('/toggleFavorite', { params: { instId } })
             if (data)
-                setFavorites([...favorites, ccy])
+                setFavorites([ccy, ...favorites])
             else
                 setFavorites(favorites.filter(e => e.instId !== ccy.instId))
         }
