@@ -26,12 +26,12 @@ app.use(async (ctx, next) => {
         : authorizeRequest(ctx.headers.authorization, mainBot.id, mainBot.token)
 
     if (isAuthorized) {
-        ctx.state.user = {}
         ctx.headers.authorization.split('&').forEach(param => {
             const [key, value] = param.split('=')
-
-            if (['id'].includes(key))
-                ctx.state.user[key] = decodeURIComponent(value)
+            if (key === 'user') {
+                ctx.state.user = JSON.parse(decodeURIComponent(value))
+                return
+            }
         })
 
         await next()
