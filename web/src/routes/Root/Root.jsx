@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, ScrollRestoration } from 'react-router-dom'
 import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
 
@@ -75,7 +75,7 @@ const Root = () => {
     })
 
     return (
-        <>
+        <div>
             <Search setDebounceInput={setSearchQuery} param={'cur'} />
             {searchQuery
                 ? !searchResult.length
@@ -134,7 +134,8 @@ const Root = () => {
                         }
                     </>
             }
-        </>
+            <ScrollRestoration />
+        </div>
     )
 }
 
