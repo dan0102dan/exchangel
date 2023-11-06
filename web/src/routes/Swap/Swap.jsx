@@ -30,6 +30,7 @@ const Swap = () => {
     useEffect(() => {
         if (!Object.keys(ccy).length)
             getCcy()
+        window.history.replaceState({}, document.title)
     }, [ccy, getCcy])
 
     const [baseCcy, setBaseCcy] = useState('')
