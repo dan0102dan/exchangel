@@ -16,8 +16,8 @@
 
 .favoriteButton {
     width: -webkit-fill-available;
-    margin: 0 12px 0 12px;
-    padding: 8px;
+    margin: 12px;
+    padding: 12px;
 }
 
 .button:active, .favoriteButton:active {
