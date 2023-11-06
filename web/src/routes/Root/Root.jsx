@@ -105,7 +105,8 @@ const Root = () => {
                     />
                     :
                     <>
-                        {loading &&
+                        {loading
+                            ?
                             <Section title='Loading...' loading={loading}>
                                 {[...Array(7)].map((_, e) => (
                                     <Cell
@@ -114,18 +115,22 @@ const Root = () => {
                                     />
                                 ))}
                             </ Section>
-                        }
-                        {favorites.length > 0 &&
-                            <Section title='Favorites'>
-                                {mapCell(favorites)}
-                            </ Section>
-                        }
+                            :
+                            <>
+                                {
+                                    favorites.length > 0 &&
+                                    <Section title='Favorites'>
+                                        {mapCell(favorites)}
+                                    </ Section>
+                                }
 
-                        {Object.keys(homeData).map((key, i) => (
-                            <Section title={homeData[key].name} key={i}>
-                                {mapCell(homeData[key].data)}
-                            </ Section >
-                        ))}
+                                {Object.keys(homeData).map((key, i) => (
+                                    <Section title={homeData[key].name} key={i}>
+                                        {mapCell(homeData[key].data)}
+                                    </ Section >
+                                ))}
+                            </>
+                        }
                     </>
             }
         </>
