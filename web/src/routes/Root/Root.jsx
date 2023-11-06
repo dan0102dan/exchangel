@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { useNavigate, ScrollRestoration } from 'react-router-dom'
+import React, { useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
 
 const Root = () => {
-    const { favorites, setFavorites, homeData, setHomeData, searchQuery, setSearchQuery, searchResult, setSearchResult } = useAppState()
-    const [loading, setLoading] = useState(true)
-    const [fetching, setFetching] = useState(false)
+    const {
+        favorites, setFavorites,
+        homeData, setHomeData,
+        searchQuery, setSearchQuery,
+        searchResult, setSearchResult,
+        loading, setLoading,
+        fetching, setFetching
+    } = useAppState()
     const navigate = useNavigate()
 
     const getData = useCallback(async () => {
@@ -23,14 +28,14 @@ const Root = () => {
             console.error(e)
         }
         setLoading(false)
-    }, [setHomeData, setFavorites])
+    }, [setHomeData, setFavorites, setLoading])
 
     useEffect(() => {
         if (!Object.keys(homeData).length)
             getData()
         else
             setLoading(false)
-    }, [homeData, getData])
+    }, [homeData, getData, setLoading])
 
     const searchData = useCallback(async (query) => {
         setFetching(true)
@@ -42,7 +47,7 @@ const Root = () => {
             console.error(e)
         }
         setFetching(false)
-    }, [setSearchResult])
+    }, [setSearchResult, setFetching])
 
     useEffect(() => {
         if (searchQuery)
@@ -75,7 +80,7 @@ const Root = () => {
     })
 
     return (
-        <div>
+        <>
             <Search setDebounceInput={setSearchQuery} param={'cur'} />
             {searchQuery
                 ? !searchResult.length
@@ -134,8 +139,7 @@ const Root = () => {
                         }
                     </>
             }
-            <ScrollRestoration />
-        </div>
+        </>
     )
 }
 
