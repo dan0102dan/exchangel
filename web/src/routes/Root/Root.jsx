@@ -83,44 +83,50 @@ const Root = () => {
                             title={'Searhing...'}
                             description={'Looking for information on the server.'}
                             icon={'👀'}
+                            loading={loading}
                         />
                         :
                         <Placeholder
                             title={'Empty'}
                             description={'Unfortunately, nothing was found.'}
                             icon={'😔'}
+                            loading={loading}
                         />
                     :
                     mapCell(searchResult)
-                : loading
+                : !loading && !Object.keys(homeData).length
                     ?
                     <Placeholder
-                        title={'Loading...'}
-                        description={'Getting basic information.'}
-                        icon={'🔍'}
+                        title={'Empty'}
+                        description={'Unfortunately, nothing was found.'}
+                        icon={'😔'}
+                        action={<Button onClick={() => getData()}>Reload</Button >}
+                        loading={loading}
                     />
-                    : !Object.keys(homeData).length
-                        ?
-                        <Placeholder
-                            title={'Empty'}
-                            description={'Unfortunately, nothing was found.'}
-                            icon={'😔'}
-                            action={<Button onClick={() => getData()}>Reload</Button >}
-                        />
-                        :
-                        <>
-                            {favorites.length
-                                ? <Section title='Favorites'>
-                                    {mapCell(favorites)}
-                                </ Section >
-                                : null}
+                    :
+                    <>
+                        {loading &&
+                            <Section title='Loading...' loading={loading}>
+                                {[...Array(7)].map((_, e) => (
+                                    <Cell
+                                        key={e}
+                                        loading={true}
+                                    />
+                                ))}
+                            </ Section>
+                        }
+                        {favorites.length > 0 &&
+                            <Section title='Favorites'>
+                                {mapCell(favorites)}
+                            </ Section>
+                        }
 
-                            {Object.keys(homeData).map((key, i) => (
-                                <Section title={homeData[key].name} key={i}>
-                                    {mapCell(homeData[key].data)}
-                                </ Section >
-                            ))}
-                        </>
+                        {Object.keys(homeData).map((key, i) => (
+                            <Section title={homeData[key].name} key={i}>
+                                {mapCell(homeData[key].data)}
+                            </ Section >
+                        ))}
+                    </>
             }
         </>
     )

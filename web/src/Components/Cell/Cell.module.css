@@ -15,10 +15,19 @@
     background-color: var(--tg-theme-secondary-bg-color);
 }
 
-.icon {
+.placeholderIcon, .placeholderTitle, .placeholderSubtitle {
+    background-color: rgba(204, 203, 203, 0.5);
+    border-radius: 8px;
+}
+
+.icon, .placeholderIcon {
     width: 32px;
     height: 32px;
     margin-right: 16px;
+}
+
+.placeholderIcon {
+    border-radius: 50%;
 }
 
 .content {
@@ -32,9 +41,20 @@
     color: var(--tg-theme-text-color);
 }
 
+.placeholderTitle {
+    width: 25%;
+    height: 16px;
+    margin-bottom: 8px;
+}
+
 .subtitle {
     font-size: 14px;
     color: var(--tg-theme-hint-color);
+}
+
+.placeholderSubtitle {
+    width: 25%;
+    height: 14px;
 }
 
 .extraContent {

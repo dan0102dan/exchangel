@@ -10,8 +10,11 @@ const Swap = () => {
     const { favorites, setFavorites } = useAppState()
 
     const [loading, setLoading] = useState(false)
+    const [toggling, setToggling] = useState(false)
     const [ccy, setCcy] = useState({ ...state })
     const [isFavorite, setIsFavorite] = useState(false)
+    const [baseCcy, setBaseCcy] = useState('')
+    const [quoteCcy, setQuoteCcy] = useState('')
 
     const getCcy = useCallback(async () => {
         setLoading(true)
@@ -20,21 +23,22 @@ const Swap = () => {
             if (data.isFavorite)
                 setFavorites([data])
             setCcy(data)
+            if (baseCcy)
+                setQuoteCcy(baseCcy * data.last)
+            else if (quoteCcy)
+                setBaseCcy(quoteCcy / data.last)
         }
         catch (e) {
             console.error(e)
         }
         setLoading(false)
-    }, [instId, setFavorites])
+    }, [instId, setFavorites, baseCcy, quoteCcy])
 
     useEffect(() => {
         if (!Object.keys(ccy).length)
             getCcy()
         window.history.replaceState({}, document.title)
     }, [ccy, getCcy])
-
-    const [baseCcy, setBaseCcy] = useState('')
-    const [quoteCcy, setQuoteCcy] = useState('')
 
     const baseSwap = (e) => {
         setBaseCcy(e.target.value)
@@ -54,11 +58,13 @@ const Swap = () => {
 
         try {
             HapticFeedback.selectionChanged()
+            setToggling(true)
             const { data } = await server.get('/toggleFavorite', { params: { instId } })
             if (data)
                 setFavorites([ccy, ...favorites])
             else
                 setFavorites(favorites.filter(e => e.instId !== ccy.instId))
+            setToggling(false)
         }
         catch (e) {
             console.error(e)
@@ -66,54 +72,48 @@ const Swap = () => {
     }
 
     return (
-        loading
+        !loading && !Object.keys(ccy).length
             ?
             <Placeholder
-                title={'Loading...'}
-                description={'Getting basic information.'}
-                icon={'🔍'}
+                title={'Empty'}
+                description={'Unfortunately, nothing was found.'}
+                icon={'😔'}
+                action={<Button onClick={() => getCcy()}>Reload</Button >}
             />
-            : !Object.keys(ccy).length
-                ?
-                <Placeholder
-                    title={'Empty'}
-                    description={'Unfortunately, nothing was found.'}
-                    icon={'😔'}
-                    action={<Button onClick={() => getCcy()}>Reload</Button >}
-                />
-                :
-                <>
-                    <Section>
-                        <MiniCell title={ccy.baseCcy.name} icon={ccy.baseCcy.logoLink} />
-                        <InputNumber value={baseCcy} onChange={baseSwap} />
-                    </Section>
-                    <Section>
-                        <MiniCell title={ccy.quoteCcy.name} icon={ccy.quoteCcy.logoLink} />
-                        <InputNumber value={quoteCcy} onChange={quoteSwap} />
-                    </Section>
-                    <Section title='Info'>
-                        <HorizontalList>
-                            <InfoBlock text="last" number={ccy.last} />
-                            <InfoBlock text="open" number={ccy.open24h} />
-                            <InfoBlock text="24'highest" number={ccy.high24h} />
-                            <InfoBlock text="24'lowest" number={ccy.low24h} />
-                            <InfoBlock text="24'volume" number={ccy.vol24h} />
-                        </HorizontalList>
-                        <ProgressBar
-                            minValue={ccy.low24h}
-                            maxValue={ccy.high24h}
-                            openPrice={ccy.open24h}
-                            currentPrice={ccy.last}
-                            title="day's range"
-                        />
-                        <Button
-                            styleType='favoriteButton'
-                            onClick={toggleFavorite}
-                        >
-                            {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                        </Button>
-                    </Section>
-                </>
+            :
+            <>
+                <Section loading={loading}>
+                    <MiniCell title={ccy.baseCcy?.name} icon={ccy.baseCcy?.logoLink} loading={loading} />
+                    <InputNumber value={baseCcy} onChange={baseSwap} />
+                </Section>
+                <Section loading={loading}>
+                    <MiniCell title={ccy.quoteCcy?.name} icon={ccy.quoteCcy?.logoLink} loading={loading} />
+                    <InputNumber value={quoteCcy} onChange={quoteSwap} />
+                </Section>
+                <Section title='Info' loading={loading}>
+                    <HorizontalList>
+                        <InfoBlock text="last" number={ccy.last} />
+                        <InfoBlock text="open" number={ccy.open24h} />
+                        <InfoBlock text="24'highest" number={ccy.high24h} />
+                        <InfoBlock text="24'lowest" number={ccy.low24h} />
+                        <InfoBlock text="24'volume" number={ccy.vol24h} />
+                    </HorizontalList>
+                    <ProgressBar
+                        minValue={ccy.low24h}
+                        maxValue={ccy.high24h}
+                        openPrice={ccy.open24h}
+                        currentPrice={ccy.last}
+                        title="day's range"
+                    />
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                </Section>
+            </>
     )
 }
 

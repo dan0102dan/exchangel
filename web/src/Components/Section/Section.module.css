@@ -1,4 +1,4 @@
-.section {
+.section, .loading {
     overflow-x: hidden;
     margin-top: 16px;
     border-radius: 8px;
@@ -11,4 +11,18 @@
     font-weight: bold;
     color: var(--tg-theme-text-color);
     border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+}
+
+.loading {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
 }

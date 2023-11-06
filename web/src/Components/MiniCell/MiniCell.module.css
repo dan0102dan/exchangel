@@ -18,8 +18,13 @@
     color: var(--tg-theme-text-color);
 }
 
-.icon {
+.icon, .placeholderIcon {
     width: 36px;
     height: 36px;
     margin-right: 12px;
+}
+
+.placeholderIcon {
+    border-radius: 50%;
+    background-color: rgba(204, 203, 203, 0.5);
 }

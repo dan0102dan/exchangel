@@ -14,6 +14,10 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.button:disabled, .favoriteButton:disabled {
+    color: var(--tg-theme-hint-color);
+}
+
 .favoriteButton {
     width: -webkit-fill-available;
     margin: 12px;
