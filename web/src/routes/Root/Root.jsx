@@ -5,7 +5,7 @@ import { server } from '../../API'
 
 const Root = () => {
     const { favorites, setFavorites, homeData, setHomeData, searchQuery, setSearchQuery, searchResult, setSearchResult } = useAppState()
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [fetching, setFetching] = useState(false)
     const navigate = useNavigate()
 
@@ -28,6 +28,8 @@ const Root = () => {
     useEffect(() => {
         if (!Object.keys(homeData).length)
             getData()
+        else
+            setLoading(false)
     }, [homeData, getData])
 
     const searchData = useCallback(async (query) => {

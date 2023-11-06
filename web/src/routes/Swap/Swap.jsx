@@ -9,7 +9,7 @@ const Swap = () => {
 
     const { favorites, setFavorites } = useAppState()
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [toggling, setToggling] = useState(false)
     const [ccy, setCcy] = useState({ ...state })
     const [isFavorite, setIsFavorite] = useState(false)
@@ -37,6 +37,8 @@ const Swap = () => {
     useEffect(() => {
         if (!Object.keys(ccy).length)
             getCcy()
+        else
+            setLoading(false)
         window.history.replaceState({}, document.title)
     }, [ccy, getCcy])
 
