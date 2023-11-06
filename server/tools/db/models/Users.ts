@@ -6,7 +6,8 @@ const userSchema = {
 		type: Number,
 		required: true,
 		unique: true
-	}
+	},
+	favorites: [String]
 }
 
 export default mongoose.model('Users', new Schema(userSchema))

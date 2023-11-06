@@ -1,26 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { Section, InputNumber, MiniCell, Placeholder, Button, HorizontalList, InfoBlock, ProgressBar } from '../../Components/index'
+import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, HorizontalList, InfoBlock, ProgressBar } from '../../Components/index'
 
 const Swap = () => {
     const { state } = useLocation()
     const { instId } = useParams()
 
+    const { favorites, setFavorites } = useAppState()
+
     const [loading, setLoading] = useState(false)
     const [ccy, setCcy] = useState({ ...state })
+    const [isFavorite, setIsFavorite] = useState(false)
 
     const getCcy = useCallback(async () => {
         setLoading(true)
         try {
             const { data } = await server.get('/getCcy', { params: { instId } })
+            if (data.isFavorite)
+                setFavorites([data])
             setCcy(data)
         }
         catch (e) {
             console.error(e)
         }
         setLoading(false)
-    }, [instId])
+    }, [instId, setFavorites])
 
     useEffect(() => {
         if (!Object.keys(ccy).length)
@@ -37,6 +42,23 @@ const Swap = () => {
     const quoteSwap = (e) => {
         setQuoteCcy(e.target.value)
         setBaseCcy(e.target.value / ccy.last || '')
+    }
+
+    useEffect(() => {
+        setIsFavorite(favorites?.some(e => e.instId === ccy.instId))
+    }, [favorites, ccy])
+
+    const toggleFavorite = async () => {
+        try {
+            const { data } = await server.get('/toggleFavorite', { params: { instId } })
+            if (data)
+                setFavorites([...favorites, ccy])
+            else
+                setFavorites(favorites.filter(e => e.instId !== ccy.instId))
+        }
+        catch (e) {
+            console.error(e)
+        }
     }
 
     return (
@@ -80,6 +102,12 @@ const Swap = () => {
                             currentPrice={ccy.last}
                             title="day's range"
                         />
+                        <Button
+                            styleType='favoriteButton'
+                            onClick={toggleFavorite}
+                        >
+                            {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                        </Button>
                     </Section>
                 </>
     )

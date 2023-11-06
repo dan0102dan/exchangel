@@ -4,7 +4,7 @@ import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../C
 import { server } from '../../API'
 
 const Root = () => {
-    const { homeData, setHomeData, searchQuery, setSearchQuery, searchResult, setSearchResult } = useAppState()
+    const { favorites, setFavorites, homeData, setHomeData, searchQuery, setSearchQuery, searchResult, setSearchResult } = useAppState()
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(false)
     const navigate = useNavigate()
@@ -13,13 +13,18 @@ const Root = () => {
         setLoading(true)
         try {
             const { data } = await server.get('/home')
+            if (data.favorites) {
+                setFavorites(data.favorites)
+                delete data.favorites
+            }
             setHomeData(data)
         }
         catch (e) {
             console.error(e)
         }
         setLoading(false)
-    }, [setHomeData])
+    }, [setHomeData, setFavorites])
+
     useEffect(() => {
         if (!Object.keys(homeData).length)
             getData()
@@ -103,11 +108,19 @@ const Root = () => {
                             action={<Button onClick={() => getData()}>Reload</Button >}
                         />
                         :
-                        Object.keys(homeData).map((key, i) => (
-                            <Section title={homeData[key].name} key={i}>
-                                {mapCell(homeData[key].data)}
-                            </ Section >
-                        ))
+                        <>
+                            {favorites.length
+                                ? <Section title='Favorites'>
+                                    {mapCell(favorites)}
+                                </ Section >
+                                : null}
+
+                            {Object.keys(homeData).map((key, i) => (
+                                <Section title={homeData[key].name} key={i}>
+                                    {mapCell(homeData[key].data)}
+                                </ Section >
+                            ))}
+                        </>
             }
         </>
     )
