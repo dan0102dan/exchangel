@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import {
   createHashRouter,
   RouterProvider,
+  ScrollRestoration
 } from 'react-router-dom'
 import { AppProvider } from './Components/index'
 import { ErrorPage, Root, Swap } from './routes/index'
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AppProvider>
       <RouterProvider router={router} />
+      <ScrollRestoration />
     </AppProvider>
   </React.StrictMode>
 )
