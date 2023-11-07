@@ -45,14 +45,14 @@ app.use(async (ctx, next) => {
 
 router.get('/home', async (ctx) => {
     let favorites = await db.Tickers.find({
-        instId: { $in: ctx.state.user.favorites }
+        instId: { $in: ctx.state.user?.favorites }
     })
         .populate('baseCcy')
         .populate('quoteCcy')
         .lean()
 
     const favoritesMap = new Map(favorites.map((favorite) => [favorite.instId, favorite]))
-    favorites = ctx.state.user.favorites.map((instId) => favoritesMap.get(instId))
+    favorites = ctx.state.user?.favorites.map((instId) => favoritesMap.get(instId))
 
     const popular = {
         name: 'Popular',
@@ -94,7 +94,7 @@ router.get('/getCcy', async (ctx) => {
             .populate('baseCcy')
             .populate('quoteCcy')
             .lean(),
-        isFavorite: ctx.state.user.favorites.includes(instId)
+        isFavorite: ctx.state.user?.favorites.includes(instId)
     }
 
     ctx.status = 200

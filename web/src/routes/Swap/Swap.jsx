@@ -98,11 +98,11 @@ const Swap = () => {
                 </Section>
                 <Section title='Info' loading={loading}>
                     <HorizontalList>
-                        <InfoBlock text="last" number={ccy.last} />
-                        <InfoBlock text="open" number={ccy.open24h} />
-                        <InfoBlock text="24'highest" number={ccy.high24h} />
-                        <InfoBlock text="24'lowest" number={ccy.low24h} />
-                        <InfoBlock text="24'volume" number={ccy.vol24h} />
+                        <InfoBlock text="last" number={ccy.last} loading={loading} />
+                        <InfoBlock text="open" number={ccy.open24h} loading={loading} />
+                        <InfoBlock text="24'lowest" number={ccy.low24h} loading={loading} />
+                        <InfoBlock text="24'highest" number={ccy.high24h} loading={loading} />
+                        <InfoBlock text="24'volume" number={ccy.vol24h} loading={loading} />
                     </HorizontalList>
                     <ProgressBar
                         minValue={ccy.low24h}

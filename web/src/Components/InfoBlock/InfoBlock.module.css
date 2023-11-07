@@ -17,3 +17,11 @@
   margin-top: 4px;
   color: var(--tg-theme-text-color);
 }
+
+.placeholderInfoNumber {
+  background-color: rgba(204, 203, 203, 0.5);
+  border-radius: 8px;
+  margin-top: 6px;
+  width: 45px;
+  height: 16px;
+}
