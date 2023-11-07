@@ -6,6 +6,7 @@ import { RateLimit } from 'koa2-ratelimit'
 import { mainBot } from '../../config'
 import { authorizeRequest, getTopData, searchTickers } from './functions'
 import { db } from '../../tools/index'
+import { User } from '../../classes'
 
 const app = new Koa()
 const router = new Router()
@@ -26,10 +27,11 @@ app.use(async (ctx, next) => {
         : authorizeRequest(ctx.headers.authorization, mainBot.id, mainBot.token)
 
     if (isAuthorized) {
-        ctx.headers.authorization.split('&').forEach(param => {
+        ctx.headers.authorization.split('&').forEach(async param => {
             const [key, value] = param.split('=')
             if (key === 'user') {
-                ctx.state.user = JSON.parse(decodeURIComponent(value))
+                const { id } = JSON.parse(decodeURIComponent(value))
+                ctx.state.user = await new User(id).getUser()
                 return
             }
         })
@@ -42,17 +44,15 @@ app.use(async (ctx, next) => {
 })
 
 router.get('/home', async (ctx) => {
-    const user = await db.Users.findOne({ id: ctx.state.user?.id })
-
     let favorites = await db.Tickers.find({
-        instId: { $in: user?.favorites }
+        instId: { $in: ctx.state.user.favorites }
     })
         .populate('baseCcy')
         .populate('quoteCcy')
         .lean()
 
     const favoritesMap = new Map(favorites.map((favorite) => [favorite.instId, favorite]))
-    favorites = user?.favorites.map((instId) => favoritesMap.get(instId))
+    favorites = ctx.state.user.favorites.map((instId) => favoritesMap.get(instId))
 
     const popular = {
         name: 'Popular',
@@ -88,14 +88,13 @@ router.get('/home', async (ctx) => {
 
 router.get('/getCcy', async (ctx) => {
     const { instId } = ctx.query
-    const user = await db.Users.findOne({ id: ctx.state.user?.id })
 
     const ccy = {
         ...await db.Tickers.findOne({ instId })
             .populate('baseCcy')
             .populate('quoteCcy')
             .lean(),
-        isFavorite: user?.favorites.includes(instId)
+        isFavorite: ctx.state.user.favorites.includes(instId)
     }
     console.log(ccy.isFavorite)
 
@@ -111,21 +110,10 @@ router.get('/search', async (ctx) => {
 })
 
 router.get('/toggleFavorite', async (ctx) => {
-    const { instId } = ctx.query
-    const user = await db.Users.findOne({ id: ctx.state.user?.id })
-
-    if (!user) throw new Error('User not found')
-
-    const index = user.favorites.indexOf(instId)
-    if (index !== -1)
-        user.favorites.splice(index, 1)
-    else if (instId)
-        user.favorites.unshift(instId)
-
-    await user.save()
+    const isFavorite = await ctx.state.user.toggleFavorite(ctx.query.instId)
 
     ctx.status = 200
-    ctx.body = user.favorites.some(e => e === instId)
+    ctx.body = isFavorite
 })
 
 app.use(async (ctx, next) => {

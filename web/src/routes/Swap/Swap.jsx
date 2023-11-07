@@ -114,6 +114,70 @@ const Swap = () => {
                     >
                         {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                     </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
+                    <Button
+                        styleType='favoriteButton'
+                        onClick={toggleFavorite}
+                        loading={loading || toggling}
+                    >
+                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    </Button>
                 </Section>
             </>
     )
