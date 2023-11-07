@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
             if (key === 'user') {
                 const { id } = JSON.parse(decodeURIComponent(value))
                 ctx.state.user = await new User(id).getUser()
-                return
+                break
             }
         }
 
