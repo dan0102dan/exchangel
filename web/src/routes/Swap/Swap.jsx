@@ -16,6 +16,10 @@ const Swap = () => {
     const [baseCcy, setBaseCcy] = useState('')
     const [quoteCcy, setQuoteCcy] = useState('')
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     const getCcy = useCallback(async () => {
         setLoading(true)
         try {
@@ -107,70 +111,6 @@ const Swap = () => {
                         currentPrice={ccy.last}
                         title="day's range"
                     />
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
-                    <Button
-                        styleType='favoriteButton'
-                        onClick={toggleFavorite}
-                        loading={loading || toggling}
-                    >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    </Button>
                     <Button
                         styleType='favoriteButton'
                         onClick={toggleFavorite}

@@ -75,7 +75,10 @@ const Root = () => {
             info2={plusFor24}
             info3={percFor24}
             type={plusOrMinus}
-            onClick={() => navigate(`/ccy/${e.instId}`, { state: e })}
+            onClick={() => {
+                navigate(`/ccy/${e.instId}`, { state: e })
+                window.scrollTo(0, 0)
+            }}
         />
     })
 

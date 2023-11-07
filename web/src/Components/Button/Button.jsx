@@ -2,7 +2,6 @@ import React from 'react'
 import styles from './Button.module.css'
 
 const Button = ({ children, onClick, loading, styleType }) => {
-    console.log(loading)
     return (
         <button
             className={styles[styleType ? styleType : 'button']}

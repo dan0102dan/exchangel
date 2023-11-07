@@ -27,7 +27,7 @@ app.use(async (ctx, next) => {
         : authorizeRequest(ctx.headers.authorization, mainBot.id, mainBot.token)
 
     if (isAuthorized) {
-        ctx.headers.authorization.split('&').forEach(async param => {
+        await ctx.headers.authorization.split('&').forEach(async param => {
             const [key, value] = param.split('=')
             if (key === 'user') {
                 const { id } = JSON.parse(decodeURIComponent(value))
@@ -96,7 +96,6 @@ router.get('/getCcy', async (ctx) => {
             .lean(),
         isFavorite: ctx.state.user.favorites.includes(instId)
     }
-    console.log(ccy.isFavorite)
 
     ctx.status = 200
     ctx.body = ccy
