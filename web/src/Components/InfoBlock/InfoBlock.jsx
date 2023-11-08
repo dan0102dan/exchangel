@@ -4,10 +4,10 @@ import styles from './InfoBlock.module.css'
 const InfoBlock = ({ text, number, loading }) => {
     return (
         <div className={styles.infoBlock}>
-            <span className={styles.infoText}>{text}</span>
+            <div className={styles.infoText}>{text}</div>
             {loading
                 ? <div className={styles.placeholderInfoNumber} />
-                : <span className={styles.infoNumber}>{number}</span>}
+                : <div className={styles.infoNumber}>{number}</div>}
         </div>
     )
 }
