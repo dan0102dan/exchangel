@@ -7,13 +7,9 @@ const ProgressBar = ({ minValue, maxValue, openPrice, currentPrice, title }) => 
     const leftOffset = ((Math.min(openPrice, currentPrice) - minValue) / totalRange) * 100
     const filledWidth = (filledRange / totalRange) * 100
 
-    const getSign = () => {
-        if (currentPrice > openPrice) return '+'
-        if (currentPrice < openPrice) return '-'
-        return ''
-    }
-
-    const type = getSign()
+    const progressFillClass = `${styles.progressFill} ${currentPrice > openPrice ? styles.progressFillPositive :
+        currentPrice < openPrice ? styles.progressFillNegative :
+            ''}`
 
     return (
         <div className={styles.container}>
@@ -22,9 +18,9 @@ const ProgressBar = ({ minValue, maxValue, openPrice, currentPrice, title }) => 
                 <div className={styles.title}>{title}</div>
                 <div className={styles.maxValue}>{maxValue}</div>
             </div>
-            <div className={styles.progressBar}>
+            <div className={styles.progressBar} aria-label={`Current progress between ${minValue} and ${maxValue}`}>
                 <div
-                    className={type === '+' ? styles.progressFillPositive : type === '-' ? styles.progressFillNegative : styles.progressFill}
+                    className={progressFillClass}
                     style={{
                         width: `${filledWidth}%`,
                         left: `${leftOffset}%`

@@ -104,13 +104,13 @@ const Swap = () => {
                         text={`24h Volume: ${ccy.vol24h} ${ccy.baseCcy?.ccy}`}
                         loading={loading}
                     />
-                    <ProgressBar
+                    {/* <ProgressBar
                         minValue={ccy.low24h}
                         maxValue={ccy.high24h}
                         openPrice={ccy.open24h}
                         currentPrice={ccy.last}
                         title="day's range"
-                    />
+                    /> */}
                     <Button
                         styleType='favoriteButton'
                         onClick={toggleFavorite}
