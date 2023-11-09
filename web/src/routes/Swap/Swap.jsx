@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell } from '../../Components/index'
+import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar } from '../../Components/index'
 
 const Swap = () => {
     const { state } = useLocation()
@@ -104,13 +104,13 @@ const Swap = () => {
                         text={`24h Volume: ${ccy.vol24h} ${ccy.baseCcy?.ccy}`}
                         loading={loading}
                     />
-                    {/* <ProgressBar
+                    <ProgressBar
                         minValue={ccy.low24h}
                         maxValue={ccy.high24h}
                         openPrice={ccy.open24h}
                         currentPrice={ccy.last}
                         title="day's range"
-                    /> */}
+                    />
                     <Button
                         styleType='favoriteButton'
                         onClick={toggleFavorite}
