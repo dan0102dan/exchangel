@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar } from '../../Components/index'
+import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell } from '../../Components/index'
 
 const Swap = () => {
     const { state } = useLocation()
