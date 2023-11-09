@@ -2,7 +2,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
     padding: 8px;
 }
 
