@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+    padding: 8px;
+}
+
+.text {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color);
+}
+
+.placeholderText {
+    background-color: rgba(204, 203, 203, 0.5);
+    border-radius: 8px;
+    width: 50%;
+    height: 17px;
+}

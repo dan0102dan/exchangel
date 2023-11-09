@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, HorizontalList, InfoBlock, ProgressBar } from '../../Components/index'
+import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar } from '../../Components/index'
 
 const Swap = () => {
     const { state } = useLocation()
@@ -97,13 +97,13 @@ const Swap = () => {
                     <InputNumber value={quoteCcy} onChange={quoteSwap} />
                 </Section>
                 <Section title='Info' loading={loading}>
-                    <HorizontalList>
-                        <InfoBlock text="last" number={ccy.last} loading={loading} />
-                        <InfoBlock text="open" number={ccy.open24h} loading={loading} />
-                        <InfoBlock text="24'lowest" number={ccy.low24h} loading={loading} />
-                        <InfoBlock text="24'highest" number={ccy.high24h} loading={loading} />
-                        <InfoBlock text="24'volume" number={ccy.vol24h} loading={loading} />
-                    </HorizontalList>
+                    <StrokeCell
+                        text={`1 ${ccy.baseCcy?.ccy} = ${ccy.last} ${ccy.quoteCcy?.ccy}`}
+                        loading={loading} />
+                    <StrokeCell
+                        text={`24h Volume: ${ccy.vol24h} ${ccy.baseCcy?.ccy}`}
+                        loading={loading}
+                    />
                     <ProgressBar
                         minValue={ccy.low24h}
                         maxValue={ccy.high24h}
