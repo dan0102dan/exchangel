@@ -102,7 +102,7 @@ router.get('/getCcy', async (ctx) => {
 })
 
 router.get('/search', async (ctx) => {
-    const sortedTickers = await searchTickers(ctx.query.query)
+    const sortedTickers = await searchTickers(ctx.query.query.trim())
 
     ctx.status = 200
     ctx.body = sortedTickers
