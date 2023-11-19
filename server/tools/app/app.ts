@@ -52,7 +52,7 @@ router.get('/home', async (ctx) => {
         .lean()
 
     const favoritesMap = new Map(favorites.map((favorite) => [favorite.instId, favorite]))
-    favorites = ctx.state.user?.favorites.map((instId) => favoritesMap.get(instId))
+    favorites = ctx.state.user?.favorites?.map((instId) => favoritesMap.get(instId))
 
     const popular = {
         name: 'Popular',
