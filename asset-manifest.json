@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/exchangel/static/css/main.143fe15a.css",
+    "main.js": "/exchangel/static/js/main.6014d4e4.js",
+    "index.html": "/exchangel/index.html",
+    "static/media/SearchIcon.svg": "/exchangel/static/media/SearchIcon.8813b9b4a87217894859c6ff8fa74721.svg",
+    "main.143fe15a.css.map": "/exchangel/static/css/main.143fe15a.css.map",
+    "main.6014d4e4.js.map": "/exchangel/static/js/main.6014d4e4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.143fe15a.css",
+    "static/js/main.6014d4e4.js"
+  ]
+}
