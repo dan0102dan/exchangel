@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './StrokeCell.module.css' // Используем CSS модули для стилей
+import styles from './StrokeCell.module.css'
 
 const StrokeCell = ({ text, loading }) => {
     return (

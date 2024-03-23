@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 8px;
+    margin: 8px
 }
 
 .text {
