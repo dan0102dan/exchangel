@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const baseURL = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:49300'
+    ? 'http://localhost:49301'
     : 'https://exchangel.dan0102dan.ru'
 
 export const server = axios.create({

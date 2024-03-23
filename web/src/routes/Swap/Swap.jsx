@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
 import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar } from '../../Components/index'
+import { smartRound } from '../../functions'
 
 const Swap = () => {
     const { state } = useLocation()
@@ -15,10 +16,6 @@ const Swap = () => {
     const [isFavorite, setIsFavorite] = useState(false)
     const [baseCcy, setBaseCcy] = useState('')
     const [quoteCcy, setQuoteCcy] = useState('')
-
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
 
     const getCcy = useCallback(async () => {
         setLoading(true)
@@ -47,12 +44,16 @@ const Swap = () => {
     }, [ccy, getCcy])
 
     const baseSwap = (e) => {
-        setBaseCcy(e.target.value)
-        setQuoteCcy(e.target.value * ccy.last || '')
+        const inputValue = e.target.value.replace(',', '.')
+
+        setBaseCcy(inputValue)
+        setQuoteCcy(smartRound(inputValue * ccy.last) || '')
     }
     const quoteSwap = (e) => {
-        setQuoteCcy(e.target.value)
-        setBaseCcy(e.target.value / ccy.last || '')
+        const inputValue = e.target.value.replace(',', '.')
+
+        setQuoteCcy(inputValue)
+        setBaseCcy(smartRound(inputValue / ccy.last) || '')
     }
 
     useEffect(() => {
@@ -101,7 +102,7 @@ const Swap = () => {
                         text={`1 ${ccy.baseCcy?.ccy} = ${ccy.last} ${ccy.quoteCcy?.ccy}`}
                         loading={loading} />
                     <StrokeCell
-                        text={`24h Volume: ${ccy.vol24h} ${ccy.baseCcy?.ccy}`}
+                        text={`24h Volume: ${smartRound(Number(ccy.vol24h))} ${ccy.baseCcy?.ccy}`}
                         loading={loading}
                     />
                     <ProgressBar

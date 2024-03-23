@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
+import { smartRound } from '../../functions'
 
 const Root = () => {
     const {
@@ -63,8 +64,8 @@ const Root = () => {
 
         const plusOrMinus = getSign()
 
-        const plusFor24 = plusOrMinus + Math.abs((e.last - e.open24h).toFixed(Math.max(e.last?.toString().split('.')[1]?.length || 2, e.open24h?.toString().split('.')[1]?.length || 2)))
-        const percFor24 = plusOrMinus + Math.abs((e.last * 100 / e.open24h - 100).toFixed(2)) + '%'
+        const plusFor24 = plusOrMinus + Math.abs(smartRound(e.last - e.open24h))
+        const percFor24 = plusOrMinus + Math.abs(smartRound(e.last * 100 / e.open24h - 100)) + '%'
 
         return <Cell
             key={i}
