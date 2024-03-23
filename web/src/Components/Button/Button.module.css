@@ -1,11 +1,11 @@
-.button, .favoriteButton {
+.button, .favoriteButton, .destructiveButton {
     display: inline-block;
     padding: 10px 18px;
     margin: 12px;
     font-size: 16px;
     font-weight: bold;
-    color: var(--tg-theme-button-text-color);
-    background-color: var(--tg-theme-button-color);
+    color: var(--app-button-text-color);
+    background-color: var(--app-button-color);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -14,16 +14,20 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.button:disabled, .favoriteButton:disabled {
-    color: var(--tg-theme-hint-color);
+.button:disabled, .favoriteButton:disabled, .destructiveButton:disabled {
+    color: var(--app-subtitle-text-color);
 }
 
-.favoriteButton {
+.button:active, .favoriteButton:active, .destructiveButton:active {
+    background-color: rgba(169, 199, 255, 0.2);
+}
+
+.favoriteButton, .destructiveButton {
     width: -webkit-fill-available;
     margin: 12px;
     padding: 12px;
 }
 
-.button:active, .favoriteButton:active {
-    background-color: rgba(169, 199, 255, 0.2);
+.destructiveButton {
+    color: var(--app-destructive-text-color)
 }

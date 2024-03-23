@@ -2,15 +2,15 @@
     overflow-x: hidden;
     margin-top: 16px;
     border-radius: 8px;
-    background-color: var(--tg-theme-bg-color);
+    background-color: var(--app-bg-color);
 }
 
 .title {
     padding: 16px;
     font-size: 20px;
     font-weight: bold;
-    color: var(--tg-theme-text-color);
-    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+    color: var(--app-section-header-text-color);
+    border-bottom: 1px solid var(--app-section-bg-color);
 }
 
 .loading {

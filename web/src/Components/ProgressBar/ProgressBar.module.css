@@ -14,11 +14,11 @@
 }
 
 .minValue, .maxValue {
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
 }
 
 .title {
-    color: var(--tg-theme-hint-color);
+    color: var(--app-subtitle-text-color);
 }
 
 .progressBar {
@@ -34,7 +34,7 @@
     height: 100%;
     top: 0;
     width: 100%;
-    background-color: var(--tg-theme-link-color);
+    background-color: var(--app-link-color);
 }
 
 .progressFillPositive {

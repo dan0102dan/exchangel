@@ -45,6 +45,7 @@ const updateData = async () => {
 }
 
 const updater = async (period) => {
+    console.log('Updating the database...')
     try {
         await updateCurrency()
 
@@ -56,7 +57,8 @@ const updater = async (period) => {
         console.error(e.message)
     }
 
-    setTimeout(updater, period)
+    console.log(`Completed, sleeping ${period / 1000}s...`)
+    setTimeout(updater, period, period)
 }
 
 export default updater

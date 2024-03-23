@@ -2,8 +2,8 @@
     display: flex;
     align-items: center;
     padding: 12px;
-    border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
-    background-color: var(--tg-theme-bg-color);
+    border-bottom: 1px solid var(--app-section-bg-color);
+    background-color: var(--app-bg-color);
     transition: background-color 0.2s;
 }
 
@@ -15,7 +15,7 @@
 .title {
     font-size: 24px;
     font-weight: bold;
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
 }
 
 .icon, .placeholderIcon {

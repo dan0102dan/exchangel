@@ -9,26 +9,26 @@
 .icon {
     width: 56px;
     height: 56px;
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
     font-size: 3em;
 }
 
 .title {
     font-size: 20px;
     font-weight: bold;
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
     margin-top: 16px;
 }
 
 .description {
     font-size: 16px;
-    color: var(--tg-theme-hint-color);
+    color: var(--app-subtitle-text-color);
     margin-top: 8px;
 }
 
 .errorInfo {
     font-size: 16px;
-    color: var(--tg-theme-hint-color);
+    color: var(--app-subtitle-text-color);
     font-style: oblique;
     margin-top: 8px;
 }

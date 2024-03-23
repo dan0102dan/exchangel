@@ -2,7 +2,7 @@
     display: flex;
     overflow-x: hidden;
     align-items: center;
-    background-color: var(--tg-theme-bg-color);
+    background-color: var(--app-bg-color);
     border-radius: 0 0 8px 8px;
     max-width: 100%;
     margin: 0 auto;
@@ -15,14 +15,14 @@
     margin: 12px 4px 12px 4px;
     font-size: 16px;
     outline: none;
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
     background: transparent;
 }
 
 .searchIcon {
     width: 20px;
     height: 20px;
-    color: var(--tg-theme-text-color);
+    color: var(--app-text-color);
     animation: appearance 0.3s ease;
 }
 
