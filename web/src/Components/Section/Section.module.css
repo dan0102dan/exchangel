@@ -10,7 +10,7 @@
     font-size: 20px;
     font-weight: bold;
     color: var(--app-section-header-text-color);
-    border-bottom: 1px solid var(--app-section-bg-color);
+    border-bottom: 1px solid var(--app-secondary-bg-color);
 }
 
 .loading {

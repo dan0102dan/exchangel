@@ -1,4 +1,4 @@
-.button, .favoriteButton, .destructiveButton {
+.button, .favoriteButton {
     display: inline-block;
     padding: 10px 18px;
     margin: 12px;
@@ -14,20 +14,16 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.button:disabled, .favoriteButton:disabled, .destructiveButton:disabled {
+.button:disabled, .favoriteButton:disabled {
     color: var(--app-subtitle-text-color);
 }
 
-.button:active, .favoriteButton:active, .destructiveButton:active {
+.button:active, .favoriteButton:active {
     background-color: rgba(169, 199, 255, 0.2);
 }
 
-.favoriteButton, .destructiveButton {
+.favoriteButton {
     width: -webkit-fill-available;
     margin: 12px;
     padding: 12px;
-}
-
-.destructiveButton {
-    color: var(--app-destructive-text-color)
 }

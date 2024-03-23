@@ -113,16 +113,16 @@ const Swap = () => {
                         title="day's range"
                     />
                     <Button
-                        styleType={isFavorite ? 'destructiveButton' : 'favoriteButton'}
+                        styleType='favoriteButton'
                         onClick={toggleFavorite}
                         loading={loading || toggling}
                     >
                         {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                     </Button>
                 </Section>
-                {/* <Section title='Triggers' loading={loading}>
+                <Section title='Triggers' loading={loading}>
 
-                </Section> */}
+                </Section>
             </>
     )
 }
