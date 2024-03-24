@@ -31,7 +31,6 @@ const searchPair = async () => {
             ).lean()
         }
         catch (e) {
-            // console.error(item.instId, e)
             continue
         }
     }

@@ -12,10 +12,9 @@ const Swap = () => {
 
     const [loading, setLoading] = useState(true)
     const [toggling, setToggling] = useState(false)
-    const [subscribing, setSubscribing] = useState(false)
+    const [gettingSubscriptions, setGettingSubscriptions] = useState(true)
     const [isFavorite, setIsFavorite] = useState(false)
 
-    const [subscriptions, setSubscriptions] = useState()
     const [ccy, setCcy] = useState({ ...state })
     const [baseCcy, setBaseCcy] = useState('')
     const [quoteCcy, setQuoteCcy] = useState('')
@@ -43,7 +42,6 @@ const Swap = () => {
             getCcy()
         else
             setLoading(false)
-        window.history.replaceState({}, document.title)
     }, [ccy, getCcy])
 
     const baseSwap = (e) => {
@@ -124,13 +122,10 @@ const Swap = () => {
                         {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                     </Button>
                 </Section>
-                <Section title='Triggers' loading={loading}>
+                <Section title='Triggers' loading={gettingSubscriptions}>
                     <TriggerForm
                         instId={instId}
-                        loading={loading || subscribing}
-                        setSubscribing={setSubscribing}
-                        subscriptions={subscriptions}
-                        setSubscriptions={setSubscriptions}
+                        setGettingSubscriptions={setGettingSubscriptions}
                     />
                 </Section>
             </>

@@ -3,12 +3,21 @@ import styles from './TriggerForm.module.css'
 import { Button } from '../index'
 import { server } from '../../API'
 
-const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions, setSubscriptions }) => {
+const TriggerForm = ({ instId, setGettingSubscriptions }) => {
     const [price, setPrice] = useState('')
     const [trend, setTrend] = useState('any')
 
+    const [subscribing, setSubscribing] = useState(false)
+    const [subscriptions, setSubscriptions] = useState()
+
+    const options = {
+        any: 'Any',
+        up: 'Ascending',
+        down: 'Descending'
+    }
+
     const getSubscriptions = useCallback(async () => {
-        setSubscribing(true)
+        setGettingSubscriptions(true)
         try {
             const { data } = await server.get('/subscriptions', { params: { instId } })
 
@@ -17,8 +26,8 @@ const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions,
         catch (e) {
             console.error(e)
         }
-        setSubscribing(false)
-    }, [instId, setSubscriptions, setSubscribing])
+        setGettingSubscriptions(false)
+    }, [instId, setSubscriptions, setGettingSubscriptions])
 
     useEffect(() => {
         if (!subscriptions)
@@ -59,12 +68,12 @@ const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions,
 
     return (
         <form className={styles.form}>
-            <div className={styles.labelGroup}>
-                <div className={styles.label}>Trigger price</div>
-                <div className={styles.label}>Select trend</div>
-            </div>
-            <div className={styles.inputGroup}>
+            <div className={styles.field}>
+                <div className={styles.labelContainer}>
+                    <label className={styles.label}>Trigger price</label>
+                </div>
                 <input
+                    id="price"
                     className={styles.input}
                     inputMode="decimal"
                     min="0"
@@ -73,20 +82,24 @@ const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions,
                     onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
                     placeholder="Enter price"
                 />
+                <div className={styles.labelContainer}>
+                    <label className={styles.label}>Select trend</label>
+                </div>
                 <select
+                    id="trend"
                     value={trend}
                     onChange={(e) => setTrend(e.target.value)}
                     className={styles.select}
                 >
-                    <option value="any">Any</option>
-                    <option value="up">Ascending</option>
-                    <option value="down">Descending</option>
+                    {Object.entries(options).map(([value, label]) =>
+                        <option value={value}>{label}</option>
+                    )}
                 </select>
             </div>
             <Button
                 styleType='triggerButton'
                 onClick={subscribe}
-                loading={loading || disabled}
+                loading={subscribing}
             >
                 Subscribe
             </Button>
@@ -95,7 +108,7 @@ const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions,
                     <div key={i} className={styles.item}>
                         <div className={styles.details}>
                             <span>Price: {e.price}</span>
-                            <span>Trend: {e.trend}</span>
+                            <span>Trend: {options[e.trend]}</span>
                         </div>
                         <Button
                             onClick={() => unsubscribe(e.price, e.trend)}

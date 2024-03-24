@@ -1,9 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --app-bg-color: var(--tg-theme-bg-color, #FFFFFF);
   --app-secondary-bg-color: var(--tg-theme-secondary-bg-color, #F5F5F5);
@@ -23,6 +17,30 @@
   --app-section-header-text-color: var(--tg-theme-section-header-text-color, #303030);
 
   --app-destructive-text-color: var(--tg-theme-destructive-text-color, #FF3B30);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-bg-color: var(--tg-theme-bg-color-dark, #121212);
+    --app-secondary-bg-color: var(--tg-theme-secondary-bg-color-dark, #1E1E1E);
+    --app-text-color: var(--tg-theme-text-color-dark, #E0E0E0);
+    --app-hint-color: var(--tg-theme-hint-color-dark, #B8B8B8);
+    --app-link-color: var(--tg-theme-link-color-dark, #88AACC);
+    --app-subtitle-text-color: var(--tg-theme-subtitle-text-color-dark, #CBCBCB);
+    --app-button-color: var(--tg-theme-button-color-dark, #2A2A2A);
+    --app-button-text-color: var(--tg-theme-button-text-color-dark, #E0E0E0);
+    --app-header-bg-color: var(--tg-theme-header-bg-color-dark, #1C1C1C);
+    --app-accent-text-color: var(--tg-theme-accent-text-color-dark, #FFA040);
+    --app-section-bg-color: var(--tg-theme-section-bg-color-dark, #2D2D2D);
+    --app-section-header-text-color: var(--tg-theme-section-header-text-color-dark, #F0F0F0);
+    --app-destructive-text-color: var(--tg-theme-destructive-text-color-dark, #FF6767);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {

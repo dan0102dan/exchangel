@@ -17,17 +17,19 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.button:active,
+.favoriteButton:active,
+.triggerButton:active {
+    background-color: rgba(169, 199, 255, 0.2);
+}
+
 .button:disabled,
 .favoriteButton:disabled,
 .triggerButton:disabled,
 .removeButton:disabled {
     color: var(--app-subtitle-text-color);
-}
-
-.button:active,
-.favoriteButton:active,
-.triggerButton:active {
-    background-color: rgba(169, 199, 255, 0.2);
+    background-color: var(--app-button-color);
+    cursor: not-allowed;
 }
 
 .favoriteButton {
@@ -41,6 +43,7 @@
 }
 
 .removeButton {
+    margin: 0;
     padding: 6px 12px;
     font-size: 14px;
     background-color: var(--app-destructive-text-color);
