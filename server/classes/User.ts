@@ -52,7 +52,7 @@ export default class User {
 		if (this.subscriptions.filter(e => e.instId === instId).length >= 10)
 			throw new Error('Subscription limit of 10 reached')
 
-		const exists = this.subscriptions.some(e => e.instId === instId && e.price === price && e.trend === trend)
+		const exists = this.subscriptions.some(e => e.instId === instId && e.price == price && e.trend === trend)
 		if (exists) throw new Error('Subscription already exists')
 
 		this.subscriptions.push({ instId, price, trend })

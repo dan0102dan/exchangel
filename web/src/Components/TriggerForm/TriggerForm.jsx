@@ -55,7 +55,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
         // setSubscribing(true)
         try {
             HapticFeedback.selectionChanged()
-            const { data } = await server.delete('/unsubscribe', { params: { instId, price, trend } })
+            const { data } = await server.get('/unsubscribe', { params: { instId, price, trend } })
             if (data)
                 setSubscriptions([...data])
         }
@@ -92,7 +92,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                     className={styles.select}
                 >
                     {Object.entries(options).map(([value, label]) =>
-                        <option value={value}>{label}</option>
+                        <option key={value} value={value}>{label}</option>
                     )}
                 </select>
             </div>

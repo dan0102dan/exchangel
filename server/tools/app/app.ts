@@ -136,7 +136,7 @@ router.get('/subscribe', async (ctx) => {
     ctx.status = 200
     ctx.body = subscriptions
 })
-router.delete('/unsubscribe', async (ctx) => {
+router.get('/unsubscribe', async (ctx) => {
     const { instId, price, trend } = ctx.query
 
     const subscriptions = await ctx.state.user.unsubscribe(instId, price, trend)
