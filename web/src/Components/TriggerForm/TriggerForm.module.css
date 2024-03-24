@@ -1,0 +1,57 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+}
+
+.labelGroup, .inputGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    flex: 1;
+    font-size: 14px;
+    color: var(--app-hint-color);
+    text-align: center;
+}
+
+.input,
+.select {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: var(--app-secondary-bg-color);
+    border: none;
+    margin-right: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.select {
+    margin-right: 0;
+}
+
+.input:focus,
+.select:focus {
+    outline: none;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.details span {
+    font-size: 16px;
+    color: var(--app-text-color);
+}

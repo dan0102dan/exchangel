@@ -31,7 +31,7 @@ app.use(async (ctx, next) => {
             const [key, value] = param.split('=')
             if (key === 'user') {
                 const { id } = JSON.parse(decodeURIComponent(value))
-                ctx.state.user = await new User(id).getUser()
+                ctx.state.user = await new User(id).init()
                 break
             }
         }
@@ -102,17 +102,47 @@ router.get('/getCcy', async (ctx) => {
 })
 
 router.get('/search', async (ctx) => {
-    const sortedTickers = await searchTickers(ctx.query.query.trim())
+    const { query } = ctx.query
+
+    const sortedTickers = await searchTickers(query.trim())
 
     ctx.status = 200
     ctx.body = sortedTickers
 })
 
 router.get('/toggleFavorite', async (ctx) => {
-    const isFavorite = await ctx.state.user.toggleFavorite(ctx.query.instId)
+    const { instId } = ctx.query
+
+    const isFavorite = await ctx.state.user.toggleFavorite(instId)
 
     ctx.status = 200
     ctx.body = isFavorite
+})
+
+router.get('/subscriptions', async (ctx) => {
+    const { instId } = ctx.query
+
+    const subscriptions = ctx.state.user.subscriptions.filter(e => e.instId === instId)
+
+    ctx.status = 200
+    ctx.body = subscriptions
+})
+
+router.get('/subscribe', async (ctx) => {
+    const { instId, price, trend } = ctx.query
+
+    const subscriptions = await ctx.state.user.subscribe(instId, price, trend)
+
+    ctx.status = 200
+    ctx.body = subscriptions
+})
+router.delete('/unsubscribe', async (ctx) => {
+    const { instId, price, trend } = ctx.query
+
+    const subscriptions = await ctx.state.user.unsubscribe(instId, price, trend)
+
+    ctx.status = 200
+    ctx.body = subscriptions
 })
 
 app.use(async (ctx, next) => {

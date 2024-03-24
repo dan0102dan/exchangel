@@ -127,12 +127,10 @@ const Root = () => {
                             </ Section>
                             :
                             <>
-                                {
-                                    favorites.length > 0 &&
+                                {favorites.length > 0 &&
                                     <Section title='Favorites'>
                                         {mapCell(favorites)}
-                                    </ Section>
-                                }
+                                    </ Section>}
 
                                 {Object.keys(homeData).map((key, i) => (
                                     <Section title={homeData[key].name} key={i}>

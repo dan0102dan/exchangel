@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar } from '../../Components/index'
+import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar, TriggerForm } from '../../Components/index'
 import { smartRound } from '../../functions'
 
 const Swap = () => {
@@ -12,8 +12,11 @@ const Swap = () => {
 
     const [loading, setLoading] = useState(true)
     const [toggling, setToggling] = useState(false)
-    const [ccy, setCcy] = useState({ ...state })
+    const [subscribing, setSubscribing] = useState(false)
     const [isFavorite, setIsFavorite] = useState(false)
+
+    const [subscriptions, setSubscriptions] = useState()
+    const [ccy, setCcy] = useState({ ...state })
     const [baseCcy, setBaseCcy] = useState('')
     const [quoteCcy, setQuoteCcy] = useState('')
 
@@ -62,20 +65,21 @@ const Swap = () => {
 
     const toggleFavorite = async () => {
         const HapticFeedback = window.Telegram.WebApp.HapticFeedback
+        setToggling(true)
 
         try {
             HapticFeedback.selectionChanged()
-            setToggling(true)
             const { data } = await server.get('/toggleFavorite', { params: { instId } })
             if (data)
                 setFavorites([ccy, ...favorites])
             else
                 setFavorites(favorites.filter(e => e.instId !== ccy.instId))
-            setToggling(false)
         }
         catch (e) {
             console.error(e)
+            HapticFeedback.notificationOccurred('error')
         }
+        setToggling(false)
     }
 
     return (
@@ -121,7 +125,13 @@ const Swap = () => {
                     </Button>
                 </Section>
                 <Section title='Triggers' loading={loading}>
-
+                    <TriggerForm
+                        instId={instId}
+                        loading={loading || subscribing}
+                        setSubscribing={setSubscribing}
+                        subscriptions={subscriptions}
+                        setSubscriptions={setSubscriptions}
+                    />
                 </Section>
             </>
     )

@@ -7,7 +7,12 @@ const userSchema = {
 		required: true,
 		unique: true
 	},
-	favorites: [String]
+	favorites: [String],
+	subscriptions: [{
+		instId: String,
+		price: Number,
+		trend: String
+	}]
 }
 
 export default mongoose.model('Users', new Schema(userSchema))
