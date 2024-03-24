@@ -65,15 +65,15 @@ const TriggerForm = ({ instId, loading, disabled, setSubscribing, subscriptions,
             </div>
             <div className={styles.inputGroup}>
                 <input
-                    id="price"
+                    className={styles.input}
+                    inputMode="decimal"
+                    min="0"
                     type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
-                    className={styles.input}
                     placeholder="Enter price"
                 />
                 <select
-                    id="trend"
                     value={trend}
                     onChange={(e) => setTrend(e.target.value)}
                     className={styles.select}

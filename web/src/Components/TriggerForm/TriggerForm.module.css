@@ -23,7 +23,8 @@
     padding: 12px;
     border-radius: 10px;
     font-size: 16px;
-    background-color: var(--app-secondary-bg-color);
+    color: var(--app-text-color);
+    background-color: var(--app-section-bg-color);
     border: none;
     margin-right: 8px;
     -webkit-appearance: none;
