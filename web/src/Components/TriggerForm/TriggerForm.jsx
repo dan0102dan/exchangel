@@ -67,7 +67,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
     }
 
     return (
-        <form className={styles.form}>
+        <div className={styles.form}>
             <div className={styles.field}>
                 <div className={styles.labelContainer}>
                     <label className={styles.label}>Trigger price</label>
@@ -80,6 +80,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                     type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
+                    onKeyDown={(e) => (['Enter'].includes(e.key)) && subscribe()}
                     placeholder="Enter price"
                 />
                 <div className={styles.labelContainer}>
@@ -119,7 +120,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                     </div>
                 )
             }
-        </form>
+        </div>
     )
 }
 
