@@ -30,5 +30,11 @@
     "triggerPrice": "Trigger price",
     "selectTrend": "Select trend",
     "subscribe": "Subscribe",
-    "unsubscribe": "Unsubscribe"
+    "unsubscribe": "Unsubscribe",
+    "welcome": "Welcome to Exchangel!",
+    "alert": "Alert",
+    "threshold": "Threshold",
+    "current": "Current",
+    "previous": "Previous",
+    "openMiniApp": "Open Mini App"
 }

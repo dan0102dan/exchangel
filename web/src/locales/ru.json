@@ -22,13 +22,19 @@
     "volume24h": "Объем за 24ч",
     "wait": "Пожалуйста, подождите...",
     "any": "Любой",
-    "up": "По возрастанию",
-    "down": "По убыванию",
+    "up": "Возрастающий",
+    "down": "Убывающий",
     "enterPrice": "Введите цену",
     "price": "Цена",
     "trend": "Тренд",
     "triggerPrice": "Цена активации",
     "selectTrend": "Выберите тренд",
     "subscribe": "Подписаться",
-    "unsubscribe": "Отписаться"
+    "unsubscribe": "Отписаться",
+    "welcome": "Добро пожаловать в Exchangel!",
+    "alert": "Изменение цены",
+    "threshold": "Порог",
+    "current": "Текущая",
+    "previous": "Предыдущая",
+    "openMiniApp": "Открыть Mini App"
 }

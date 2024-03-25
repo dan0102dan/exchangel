@@ -9,7 +9,7 @@ const bot = new Telegraf(mainBot.id + ':' + mainBot.token)
 bot.catch(console.error)
 bot.use(async (ctx, next) => {
 	if (!ctx.from?.is_bot && ctx.from?.id !== undefined) {
-		ctx.state.user = await new User(ctx.from.id).init()
+		ctx.state.user = await new User(ctx.from.id, ctx.from.language_code).init()
 
 		return next()
 	}

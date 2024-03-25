@@ -7,6 +7,7 @@ const userSchema = {
 		required: true,
 		unique: true
 	},
+	language_code: String,
 	favorites: [String],
 	subscriptions: [{
 		instId: String,

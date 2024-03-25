@@ -1,4 +1,5 @@
 import { db, bot } from '../../tools/index'
+import { User } from '../../classes'
 import { okxAxios } from "../API/index"
 import { Markup } from 'telegraf'
 import packageJson from '../../../web/package.json'
@@ -46,8 +47,10 @@ const updateData = async () => {
             { projection: { last: 1 }, returnDocument: 'before' }
         ).lean()
 
-        const users = await db.Users.find({ 'subscriptions.instId': ticker.instId })
+        const users = await db.Users.find({ 'subscriptions.instId': ticker.instId }).lean()
         for (const user of users) {
+            const u = new User(user.id, user.language_code)
+
             for (const sub of user.subscriptions) {
                 const priceCrossed = (prevTicker.last < sub.price && sub.price <= ticker.last) || (prevTicker.last > sub.price && sub.price >= ticker.last)
                 if (priceCrossed && (sub.trend === "any" ||
@@ -57,11 +60,11 @@ const updateData = async () => {
 
                     bot.telegram.sendMessage(
                         user.id,
-                        `<b>Price Alert</b> ${prevTicker.last < ticker.last ? '📈' : '📉'} for <b>${sub.instId}</b>\n\n<b>Threshold:</b> ${sub.price}\n<b>Previous:</b> ${prevTicker.last}\n<b>Current:</b> ${ticker.last}\n\nTrend: ${sub.trend === 'up' ? 'Ascending 📈' : sub.trend === 'down' ? 'Descending 📉' : 'Any'}`,
+                        `<b>${sub.instId}</b> ${prevTicker.last < ticker.last ? '📈' : '📉'} <b>${u.t('current')}:</b> ${ticker.last}\n\n<b>${u.t('price')} ${u.t('alert')}!</b>\n\n<b>${u.t('threshold')}:</b> ${sub.price}\n<b>${u.t('previous')}:</b> ${prevTicker.last}\n\n<b>${u.t('trend')}</b>: ${sub.trend === 'up' ? u.t('up') : sub.trend === 'down' ? u.t('down') : u.t('any')}`,
                         {
                             parse_mode: 'HTML',
                             ...Markup.inlineKeyboard([
-                                [Markup.button.webApp('Open Mini App', `${packageJson.homepage}/#/ccy/${sub.instId}`)],
+                                [Markup.button.webApp(u.t('openMiniApp'), `${packageJson.homepage}/#/ccy/${sub.instId}`)],
                             ])
                         }
                     ).catch(console.error)

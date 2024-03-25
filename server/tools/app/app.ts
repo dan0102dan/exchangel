@@ -30,8 +30,8 @@ app.use(async (ctx, next) => {
         for (const param of ctx.headers.authorization.split('&')) {
             const [key, value] = param.split('=')
             if (key === 'user') {
-                const { id } = JSON.parse(decodeURIComponent(value))
-                ctx.state.user = await new User(id).init()
+                const { id, language_code } = JSON.parse(decodeURIComponent(value))
+                ctx.state.user = await new User(id, language_code).init()
                 break
             }
         }

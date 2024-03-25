@@ -1,8 +1,10 @@
 import { db } from '../tools/index'
 import { checkParameters } from '../tools/app/functions'
+import translations from '../../web/src/locales'
 
 export default class User {
 	id: number
+	language_code: string
 	isNew: boolean = false
 	favorites: string[] = []
 	subscriptions: {
@@ -11,8 +13,9 @@ export default class User {
 		trend?: string
 	}[] = []
 
-	constructor(id: number) {
+	constructor(id: number, language_code: string) {
 		this.id = id
+		this.language_code = language_code
 	}
 
 	async init() {
@@ -30,6 +33,10 @@ export default class User {
 		this.subscriptions = subscriptions
 
 		return this
+	}
+
+	t(key: string): string {
+		return translations[this.language_code]?.[key] || translations.en[key]
 	}
 
 	async toggleFavorite(instId) {
