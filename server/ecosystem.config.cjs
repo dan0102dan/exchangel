@@ -2,12 +2,12 @@ module.exports = {
 	apps: [
 		{
 			name: 'exchangelAPI',
-			script: 'node ./dist/exchangelAPI.js',
+			script: 'node ./dist/server/exchangelAPI.js',
 			autorestart: true
 		},
 		{
 			name: 'exchangelBot',
-			script: 'node ./dist/exchangelBot.js',
+			script: 'node ./dist/server/exchangelBot.js',
 			autorestart: true
 		}
 	]

@@ -1,20 +1,21 @@
 import React from 'react'
 import { useRouteError, useNavigate } from 'react-router-dom'
-import { Button, Placeholder } from '../../Components/index'
+import { useTranslation, Button, Placeholder } from '../../Components/index'
 
 const ErrorPage = () => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const error = useRouteError()
     console.error(error)
 
     return (
         <Placeholder
-            title={'Oops!'}
-            description={'Sorry, an unexpected error has occurred.'}
+            title={t('oops')}
+            description={t('unexpectedErrorOccurred')}
             errorInfo={error.statusText || error.message}
             icon={'👻'}
-            action={<Button onClick={() => navigate('/')}>Restart</Button>}
+            action={<Button onClick={() => navigate('/')}>{t('restart')}</Button>}
         />
     )
 }

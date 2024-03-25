@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppState, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
+import { useAppState, useTranslation, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
 import { server } from '../../API'
 import { smartRound } from '../../functions'
 
@@ -14,6 +14,7 @@ const Root = () => {
         fetching, setFetching
     } = useAppState()
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const getData = useCallback(async () => {
         setLoading(true)
@@ -91,15 +92,15 @@ const Root = () => {
                     ? fetching
                         ?
                         <Placeholder
-                            title={'Searhing...'}
-                            description={'Looking for information on the server.'}
+                            title={t('searching')}
+                            description={t('lookingForInfo')}
                             icon={'👀'}
                             loading={loading}
                         />
                         :
                         <Placeholder
-                            title={'Empty'}
-                            description={'Unfortunately, nothing was found.'}
+                            title={t('empty')}
+                            description={t('nothingFound')}
                             icon={'😔'}
                             loading={loading}
                         />
@@ -108,16 +109,16 @@ const Root = () => {
                 : !loading && !Object.keys(homeData).length
                     ?
                     <Placeholder
-                        title={'Empty'}
-                        description={'Unfortunately, nothing was found.'}
+                        title={t('empty')}
+                        description={t('nothingFound')}
                         icon={'😔'}
-                        action={<Button onClick={() => getData()}>Reload</Button >}
+                        action={<Button onClick={() => getData()}>{t('reload')}</Button >}
                     />
                     :
                     <>
                         {loading
                             ?
-                            <Section title='Loading...' loading={loading}>
+                            <Section title={t('loading')} loading={loading}>
                                 {[...Array(7)].map((_, e) => (
                                     <Cell
                                         key={e}
@@ -128,12 +129,12 @@ const Root = () => {
                             :
                             <>
                                 {favorites.length > 0 &&
-                                    <Section title='Favorites'>
+                                    <Section title={t('favorites')}>
                                         {mapCell(favorites)}
                                     </ Section>}
 
                                 {Object.keys(homeData).map((key, i) => (
-                                    <Section title={homeData[key].name} key={i}>
+                                    <Section title={t(homeData[key].name)} key={i}>
                                         {mapCell(homeData[key].data)}
                                     </ Section >
                                 ))}

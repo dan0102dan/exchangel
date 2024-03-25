@@ -1,6 +1,7 @@
 import { db, bot } from '../../tools/index'
 import { okxAxios } from "../API/index"
 import { Markup } from 'telegraf'
+import packageJson from '../../../web/package.json'
 
 const updateCurrency = async () => {
     const { data } = (await okxAxios.get('/api/v5/asset/currencies')).data
@@ -60,7 +61,7 @@ const updateData = async () => {
                         {
                             parse_mode: 'HTML',
                             ...Markup.inlineKeyboard([
-                                [Markup.button.webApp('Open Mini App', `https://dan0102dan.github.io/exchangel/#/ccy/${sub.instId}`)],
+                                [Markup.button.webApp('Open Mini App', `${packageJson.homepage}/#/ccy/${sub.instId}`)],
                             ])
                         }
                     ).catch(console.error)

@@ -1,7 +1,7 @@
 {
 	"scripts": {
-		"start": "npx tsc && node ./dist/exchangelAPI.js & node ./dist/exchangelBot.js",
-		"test": "npx tsc && NODE_ENV=development node ./dist/exchangelAPI.js & node ./dist/exchangelBot.js"
+		"start": "npx tsc && node ./dist/server/exchangelAPI.js & node ./dist/server/exchangelBot.js",
+		"test": "npx tsc && NODE_ENV=development node ./dist/server/exchangelAPI.js & node ./dist/server/exchangelBot.js"
 	},
 	"dependencies": {
 		"axios": "^1.6.0",

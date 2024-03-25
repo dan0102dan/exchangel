@@ -55,7 +55,7 @@ router.get('/home', async (ctx) => {
     favorites = ctx.state.user?.favorites?.map((instId) => favoritesMap.get(instId))
 
     const popular = {
-        name: 'Popular',
+        name: 'popular',
         data: await db.Tickers.find({
             instId: { $in: ['TON-USDT', 'BTC-USDT', 'ETH-USDT', 'LTC-USDT', 'DOGE-USDT'] }
         })
@@ -65,17 +65,17 @@ router.get('/home', async (ctx) => {
     }
 
     const gainers = {
-        name: 'Gainers',
+        name: 'gainers',
         data: await getTopData(-1)
     }
 
     const losers = {
-        name: 'Losers',
+        name: 'losers',
         data: await getTopData(1)
     }
 
     const all = {
-        name: 'All',
+        name: 'all',
         data: await db.Tickers.find()
             .populate('baseCcy')
             .populate('quoteCcy')

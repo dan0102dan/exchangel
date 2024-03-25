@@ -2,8 +2,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 import styles from './TriggerForm.module.css'
 import { Button } from '../index'
 import { server } from '../../API'
+import { useTranslation } from '../../Components/index'
 
 const TriggerForm = ({ instId, setGettingSubscriptions }) => {
+    const { t } = useTranslation()
+
     const [price, setPrice] = useState('')
     const [trend, setTrend] = useState('any')
 
@@ -11,9 +14,9 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
     const [subscriptions, setSubscriptions] = useState()
 
     const options = {
-        any: 'Any',
-        up: 'Ascending',
-        down: 'Descending'
+        any: t('any'),
+        up: t('up'),
+        down: t('down')
     }
 
     const getSubscriptions = useCallback(async () => {
@@ -70,7 +73,7 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
         <div className={styles.form}>
             <div className={styles.field}>
                 <div className={styles.labelContainer}>
-                    <label className={styles.label}>Trigger price</label>
+                    <label className={styles.label}>{t('triggerPrice')}</label>
                 </div>
                 <input
                     id="price"
@@ -81,10 +84,10 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                     value={price}
                     onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
                     onKeyDown={(e) => (['Enter'].includes(e.key)) && subscribe()}
-                    placeholder="Enter price"
+                    placeholder={t('enterPrice')}
                 />
                 <div className={styles.labelContainer}>
-                    <label className={styles.label}>Select trend</label>
+                    <label className={styles.label}>{t('selectTrend')}</label>
                 </div>
                 <select
                     id="trend"
@@ -102,20 +105,20 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                 onClick={subscribe}
                 loading={subscribing}
             >
-                Subscribe
+                {t('subscribe')}
             </Button>
             {subscriptions?.length > 0 &&
                 subscriptions.map((e, i) =>
                     <div key={i} className={styles.item}>
                         <div className={styles.details}>
-                            <span>Price: {e.price}</span>
-                            <span>Trend: {options[e.trend]}</span>
+                            <span>{t('price')}: {e.price}</span>
+                            <span>{t('trend')}: {options[e.trend]}</span>
                         </div>
                         <Button
                             onClick={() => unsubscribe(e.price, e.trend)}
-                            styleType={'removeButton'}
+                            styleType={'unsubscribeButton'}
                         >
-                            Remove
+                            {t('unsubscribe')}
                         </Button>
                     </div>
                 )

@@ -4,7 +4,7 @@ import {
   createHashRouter,
   RouterProvider
 } from 'react-router-dom'
-import { AppProvider } from './Components/index'
+import { AppProvider, LocalizationProvider } from './Components/index'
 import { ErrorPage, Root, Swap } from './routes/index'
 import './index.css'
 
@@ -26,7 +26,9 @@ const router = createHashRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AppProvider>
-      <RouterProvider router={router} />
+      <LocalizationProvider>
+        <RouterProvider router={router} />
+      </LocalizationProvider>
     </AppProvider>
   </React.StrictMode>
 )

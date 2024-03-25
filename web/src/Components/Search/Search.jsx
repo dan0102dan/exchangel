@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useSearchParams } from "react-router-dom"
 import styles from './Search.module.css'
 import { ReactComponent as SearchIcon } from './SearchIcon.svg'
+import { useTranslation } from '../../Components/index'
 
 const Search = ({ setInput, setDebounceInput, param }) => {
+    const { t } = useTranslation()
     const [searchParams, setSearchParams] = useSearchParams()
     const [prevParam, setPrevParam] = useState('')
     const [typingTimeout, setTypingTimeout] = useState()
@@ -48,8 +50,7 @@ const Search = ({ setInput, setDebounceInput, param }) => {
             </div>
             <input
                 type='text'
-                name='q'
-                placeholder='Search'
+                placeholder={t('search')}
                 value={searchParams.get(param) || ''}
                 onChange={handleInputChange}
             />

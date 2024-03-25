@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar, TriggerForm } from '../../Components/index'
+import { useAppState, useTranslation, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar, TriggerForm } from '../../Components/index'
 import { smartRound } from '../../functions'
 
 const Swap = () => {
     const { state } = useLocation()
+    const { t } = useTranslation()
     const { instId } = useParams()
 
     const { favorites, setFavorites } = useAppState()
@@ -84,10 +85,10 @@ const Swap = () => {
         !loading && !Object.keys(ccy).length
             ?
             <Placeholder
-                title={'Empty'}
-                description={'Unfortunately, nothing was found.'}
+                title={t('empty')}
+                description={t('nothingFound')}
                 icon={'😔'}
-                action={<Button onClick={() => getCcy()}>Reload</Button >}
+                action={<Button onClick={() => getCcy()}>{t('reload')}</Button >}
             />
             :
             <>
@@ -99,12 +100,12 @@ const Swap = () => {
                     <MiniCell title={ccy.quoteCcy?.name} icon={ccy.quoteCcy?.logoLink} loading={loading} />
                     <InputNumber value={quoteCcy} onChange={quoteSwap} />
                 </Section>
-                <Section title='Info' loading={loading}>
+                <Section title={t('info')} loading={loading}>
                     <StrokeCell
                         text={`1 ${ccy.baseCcy?.ccy} = ${ccy.last} ${ccy.quoteCcy?.ccy}`}
                         loading={loading} />
                     <StrokeCell
-                        text={`24h Volume: ${smartRound(Number(ccy.vol24h))} ${ccy.baseCcy?.ccy}`}
+                        text={`${t('volume24h')}: ${smartRound(Number(ccy.vol24h))} ${ccy.baseCcy?.ccy}`}
                         loading={loading}
                     />
                     <ProgressBar
@@ -112,17 +113,17 @@ const Swap = () => {
                         maxValue={ccy.high24h}
                         openPrice={ccy.open24h}
                         currentPrice={ccy.last}
-                        title="day's range"
+                        title={t('daysRange').toLowerCase()}
                     />
                     <Button
                         styleType='favoriteButton'
                         onClick={toggleFavorite}
                         loading={loading || toggling}
                     >
-                        {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                        {isFavorite ? t('removeFromFavorites') : t('addToFavorites')}
                     </Button>
                 </Section>
-                <Section title='Triggers' loading={gettingSubscriptions}>
+                <Section title={t('triggers')} loading={gettingSubscriptions}>
                     <TriggerForm
                         instId={instId}
                         setGettingSubscriptions={setGettingSubscriptions}
