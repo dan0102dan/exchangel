@@ -36,7 +36,8 @@ export default class User {
 	}
 
 	t(key: string): string {
-		return translations[this.language_code]?.[key] || translations.en[key]
+		return (translations[this.language_code]?.[key] || translations.en[key])
+			?.replace(/{{(.*?)}}/g, (_, k) => translations[k] || k)
 	}
 
 	async toggleFavorite(instId) {

@@ -22,7 +22,7 @@ export const LocalizationProvider = ({ children }) => {
             loadTranslations(language)
     }, [language])
 
-    const t = (key) => translations[key]
+    const t = (key) => translations[key]?.replace(/{{(.*?)}}/g, (_, k) => translations[k] || k)
 
     return (
         <LocalizationContext.Provider value={{ t, setLanguage }}>

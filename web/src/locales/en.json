@@ -31,6 +31,8 @@
     "selectTrend": "Select trend",
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
+    "noSubscriptions": "No subscription yet",
+    "subscriptionInstructions": "Tap «{{subscribe}}» above to set up price alerts for your favorite cryptocurrencies.",
     "welcome": "Welcome to Exchangel!",
     "alert": "Alert",
     "threshold": "Threshold",

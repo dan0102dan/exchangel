@@ -1,14 +1,14 @@
 {
-    "search": "بحث",
+    "search": "البحث",
     "searching": "جاري البحث...",
-    "lookingForInfo": "البحث عن المعلومات على الخادم.",
+    "lookingForInfo": "البحث عن معلومات على الخادم.",
     "empty": "فارغ",
-    "nothingFound": "للأسف، لم يتم العثور على شيء.",
+    "nothingFound": "للأسف، لم يتم العثور على أي شيء.",
     "reload": "إعادة تحميل",
     "loading": "جاري التحميل...",
-    "oops": "عفوًا!",
+    "oops": "عفواً!",
     "unexpectedErrorOccurred": "آسف، حدث خطأ غير متوقع.",
-    "restart": "إعادة تشغيل",
+    "restart": "إعادة البدء",
     "favorites": "المفضلة",
     "popular": "الشائع",
     "gainers": "الرابحون",
@@ -31,5 +31,12 @@
     "selectTrend": "اختر الاتجاه",
     "subscribe": "اشتراك",
     "unsubscribe": "إلغاء الاشتراك",
-    "welcome": "مرحبا بك في !"
+    "noSubscriptions": "لا توجد اشتراكات بعد",
+    "subscriptionInstructions": "اضغط على «{{subscribe}}» أعلاه لضبط تنبيهات السعر لعملاتك المفضلة.",
+    "welcome": "مرحبا بك في!",
+    "alert": "تنبيه",
+    "threshold": "العتبة",
+    "current": "الحالي",
+    "previous": "السابق",
+    "openMiniApp": "فتح التطبيق الصغير"
 }

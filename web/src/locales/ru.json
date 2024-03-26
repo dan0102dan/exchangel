@@ -31,6 +31,8 @@
     "selectTrend": "Выберите тренд",
     "subscribe": "Подписаться",
     "unsubscribe": "Отписаться",
+    "noSubscriptions": "Подписок пока нет",
+    "subscriptionInstructions": "Нажмите «{{subscribe}}» выше, чтобы настроить уведомления о ценах для ваших любимых криптовалют.",
     "welcome": "Добро пожаловать в Exchangel!",
     "alert": "Изменение цены",
     "threshold": "Порог",

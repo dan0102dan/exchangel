@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styles from './TriggerForm.module.css'
-import { Button } from '../index'
+import { Button, Placeholder } from '../index'
 import { server } from '../../API'
 import { useTranslation } from '../../Components/index'
 
@@ -107,8 +107,8 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
             >
                 {t('subscribe')}
             </Button>
-            {subscriptions?.length > 0 &&
-                subscriptions.map((e, i) =>
+            {subscriptions?.length > 0
+                ? subscriptions.map((e, i) =>
                     <div key={i} className={styles.item}>
                         <div className={styles.details}>
                             <span>{t('price')}: {e.price}</span>
@@ -122,6 +122,11 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
                         </Button>
                     </div>
                 )
+                : <Placeholder
+                    title={t('noSubscriptions')}
+                    description={t('subscriptionInstructions')}
+                    icon={'📭'}
+                />
             }
         </div>
     )
