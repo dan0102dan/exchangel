@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { server } from '../../API'
-import { useAppState, useTranslation, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar, TriggerForm } from '../../Components/index'
+import { useAppState, useTranslation, Section, InputNumber, MiniCell, Placeholder, Button, StrokeCell, ProgressBar, TriggerForm, TriggerList } from '../../Components/index'
 import { smartRound } from '../../functions'
 
 const Swap = () => {
@@ -13,8 +13,10 @@ const Swap = () => {
 
     const [loading, setLoading] = useState(true)
     const [toggling, setToggling] = useState(false)
-    const [gettingSubscriptions, setGettingSubscriptions] = useState(true)
     const [isFavorite, setIsFavorite] = useState(false)
+
+    const [subscriptions, setSubscriptions] = useState()
+    const [gettingSubscriptions, setGettingSubscriptions] = useState(true)
 
     const [ccy, setCcy] = useState({ ...state })
     const [baseCcy, setBaseCcy] = useState('')
@@ -126,6 +128,12 @@ const Swap = () => {
                 <Section title={t('triggers')} loading={gettingSubscriptions}>
                     <TriggerForm
                         instId={instId}
+                        setSubscriptions={setSubscriptions}
+                    />
+                    <TriggerList
+                        instId={instId}
+                        subscriptions={subscriptions}
+                        setSubscriptions={setSubscriptions}
                         setGettingSubscriptions={setGettingSubscriptions}
                     />
                 </Section>

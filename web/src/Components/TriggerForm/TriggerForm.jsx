@@ -1,17 +1,15 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from './TriggerForm.module.css'
-import { Button, Placeholder } from '../index'
+import { Button } from '../index'
 import { server } from '../../API'
 import { useTranslation } from '../../Components/index'
 
-const TriggerForm = ({ instId, setGettingSubscriptions }) => {
+const TriggerForm = ({ instId, setSubscriptions }) => {
     const { t } = useTranslation()
 
     const [price, setPrice] = useState('')
     const [trend, setTrend] = useState('any')
-
     const [subscribing, setSubscribing] = useState(false)
-    const [subscriptions, setSubscriptions] = useState()
 
     const options = {
         any: t('any'),
@@ -19,32 +17,21 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
         down: t('down')
     }
 
-    const getSubscriptions = useCallback(async () => {
-        setGettingSubscriptions(true)
-        try {
-            const { data } = await server.get('/subscriptions', { params: { instId } })
+    const subscribe = async (e) => {
+        e.preventDefault()
 
-            setSubscriptions(data)
-        }
-        catch (e) {
-            console.error(e)
-        }
-        setGettingSubscriptions(false)
-    }, [instId, setSubscriptions, setGettingSubscriptions])
-
-    useEffect(() => {
-        if (!subscriptions)
-            getSubscriptions()
-    }, [subscriptions, getSubscriptions])
-
-    const subscribe = async () => {
         const HapticFeedback = window.Telegram.WebApp.HapticFeedback
+        if (!price || !trend) {
+            HapticFeedback.notificationOccurred('error')
+            return
+        }
+
         setSubscribing(true)
         try {
-            HapticFeedback.selectionChanged()
             const { data } = await server.get('/subscribe', { params: { instId, price, trend } })
-            if (data)
-                setSubscriptions([...data])
+            setSubscriptions([...data])
+
+            HapticFeedback.notificationOccurred('success')
         }
         catch (e) {
             console.error(e)
@@ -52,48 +39,38 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
         }
         setSubscribing(false)
     }
-    const unsubscribe = async (price, trend) => {
+
+    const selectionChange = (e) => {
         const HapticFeedback = window.Telegram.WebApp.HapticFeedback
-        //TODO
-        // setSubscribing(true)
-        try {
-            HapticFeedback.selectionChanged()
-            const { data } = await server.get('/unsubscribe', { params: { instId, price, trend } })
-            if (data)
-                setSubscriptions([...data])
-        }
-        catch (e) {
-            console.error(e)
-            HapticFeedback.notificationOccurred('error')
-        }
-        // setSubscribing(false)
+
+        setTrend(e.target.value)
+        HapticFeedback.selectionChanged()
     }
 
     return (
-        <div className={styles.form}>
+        <form className={styles.form} onSubmit={subscribe}>
             <div className={styles.field}>
                 <div className={styles.labelContainer}>
                     <label className={styles.label}>{t('triggerPrice')}</label>
                 </div>
                 <input
-                    id="price"
+                    type="text"
                     className={styles.input}
                     inputMode="decimal"
                     min="0"
-                    type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
-                    onKeyDown={(e) => (['Enter'].includes(e.key)) && subscribe()}
                     placeholder={t('enterPrice')}
+                    required
                 />
                 <div className={styles.labelContainer}>
                     <label className={styles.label}>{t('selectTrend')}</label>
                 </div>
                 <select
-                    id="trend"
                     value={trend}
-                    onChange={(e) => setTrend(e.target.value)}
+                    onChange={selectionChange}
                     className={styles.select}
+                    required
                 >
                     {Object.entries(options).map(([value, label]) =>
                         <option key={value} value={value}>{label}</option>
@@ -102,33 +79,11 @@ const TriggerForm = ({ instId, setGettingSubscriptions }) => {
             </div>
             <Button
                 styleType='triggerButton'
-                onClick={subscribe}
                 loading={subscribing}
             >
                 {t('subscribe')}
             </Button>
-            {subscriptions?.length > 0
-                ? subscriptions.map((e, i) =>
-                    <div key={i} className={styles.item}>
-                        <div className={styles.details}>
-                            <span>{t('price')}: {e.price}</span>
-                            <span>{t('trend')}: {options[e.trend]}</span>
-                        </div>
-                        <Button
-                            onClick={() => unsubscribe(e.price, e.trend)}
-                            styleType={'unsubscribeButton'}
-                        >
-                            {t('unsubscribe')}
-                        </Button>
-                    </div>
-                )
-                : <Placeholder
-                    title={t('noSubscriptions')}
-                    description={t('subscriptionInstructions')}
-                    icon={'📭'}
-                />
-            }
-        </div>
+        </form>
     )
 }
 
