@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/exchangel/static/css/main.996f8e85.css",
+    "main.js": "/exchangel/static/js/main.ff006b87.js",
+    "static/js/726.de021b13.chunk.js": "/exchangel/static/js/726.de021b13.chunk.js",
+    "static/js/929.9ea37434.chunk.js": "/exchangel/static/js/929.9ea37434.chunk.js",
+    "static/js/563.19122d1d.chunk.js": "/exchangel/static/js/563.19122d1d.chunk.js",
+    "static/js/844.8dbd630b.chunk.js": "/exchangel/static/js/844.8dbd630b.chunk.js",
+    "static/js/566.fa15b710.chunk.js": "/exchangel/static/js/566.fa15b710.chunk.js",
+    "static/js/672.c122e733.chunk.js": "/exchangel/static/js/672.c122e733.chunk.js",
+    "static/js/538.f8eec129.chunk.js": "/exchangel/static/js/538.f8eec129.chunk.js",
+    "index.html": "/exchangel/index.html",
+    "static/media/SearchIcon.svg": "/exchangel/static/media/SearchIcon.8813b9b4a87217894859c6ff8fa74721.svg",
+    "main.996f8e85.css.map": "/exchangel/static/css/main.996f8e85.css.map",
+    "main.ff006b87.js.map": "/exchangel/static/js/main.ff006b87.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.996f8e85.css",
+    "static/js/main.ff006b87.js"
+  ]
+}
