@@ -22,6 +22,17 @@ const router = createHashRouter([
   }
 ])
 
+// Configure the BackButton behavior
+const BackButton = (window as any).Telegram.WebApp.BackButton
+BackButton.onClick(() => router.navigate(-1))
+
+router.subscribe((state) => {
+  if (state.matches.at(0)?.pathname === '/')
+    BackButton.hide()
+  else
+    BackButton.show()
+})
+
 // Render the router within the application's root element
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -32,13 +43,3 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </AppProvider>
   </React.StrictMode>
 )
-
-// Configure the BackButton behavior
-const BackButton = (window as any).Telegram.WebApp.BackButton
-BackButton.onClick(() => router.navigate(-1))
-router.subscribe((state) => {
-  if (state.matches.at(0)?.pathname === '/')
-    BackButton.hide()
-  else
-    BackButton.show()
-})
