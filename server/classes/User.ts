@@ -57,8 +57,8 @@ export default class User {
 	async subscribe(instId, price, trend) {
 		checkParameters([instId, price, trend])
 
-		if (this.subscriptions.filter(e => e.instId === instId).length >= 10)
-			throw new Error('Subscription limit of 10 reached')
+		if (this.subscriptions.filter(e => e.instId === instId).length >= 100)
+			throw new Error('Subscription limit of 100 reached')
 
 		const exists = this.subscriptions.some(e => e.instId === instId && e.price == price && e.trend === trend)
 		if (exists) throw new Error('Subscription already exists')

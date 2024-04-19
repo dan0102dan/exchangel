@@ -97,8 +97,6 @@ const Swap = () => {
                 <Section loading={loading}>
                     <MiniCell title={ccy.baseCcy?.name} icon={ccy.baseCcy?.logoLink} loading={loading} />
                     <InputNumber value={baseCcy} onChange={baseSwap} />
-                </Section>
-                <Section loading={loading}>
                     <MiniCell title={ccy.quoteCcy?.name} icon={ccy.quoteCcy?.logoLink} loading={loading} />
                     <InputNumber value={quoteCcy} onChange={quoteSwap} />
                 </Section>

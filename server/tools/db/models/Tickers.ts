@@ -23,4 +23,4 @@ const tickersSchema = {
 	vol24h: Number
 }
 
-export default mongoose.model('Tickers', new Schema(tickersSchema))
+export default mongoose.model('Tickers', new Schema(tickersSchema).index({ instId: 'text' }))

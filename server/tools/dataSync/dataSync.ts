@@ -32,7 +32,7 @@ const searchPair = async () => {
                 { upsert: true, new: true }
             ).lean()
         }
-        catch (e) {
+        catch {
             continue
         }
     }
@@ -40,38 +40,44 @@ const searchPair = async () => {
 
 const updateData = async () => {
     const { data } = (await okxAxios.get('/api/v5/market/tickers', { params: { instType: 'SPOT' } })).data
-    for (const ticker of data) {
-        const prevTicker = await db.Tickers.findOneAndUpdate(
-            { instId: ticker.instId },
-            { ...ticker },
-            { projection: { last: 1 }, returnDocument: 'before' }
-        ).lean()
+    for (const ticker of data)
+        try {
+            const { last } = await db.Tickers.findOneAndUpdate(
+                { instId: ticker.instId },
+                { ...ticker },
+                { projection: { last: 1 }, returnDocument: 'before' }
+            ).lean()
+            const last_new = Number(ticker.last)
 
-        const users = await db.Users.find({ 'subscriptions.instId': ticker.instId }).lean()
-        for (const user of users) {
-            const u = new User(user.id, user.language_code)
+            for await (const user of db.Users.find(
+                { 'subscriptions.instId': ticker.instId },
+                { 'subscriptions.instId': ticker.instId }
+            ).cursor().addCursorFlag('noCursorTimeout', true)) {
+                const u = new User(user.id, user.language_code)
 
-            for (const sub of user.subscriptions) {
-                const priceCrossed = (prevTicker.last < sub.price && sub.price <= ticker.last) || (prevTicker.last > sub.price && sub.price >= ticker.last)
-                if (priceCrossed && (sub.trend === "any" ||
-                    (sub.trend === "up" && prevTicker.last <= ticker.last) ||
-                    (sub.trend === "down" && prevTicker.last >= ticker.last))) {
-                    console.log('Notification triggered')
+                for (const sub of user.subscriptions) {
+                    const priceCrossed = (last <= sub.price && sub.price <= last_new) || (last >= sub.price && sub.price >= last_new)
 
-                    bot.telegram.sendMessage(
-                        user.id,
-                        `<b>${sub.instId}</b> ${prevTicker.last < ticker.last ? '📈' : '📉'} <b>${u.t('current')}:</b> ${ticker.last}\n\n<b>${u.t('price')} ${u.t('alert')}!</b>\n\n<b>${u.t('threshold')}:</b> ${sub.price}\n<b>${u.t('previous')}:</b> ${prevTicker.last}\n\n<b>${u.t('trend')}</b>: ${sub.trend === 'up' ? u.t('up') : sub.trend === 'down' ? u.t('down') : u.t('any')}`,
-                        {
-                            parse_mode: 'HTML',
-                            ...Markup.inlineKeyboard([
-                                [Markup.button.webApp(u.t('openMiniApp'), `${packageJson.homepage}/#/ccy/${sub.instId}`)],
-                            ])
-                        }
-                    ).catch(console.error)
+                    if (priceCrossed && (sub.trend === 'any' || (sub.trend === 'up' && last <= last_new) || (sub.trend === 'down' && last >= last_new))) {
+                        console.log('Notification triggered', sub, last, ticker)
+
+                        bot.telegram.sendMessage(
+                            user.id,
+                            `<b>${sub.instId}</b> ${last < last_new ? '📈' : '📉'} <b>${u.t('current')}:</b> ${last_new}`,
+                            {
+                                parse_mode: 'HTML',
+                                ...Markup.inlineKeyboard([
+                                    [Markup.button.webApp(u.t('openMiniApp'), `${packageJson.homepage}/#/ccy/${sub.instId}`)],
+                                ])
+                            }
+                        ).catch(console.error)
+                    }
                 }
             }
         }
-    }
+        catch {
+            continue
+        }
 }
 
 const updater = async (period) => {
