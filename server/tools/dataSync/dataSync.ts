@@ -51,7 +51,11 @@ const updateData = async () => {
 
             for await (const user of db.Users.find(
                 { 'subscriptions.instId': ticker.instId },
-                { 'subscriptions.instId': ticker.instId }
+                {
+                    'subscriptions.instId': ticker.instId,
+                    id: 1,
+                    language_code: 1
+                }
             ).cursor().addCursorFlag('noCursorTimeout', true)) {
                 const u = new User(user.id, user.language_code)
 

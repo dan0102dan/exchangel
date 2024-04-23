@@ -19,18 +19,16 @@ export default class User {
 	}
 
 	async init() {
-		let user = await db.Users.findOne({ id: this.id }).lean()
+		const user = await db.Users.findOneAndUpdate(
+			{ id: this.id },
+			{
+				id: this.id,
+				language_code: this.language_code
+			},
+			{ returnDocument: 'before', upsert: true }
+		).lean()
 
-		if (!user) {
-			user = await new db.Users({ id: this.id, favorites: [], subscriptions: [] }).save()
-			this.isNew = true
-		} else {
-			this.isNew = false
-		}
-
-		const { favorites = [], subscriptions = [] } = user
-		this.favorites = favorites
-		this.subscriptions = subscriptions
+		this.isNew = !user
 
 		return this
 	}
