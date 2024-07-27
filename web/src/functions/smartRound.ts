@@ -1,4 +1,4 @@
-const smartRound = (number: number) => {
+const smartRound = (number: number): number => {
     if (number === 0) return 0
 
     const magnitude = Math.floor(Math.log10(Math.abs(number)))

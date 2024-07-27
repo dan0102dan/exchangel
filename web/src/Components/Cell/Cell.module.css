@@ -64,9 +64,26 @@
     align-items: flex-end;
 }
 
-.text, .textPositive, .textNegative {
+.text, .textPositive, .textNegative, .largeText {
     font-size: 14px;
     color: var(--app-text-color);
+    transition: font-size 0.3s ease-in-out;
+}
+
+.largeText {
+    font-size: 18px;
+    transition: font-size 0.3s ease-in-out;
+}
+
+.infoText {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease-in-out;
+}
+
+.infoTextVisible {
+    height: 14px;
+    transition: height 0.3s ease-in-out;
 }
 
 .textPositive {

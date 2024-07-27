@@ -74,23 +74,15 @@ router.get('/home', async (ctx) => {
         data: await getTopData(1)
     }
 
-    const all = {
-        name: 'all',
-        data: await db.Tickers.find()
-            .populate('baseCcy')
-            .populate('quoteCcy')
-            .lean()
-    }
-
     ctx.status = 200
-    ctx.body = { favorites, popular, gainers, losers, all }
+    ctx.body = { favorites, popular, gainers, losers }
 })
 
 router.get('/getCcy', async (ctx) => {
     const { instId } = ctx.query
 
     const ccy = {
-        ...await db.Tickers.findOne({ instId })
+        ...await db.Tickers.findOne({ instId: { $eq: instId } })
             .populate('baseCcy')
             .populate('quoteCcy')
             .lean(),

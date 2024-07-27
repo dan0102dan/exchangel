@@ -1,0 +1,72 @@
+.modal {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--app-bg-color);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    color: var(--app-text-color);
+    padding: 15px;
+    box-shadow: 0 -4px 10px var(--app-section-bg-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.placeholderIcon, .placeholderTitle, .placeholderSubtitle {
+    background-color: rgba(204, 203, 203, 0.5);
+    border-radius: 8px;
+}
+
+.icon, .placeholderIcon {
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
+}
+
+.placeholderIcon {
+    border-radius: 50%;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--app-text-color);
+    flex-grow: 1;
+}
+
+.amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--app-accent-text-color);
+}
+
+.numPad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.numButton {
+    background-color: var(--app-button-color);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 20px;
+    color: var(--app-button-text-color);
+    cursor: pointer;
+    flex: 1;
+}

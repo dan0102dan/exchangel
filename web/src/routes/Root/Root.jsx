@@ -1,11 +1,13 @@
 import React, { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppState, useTranslation, Section, Search, Cell, Placeholder, Button } from '../../Components/index'
+import { useAppState, useTranslation, Section, Search, Cell, Placeholder, Button, CurrencyInput } from '../../Components/index'
 import { server } from '../../API'
-import { smartRound } from '../../functions'
+import { smartRound, formatNumber } from '../../functions'
 
 const Root = () => {
     const {
+        amount, setAmount,
+        selectedCcy, setSelectedCcy,
         favorites, setFavorites,
         homeData, setHomeData,
         searchQuery, setSearchQuery,
@@ -25,123 +27,92 @@ const Root = () => {
                 delete data.favorites
             }
             setHomeData(data)
-        }
-        catch (e) {
+            setSelectedCcy(data.popular.data[0])
+        } catch (e) {
             console.error(e)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
-    }, [setHomeData, setFavorites, setLoading])
+    }, [setHomeData, setFavorites, setSelectedCcy, setLoading])
 
     useEffect(() => {
-        if (!Object.keys(homeData).length)
+        if (!Object.keys(homeData).length) {
             getData()
-        else
-            setLoading(false)
-    }, [homeData, getData, setLoading])
+        }
+    }, [homeData, getData])
 
     const searchData = useCallback(async (query) => {
         setFetching(true)
         try {
             const { data } = await server.get('/search', { params: { query } })
             setSearchResult(data)
-        }
-        catch (e) {
+        } catch (e) {
             console.error(e)
+        } finally {
+            setFetching(false)
         }
-        setFetching(false)
     }, [setSearchResult, setFetching])
 
     useEffect(() => {
-        if (searchQuery)
+        if (searchQuery) {
             searchData(searchQuery)
+        }
     }, [searchQuery, searchData])
 
-    const mapCell = (arr) => arr.map((e, i) => {
-        const getSign = () => {
-            if (e.last > e.open24h) return '+'
-            if (e.last < e.open24h) return '-'
-            return ''
-        }
-
-        const plusOrMinus = getSign()
-
-        const plusFor24 = plusOrMinus + Math.abs(smartRound(e.last - e.open24h))
-        const percFor24 = plusOrMinus + Math.abs(smartRound(e.last * 100 / e.open24h - 100)) + '%'
-
-        return <Cell
-            key={i}
+    const renderCells = useCallback((arr) => arr.map((e) => (
+        <Cell
+            key={e.instId}
             icon={e.baseCcy.logoLink}
-            title={e.instId}
-            subtitle={e.baseCcy.name + ' / ' + e.quoteCcy.name}
-            info1={e.last}
-            info2={plusFor24}
-            info3={percFor24}
-            type={plusOrMinus}
+            title={e.baseCcy.ccy}
+            subtitle={`${e.baseCcy.name}`}
+            info1={formatNumber(e.last * Number(amount))}
+            info2={Number(amount) === 1 && `${e.last > e.open24h ? '+' : (e.last < e.open24h ? '-' : '')}${Math.abs(smartRound(e.last - e.open24h))}`}
+            info3={Number(amount) === 1 && `${e.last > e.open24h ? '+' : (e.last < e.open24h ? '-' : '')}${Math.abs(smartRound(e.last * 100 / e.open24h - 100))}%`}
+            type={e.last > e.open24h ? '+' : e.last < e.open24h ? '-' : ''}
             onClick={() => {
                 navigate(`/ccy/${e.instId}`, { state: e })
                 window.scrollTo(0, 0)
             }}
         />
-    })
+    )), [navigate, amount, formatNumber, smartRound])
 
     return (
         <>
-            <Search setDebounceInput={setSearchQuery} param={'cur'} />
-            {searchQuery
-                ? !searchResult.length
-                    ? fetching
-                        ?
-                        <Placeholder
-                            title={t('searching')}
-                            description={t('lookingForInfo')}
-                            icon={'👀'}
-                            loading={loading}
-                        />
-                        :
-                        <Placeholder
-                            title={t('empty')}
-                            description={t('nothingFound')}
-                            icon={'😔'}
-                            loading={loading}
-                        />
-                    :
-                    mapCell(searchResult)
-                : !loading && !Object.keys(homeData).length
-                    ?
+            <Search setDebounceInput={setSearchQuery} param='cur' />
+            {loading ? (
+                <Section title={t('loading')} loading={true}>
+                    {[...Array(7)].map((_, i) => <Cell key={i} loading={true} />)}
+                </Section>
+            ) : searchQuery ? (
+                searchResult.length > 0 ? renderCells(searchResult) : (
                     <Placeholder
-                        title={t('empty')}
-                        description={t('nothingFound')}
-                        icon={'😔'}
-                        action={<Button onClick={() => getData()}>{t('reload')}</Button >}
+                        title={fetching ? t('searching') : t('empty')}
+                        description={fetching ? t('lookingForInfo') : t('nothingFound')}
+                        icon={fetching ? '👀' : '😔'}
+                        action={fetching && <Button onClick={() => getData()}>{t('reload')}</Button>}
                     />
-                    :
-                    <>
-                        {loading
-                            ?
-                            <Section title={t('loading')} loading={loading}>
-                                {[...Array(7)].map((_, e) => (
-                                    <Cell
-                                        key={e}
-                                        loading={true}
-                                    />
-                                ))}
-                            </ Section>
-                            :
-                            <>
-                                {favorites.length > 0 &&
-                                    <Section title={t('favorites')}>
-                                        {mapCell(favorites)}
-                                    </ Section>}
-
-                                {Object.keys(homeData).map((key, i) => (
-                                    <Section title={t(homeData[key].name)} key={i}>
-                                        {mapCell(homeData[key].data)}
-                                    </ Section >
-                                ))}
-                            </>
-                        }
-                    </>
-            }
+                )
+            ) : (
+                <>
+                    {favorites.length > 0 && (
+                        <Section title={t('favorites')}>
+                            {renderCells(favorites)}
+                        </Section>
+                    )}
+                    {Object.keys(homeData).map((key) => (
+                        <Section key={key} title={t(homeData[key].name)}>
+                            {renderCells(homeData[key].data)}
+                        </Section>
+                    ))}
+                    <CurrencyInput
+                        loading={loading}
+                        amount={amount}
+                        setAmount={setAmount}
+                        title={selectedCcy.quoteCcy.ccy}
+                        icon={selectedCcy.quoteCcy.logoLink}
+                    />
+                </>
+            )}
         </>
     )
 }

@@ -47,17 +47,13 @@ const Swap = () => {
             setLoading(false)
     }, [ccy, getCcy])
 
-    const baseSwap = (e) => {
-        const inputValue = e.target.value.replace(',', '.')
-
-        setBaseCcy(inputValue)
-        setQuoteCcy(smartRound(inputValue * ccy.last) || '')
+    const baseSwap = ({ target: { value } }) => {
+        setBaseCcy(value)
+        setQuoteCcy(smartRound(value * ccy.last) || '')
     }
-    const quoteSwap = (e) => {
-        const inputValue = e.target.value.replace(',', '.')
-
-        setQuoteCcy(inputValue)
-        setBaseCcy(smartRound(inputValue / ccy.last) || '')
+    const quoteSwap = ({ target: { value } }) => {
+        setQuoteCcy(value)
+        setBaseCcy(smartRound(value / ccy.last) || '')
     }
 
     useEffect(() => {

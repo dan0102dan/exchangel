@@ -51,8 +51,8 @@ const TriggerList = ({ instId, subscriptions, setSubscriptions, setGettingSubscr
 
     return (
         subscriptions?.length > 0
-            ? subscriptions.map((e, i) =>
-                <div key={i} className={styles.item}>
+            ? subscriptions.map((e) =>
+                <div key={e.price + e.trend} className={styles.item}>
                     <div className={styles.details}>
                         <span>{t('price')}: {e.price}</span>
                         <span>{t('trend')}: {options[e.trend]}</span>

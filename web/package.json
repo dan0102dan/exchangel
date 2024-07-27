@@ -2,7 +2,7 @@
   "name": "exchangel",
   "author": "dan0102dan",
   "homepage": "https://dan0102dan.github.io/exchangel",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "dependencies": {
     "@types/node": "^20.8.10",
     "@types/react": "^18.2.35",

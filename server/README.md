@@ -104,7 +104,7 @@ Start the application with `npm start`. This will compile the TypeScript files a
 ##### In Test Mode
 To run the server in test mode, where certain checks like authorization may be bypassed or mocked, use the following command:
    ```sh
-   npm run test
+   npm run dev
    ```
 
 *Note: Test mode should only be used for development purposes and never in a production environment.*
