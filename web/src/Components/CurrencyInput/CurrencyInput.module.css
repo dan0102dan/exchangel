@@ -7,8 +7,8 @@
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     color: var(--app-text-color);
-    padding-bottom: calc(15px + env(safe-area-inset-bottom));
     padding: 15px;
+    padding-bottom: calc(15px + env(safe-area-inset-bottom));
     box-shadow: 0 -4px 10px var(--app-section-bg-color);
     display: flex;
     flex-direction: column;
