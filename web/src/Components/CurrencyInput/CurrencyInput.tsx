@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styles from './CurrencyInput.module.css'
 
 interface Props {
@@ -11,20 +11,8 @@ interface Props {
 
 const CurrencyInput: React.FC<Props> = ({ amount, setAmount, loading, title, icon }) => {
     const handleInput = (value: string) => {
-        if (!loading && (value !== '.' || !amount.includes('.'))) {
+        if (value !== '.' || !amount.includes('.')) {
             setAmount(amount + value)
-        }
-    }
-
-    const deleteLast = () => {
-        if (!loading) {
-            setAmount(amount.slice(0, -1))
-        }
-    }
-
-    const handleKeyPress = (key: string) => {
-        if (!loading) {
-            key === '⌫' ? deleteLast() : handleInput(key)
         }
     }
 
@@ -33,15 +21,15 @@ const CurrencyInput: React.FC<Props> = ({ amount, setAmount, loading, title, ico
             <div className={styles.header}>
                 {loading ? <div className={styles.placeholderIcon} /> : icon && <img className={styles.icon} src={icon} alt="Icon" loading="lazy" />}
                 <div className={styles.titleContainer}>
-                    <span className={styles.title}>{loading ? 'Loading...' : title}</span>
-                    <span className={styles.amount}>{loading ? '...' : amount}</span>
+                    <span className={styles.title}>{title}</span>
+                    <span className={styles.amount}>{amount}</span>
                 </div>
             </div>
             <div className={styles.numPad}>
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'].map(key => (
                     <button
                         key={key}
-                        onClick={() => handleKeyPress(key)}
+                        onClick={() => key === '⌫' ? setAmount(amount.slice(0, -1)) : handleInput(key)}
                         className={styles.numButton}
                         disabled={loading}
                     >

@@ -74,7 +74,7 @@ const Root = () => {
                 window.scrollTo(0, 0)
             }}
         />
-    )), [navigate, amount, formatNumber, smartRound])
+    )), [navigate, amount])
 
     return (
         <>
@@ -106,9 +106,9 @@ const Root = () => {
                     ))}
                     <CurrencyInput
                         loading={loading}
-                        amount={amount}
+                        title={loading ? t('loading') : selectedCcy.quoteCcy.ccy}
+                        amount={loading ? '...' : amount}
                         setAmount={setAmount}
-                        title={selectedCcy.quoteCcy.ccy}
                         icon={selectedCcy.quoteCcy.logoLink}
                     />
                 </>
