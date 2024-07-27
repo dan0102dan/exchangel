@@ -12,21 +12,21 @@ const Cell = ({ onClick, title, subtitle, icon, info1, info2, info3, type, loadi
             <div className={styles.content}>
                 {loading
                     ? <div className={styles.placeholderTitle} />
-                    : <div className={styles.title}>{title}</div>}
+                    : <span className={styles.title}>{title}</span>}
                 {loading
                     ? <div className={styles.placeholderSubtitle} />
-                    : subtitle && <div className={styles.subtitle}>{subtitle}</div>}
+                    : subtitle && <span className={styles.subtitle}>{subtitle}</span>}
             </div>
 
             <div className={styles.extraContent}>
-                <div className={hasAdditionalInfo ? styles.text : styles.largeText}>{info1}</div>
-                <div className={`${styles.text}
+                <span className={hasAdditionalInfo ? styles.text : styles.largeText}>{info1}</span>
+                <span className={`${styles.text}
                     ${hasAdditionalInfo ? styles.infoTextVisible : styles.infoText} 
                     ${type === '+' ? styles.textPositive : type === '-' ? styles.textNegative : styles.subtitle}`}>
                     {info2} {info3}
-                </div>
+                </span>
             </div>
-        </div>
+        </div >
     )
 }
 

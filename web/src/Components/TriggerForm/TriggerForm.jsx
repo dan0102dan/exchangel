@@ -78,7 +78,7 @@ const TriggerForm = ({ instId, setSubscriptions }) => {
                 </select>
             </div>
             <Button
-                styleType='triggerButton'
+                styleType='trigger'
                 loading={subscribing}
             >
                 {t('subscribe')}

@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './CurrencyInput.module.css'
+import { Button } from '../'
 
 interface Props {
     amount: string
@@ -27,14 +28,14 @@ const CurrencyInput: React.FC<Props> = ({ amount, setAmount, loading, title, ico
             </div>
             <div className={styles.numPad}>
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'].map(key => (
-                    <button
+                    <Button
                         key={key}
                         onClick={() => key === '⌫' ? setAmount(amount.slice(0, -1)) : handleInput(key)}
-                        className={styles.numButton}
                         disabled={loading}
+                        styleType={'trigger'}
                     >
                         {key}
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>

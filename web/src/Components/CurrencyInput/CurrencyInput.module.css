@@ -7,6 +7,7 @@
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     color: var(--app-text-color);
+    padding-bottom: calc(15px + env(safe-area-inset-bottom));
     padding: 15px;
     box-shadow: 0 -4px 10px var(--app-section-bg-color);
     display: flex;
@@ -58,15 +59,4 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-}
-
-.numButton {
-    background-color: var(--app-button-color);
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 20px;
-    color: var(--app-button-text-color);
-    cursor: pointer;
-    flex: 1;
 }

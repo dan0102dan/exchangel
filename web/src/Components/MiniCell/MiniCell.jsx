@@ -8,7 +8,7 @@ const MiniCell = ({ title, icon, loading }) => {
                 ? <div className={styles.placeholderIcon} />
                 : icon && <img className={styles.icon} src={icon} alt="Icon" loading="lazy" />}
             <div className={styles.content}>
-                <div className={styles.title}>{loading ? '...' : title}</div>
+                <span className={styles.title}>{loading ? '...' : title}</span>
             </div>
         </div >
     )

@@ -61,7 +61,7 @@ const updateData = async () => {
             ).cursor().addCursorFlag('noCursorTimeout', true)) {
                 const u = new User(user.id, user.language_code)
 
-                for (const sub of user.subscriptions?.filter(e => e.instId === ticker.instId)) {
+                for (const sub of user?.subscriptions?.filter(e => e.instId === ticker.instId)) {
                     const priceCrossed = (last <= sub.price && sub.price <= ticker.last) || (last >= sub.price && sub.price >= ticker.last)
 
                     if (priceCrossed && (sub.trend === 'any' || (sub.trend === 'up' && last <= ticker.last) || (sub.trend === 'down' && last >= ticker.last))) {

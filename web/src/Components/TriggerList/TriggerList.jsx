@@ -59,7 +59,7 @@ const TriggerList = ({ instId, subscriptions, setSubscriptions, setGettingSubscr
                     </div>
                     <Button
                         onClick={() => unsubscribe(e.price, e.trend)}
-                        styleType={'unsubscribeButton'}
+                        styleType={'unsubscribe'}
                     >
                         {t('unsubscribe')}
                     </Button>

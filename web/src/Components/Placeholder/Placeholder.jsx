@@ -7,9 +7,9 @@ const Placeholder = ({ icon, title, description, action, errorInfo }) => {
         <Section>
             <div className={styles.placeholder}>
                 <div className={styles.icon}>{icon}</div>
-                <div className={styles.title}>{title}</div>
-                <div className={styles.description}>{description}</div>
-                {errorInfo && <div className={styles.errorInfo}>{errorInfo}</div>}
+                <span className={styles.title}>{title}</span>
+                <span className={styles.description}>{description}</span>
+                {errorInfo && <span className={styles.errorInfo}>{errorInfo}</span>}
                 {action}
             </div>
         </Section>

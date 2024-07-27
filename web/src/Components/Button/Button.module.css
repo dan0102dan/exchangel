@@ -1,7 +1,4 @@
-.button,
-.favoriteButton,
-.triggerButton,
-.unsubscribeButton {
+.button {
     display: inline-block;
     padding: 10px 18px;
     margin: 12px;
@@ -17,38 +14,33 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.button:active,
-.favoriteButton:active,
-.triggerButton:active {
+.button:active {
     background-color: rgba(169, 199, 255, 0.2);
 }
 
-.button:disabled,
-.favoriteButton:disabled,
-.triggerButton:disabled,
-.unsubscribeButton:disabled {
+.button:disabled {
     color: var(--app-subtitle-text-color);
     background-color: var(--app-button-color);
     cursor: not-allowed;
 }
 
-.favoriteButton {
+.favorite {
     width: -webkit-fill-available;
     margin: 12px;
     padding: 12px;
 }
 
-.triggerButton {
+.trigger {
     margin: 0px
 }
 
-.unsubscribeButton {
+.unsubscribe {
     margin: 0;
     padding: 6px 12px;
     font-size: 14px;
     background-color: var(--app-destructive-text-color);
 }
 
-.unsubscribeButton:active {
+.unsubscribe:active {
     background-color: rgba(255, 169, 169, 0.2);
 }

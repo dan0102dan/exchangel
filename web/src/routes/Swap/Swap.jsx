@@ -112,7 +112,7 @@ const Swap = () => {
                         title={t('daysRange').toLowerCase()}
                     />
                     <Button
-                        styleType='favoriteButton'
+                        styleType='favorite'
                         onClick={toggleFavorite}
                         loading={loading || toggling}
                     >
