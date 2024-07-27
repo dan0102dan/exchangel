@@ -54,8 +54,8 @@ const TriggerList = ({ instId, subscriptions, setSubscriptions, setGettingSubscr
             ? subscriptions.map((e) =>
                 <div key={e.price + e.trend} className={styles.item}>
                     <div className={styles.details}>
-                        <span>{t('price')}: {e.price}</span>
-                        <span>{t('trend')}: {options[e.trend]}</span>
+                        <div>{t('price')}: {e.price}</div>
+                        <div>{t('trend')}: {options[e.trend]}</div>
                     </div>
                     <Button
                         onClick={() => unsubscribe(e.price, e.trend)}

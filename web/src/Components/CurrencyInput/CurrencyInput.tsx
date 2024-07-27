@@ -12,7 +12,7 @@ interface Props {
 
 const CurrencyInput: React.FC<Props> = ({ amount, setAmount, loading, title, icon }) => {
     const handleInput = (value: string) => {
-        if (value !== '.' || !amount.includes('.')) { // TODO
+        if (value !== '.' || (amount !== '' && !amount.includes('.'))) {
             setAmount(amount + value)
         }
     }
@@ -22,8 +22,8 @@ const CurrencyInput: React.FC<Props> = ({ amount, setAmount, loading, title, ico
             <div className={styles.header}>
                 {loading ? <div className={styles.placeholderIcon} /> : icon && <img className={styles.icon} src={icon} alt="Icon" loading="lazy" />}
                 <div className={styles.titleContainer}>
-                    <span className={styles.title}>{title}</span>
-                    <span className={styles.amount}>{amount}</span>
+                    <div className={styles.title}>{title}</div>
+                    <div className={styles.amount}>{amount}</div>
                 </div>
             </div>
             <div className={styles.numPad}>

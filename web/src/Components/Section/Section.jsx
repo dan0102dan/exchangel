@@ -7,9 +7,9 @@ const Section = ({ title, children, loading }) => {
 
     return (
         <div className={loading ? styles.loading : styles.section}>
-            {title && <span className={styles.title}>
+            {title && <div className={styles.title}>
                 {loading ? t('loading') : title}
-            </span>}
+            </div>}
             {children}
         </div>
     )

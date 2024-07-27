@@ -14,9 +14,9 @@ const ProgressBar = ({ minValue, maxValue, openPrice, currentPrice, title }) => 
     return (
         <div className={styles.container}>
             <div className={styles.label}>
-                <span className={styles.minValue}>{minValue}</span>
-                <span className={styles.title}>{title}</span>
-                <span className={styles.maxValue}>{maxValue}</span>
+                <div className={styles.minValue}>{minValue}</div>
+                <div className={styles.title}>{title}</div>
+                <div className={styles.maxValue}>{maxValue}</div>
             </div>
             <div className={styles.progressBar} aria-label={`Current progress between ${minValue} and ${maxValue}`}>
                 <div

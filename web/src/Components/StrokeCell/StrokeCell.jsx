@@ -6,7 +6,7 @@ const StrokeCell = ({ text, loading }) => {
         <div className={styles.container}>
             {loading
                 ? <div className={styles.placeholderText} />
-                : <span className={styles.text}>{text}</span>
+                : <div className={styles.text}>{text}</div>
             }
         </div>
     )
