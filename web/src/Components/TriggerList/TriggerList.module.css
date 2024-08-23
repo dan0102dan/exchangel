@@ -12,7 +12,7 @@
     gap: 4px;
 }
 
-.details span {
+.details {
     font-size: 16px;
     color: var(--app-text-color);
 }
