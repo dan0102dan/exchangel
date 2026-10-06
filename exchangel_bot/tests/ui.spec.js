@@ -201,6 +201,7 @@ test('editor keeps added currencies in place and preserves the current scroll po
  await page.goto('/');
  await page.getByRole('button',{name:'My currencies',exact:true}).click();
  const row=page.locator('.picker-row[data-code="crypto:PEPE"]');
+ await expect.poll(async()=>Math.abs(await page.getByRole('dialog').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m42))).toBeLessThan(1);
  await row.scrollIntoViewIfNeeded();
  const before=await row.boundingBox();
  const scroll=await page.locator('.picker-list').evaluate(el=>el.scrollTop);
@@ -290,4 +291,167 @@ test('existing crypto-only preferences migrate before a full refresh arrives',as
  expect(preferences).toEqual({base:'crypto:RON',selected:['crypto:RON','crypto:SCR','crypto:BTC']});
  await page.reload();
  await expect(page.locator('.base-button')).toContainText('Ronin');
+});
+
+test('icons share one fetch across calculator, search, editor and page reload',async({page})=>{
+ let requests=0;
+ await page.route('**/flags/us.svg',route=>{
+  requests++;
+  return route.fulfill({contentType:'image/svg+xml',headers:{'cache-control':'no-store'},body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
+ });
+ const decoded=async selector=>page.waitForFunction(selector=>{const img=document.querySelector(selector);return img?.complete && img.naturalWidth>0;},selector);
+ await page.goto('/');
+ await decoded('.base-button img');
+ expect(requests).toBe(1);
+ await page.locator('.base-button').click();
+ await decoded('.input-currency img');
+ await page.getByRole('button',{name:'Done',exact:false}).click();
+ await page.getByRole('button',{name:'Search currencies',exact:true}).click();
+ await page.getByRole('textbox',{name:'Search currencies'}).fill('USD');
+ await decoded('.picker-row[data-code="USD"] img');
+ await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();
+ await page.getByRole('button',{name:'My currencies',exact:true}).click();
+ await decoded('.picker-row[data-code="USD"] img');
+ expect(requests).toBe(1);
+ await page.reload();
+ await decoded('.base-button img');
+ expect(requests).toBe(1);
+});
+
+test('icons still load when the WebView denies persistent cache access',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(window,'caches',{get(){throw new Error('Storage disabled');}}));
+ await page.goto('/');
+ await page.waitForFunction(()=>{const img=document.querySelector('.base-button img');return img?.complete && img.naturalWidth>0;});
+ await page.locator('.base-button').click();
+ await page.waitForFunction(()=>{const img=document.querySelector('.input-currency img');return img?.complete && img.naturalWidth>0;});
+});
+
+test('pending icons shimmer, reveal on load and skip waiting animation when cached',async({page})=>{
+ let release;
+ await page.route('**/flags/us.svg',async route=>{
+  await new Promise(resolve=>{release=resolve;});
+  await route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
+ });
+ await page.goto('/');
+ const placeholder=page.locator('.base-button .currency-icon');
+ await expect(placeholder).toHaveAttribute('aria-busy','true');
+ expect(await placeholder.evaluate(el=>getComputedStyle(el,'::after').animationName)).toBe('icon-shimmer');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ expect(await placeholder.evaluate(el=>getComputedStyle(el,'::after').animationName)).toBe('none');
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await expect.poll(()=>Boolean(release)).toBe(true);
+ release();
+ await expect(placeholder).not.toHaveClass(/icon-loading/);
+ await page.waitForFunction(()=>document.querySelector('.base-button img')?.naturalWidth>0);
+ await page.locator('.base-button').click();
+ await expect(page.locator('.input-currency .currency-icon')).not.toHaveClass(/icon-loading/);
+});
+
+test('failed icons stop their loading animation',async({page})=>{
+ await page.route('**/flags/us.svg',route=>route.fulfill({status:404,body:''}));
+ await page.goto('/');
+ await expect(page.locator('.base-button .icon-unavailable')).toBeVisible();
+ await expect(page.locator('.base-button .currency-icon')).not.toHaveClass(/icon-loading/);
+ await expect(page.locator('.base-button .currency-icon')).not.toHaveAttribute('aria-busy');
+});
+
+test('virtual scrolling keeps DOM bounded and shimmer active without row-height jumps',async({page})=>{
+ const many={...payload,crypto:{rates:Object.fromEntries(Array.from({length:600},(_,i)=>['COIN'+i,1])),updatedAt:Date.now()}};
+ await mockRates(page,[{result:many}]);
+ let release;
+ const gate=new Promise(resolve=>{release=resolve;});
+ let active=0,peak=0;
+ await page.route(/\/(?:flags\/.*\.svg|crypto\/.*\.png|currency\/icon\/.*\.png)/,async route=>{
+  active++;peak=Math.max(peak,active);
+  await gate;
+  await route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
+  active--;
+ });
+ await page.goto('/');
+ await page.getByRole('button',{name:'Search currencies',exact:true}).click();
+ await page.getByRole('group',{name:'Currency type'}).getByRole('button',{name:'Crypto',exact:true}).click();
+ await expect(page.locator('.picker-list')).toHaveAttribute('data-total','603');
+ expect(await page.locator('.picker-row').count()).toBeLessThan(30);
+ const list=page.locator('.picker-list');
+ const before=await list.evaluate(el=>{
+  el.scrollTop=10000;el.dispatchEvent(new Event('scroll'));
+  return {height:el.scrollHeight,top:el.scrollTop};
+ });
+ await expect.poll(()=>page.locator('.picker-row').first().getAttribute('data-list-index')).not.toBe('0');
+ await expect.poll(()=>page.locator('.picker-list .icon-loading.icon-visible').count()).toBeGreaterThan(0);
+ expect(await page.locator('.picker-list .icon-loading.icon-visible').first().evaluate(el=>getComputedStyle(el,'::after').animationPlayState)).toBe('running');
+ expect(await page.locator('.picker-row').count()).toBeLessThan(30);
+ expect(peak).toBeLessThanOrEqual(4);
+ expect(peak).toBeGreaterThan(0);
+ release();
+ expect(await list.evaluate(el=>({height:el.scrollHeight,top:el.scrollTop}))).toEqual({height:before.height,top:before.top});
+});
+
+test('virtual list reaches its last currency by keyboard and keeps edits after recycling',async({page})=>{
+ const many={...payload,crypto:{rates:Object.fromEntries(Array.from({length:1200},(_,i)=>['COIN'+String(i).padStart(4,'0'),1])),updatedAt:Date.now()}};
+ await mockRates(page,[{result:many}]);
+ await page.goto('/');
+ await page.getByRole('button',{name:'My currencies',exact:true}).click();
+ await page.getByRole('group',{name:'Currency type'}).getByRole('button',{name:'Crypto',exact:true}).click();
+ await page.locator('.picker-row').first().focus();
+ await page.keyboard.press('End');
+ const last=page.locator('.picker-row[data-code="crypto:COIN1199"]');
+ await expect(last).toBeFocused();
+ await last.click();
+ await expect(last).toHaveAttribute('aria-pressed','true');
+ await page.keyboard.press('Home');
+ await expect(last).toHaveCount(0);
+ await page.keyboard.press('End');
+ await expect(last).toHaveAttribute('aria-pressed','true');
+ expect(await page.locator('.picker-row').count()).toBeLessThan(30);
+ const centers=await last.locator('.check').evaluate(el=>{const a=el.getBoundingClientRect(),b=el.querySelector('svg').getBoundingClientRect();return [Math.abs(a.x+a.width/2-b.x-b.width/2),Math.abs(a.y+a.height/2-b.y-b.height/2)];});
+ expect(Math.max(...centers)).toBeLessThan(1);
+ await page.getByRole('textbox',{name:'Search currencies'}).fill('COIN0042');
+ await expect(page.locator('.picker-row')).toHaveCount(1);
+ await expect(page.locator('.picker-row')).toContainText('COIN0042');
+});
+
+test('touch drag follows the handle and restores Telegram swipe behavior on close',async({page})=>{
+ await page.goto('/');
+ await page.getByRole('button',{name:'My currencies',exact:true}).click();
+ expect(await page.evaluate(()=>window.Telegram.WebApp.isVerticalSwipesEnabled)).toBe(false);
+ await expect.poll(async()=>Math.abs(await page.getByRole('dialog').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m42))).toBeLessThan(1);
+ const box=await page.locator('.sheet-handle').boundingBox();
+ const cdp=await page.context().newCDPSession(page);
+ await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true});
+ const x=box.x+box.width/2,y=box.y+box.height/2;
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+120}]});
+ expect(await page.getByRole('dialog').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m42)).toBeGreaterThan(80);
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+ expect(await page.evaluate(()=>window.Telegram.WebApp.swipeCalls)).toEqual(['disable','enable']);
+ await cdp.detach();
+});
+
+for (const kind of ['picker', 'calculator']) test(`handle expands upward, collapses downward, then dismisses the ${kind}`,async({page})=>{
+ await page.goto('/');
+ if (kind === 'picker') await page.getByRole('button',{name:'My currencies',exact:true}).click();
+ else await page.locator('.base-button').click();
+ const dialog=page.getByRole('dialog');
+ await expect.poll(async()=>Math.abs(await dialog.evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m42))).toBeLessThan(1);
+ const compact=(await dialog.boundingBox()).height;
+ const drag=async delta=>{
+  await expect.poll(()=>dialog.evaluate(el=>el.getAnimations().length)).toBe(0);
+  const box=await page.locator('.sheet-handle').boundingBox();
+  const x=box.x+box.width/2,y=box.y+box.height/2;
+  await page.mouse.move(x,y);await page.mouse.down();
+  await page.mouse.move(x,y+delta,{steps:12});await page.mouse.up();
+ };
+ await drag(-140);
+ await expect(dialog).toHaveAttribute('data-expanded','true');
+ await expect.poll(async()=>(await dialog.boundingBox()).height).toBeGreaterThan(compact+80);
+ await expect(page.getByRole('button',{name:'Done',exact:false})).toBeInViewport();
+ expect(await page.evaluate(()=>window.Telegram.WebApp.isVerticalSwipesEnabled)).toBe(false);
+ await drag(140);
+ await expect(dialog).toHaveAttribute('data-expanded','false');
+ await expect.poll(async()=>Math.abs((await dialog.boundingBox()).height-compact)).toBeLessThan(1);
+ await drag(140);
+ await expect(dialog).toHaveCount(0);
+ expect(await page.evaluate(()=>window.Telegram.WebApp.isVerticalSwipesEnabled)).toBe(true);
 });

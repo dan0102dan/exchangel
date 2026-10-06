@@ -1,6 +1,8 @@
 import { calculate, convert } from './calc.js';
 import { defaults, region, currencyName, format, symbols, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates, migrateAssetId } from './data.js';
 import './style.css';
+import { createVirtualList } from './virtual-list.js';
+import { hydrateIcons, releaseIconObservers } from './icon-cache.js';
 
 const tg = window.Telegram?.WebApp;
 const ru = (tg?.initDataUnsafe?.user?.language_code || navigator.language).startsWith('ru');
@@ -27,7 +29,7 @@ function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value
 
 const root = document.getElementById('root');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',backspace:'<path d="M9 5h12v14H9l-7-7Z"/><path d="m11 9 6 6m0-6-6 6"/>'})[name]}</svg>`;
+const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="m5 12 4 4 10-10"/>',backspace:'<path d="M9 5h12v14H9l-7-7Z"/><path d="m11 9 6 6m0-6-6 6"/>'})[name]}</svg>`;
 const preferencesKey = 'exchangel.preferences.v2';
 let data = read('exchangel.rates', null), rates = mergeRates(data);
 const preferences = read(preferencesKey, null);
@@ -47,6 +49,7 @@ let loading = false, failed = false, cached = Boolean(data), expression = '1';
 let sheet = null, layer = null, panel = null, opener, previousOverflow, closing = false;
 let query = '', category = 'all', catalog = [], rowNodes = new Map();
 let editorCatalog = [];
+let pickerWindow = null, restoreSwipes = false;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const crypto = code => isCryptoAsset(code, data);
 const name = code => currencyName(code, locale, crypto(code));
@@ -54,7 +57,7 @@ const number = (value, code) => format(value, code, locale, crypto(code));
 function currencyIcon(id, lazy = false) {
   const code = assetCode(id), isCrypto = crypto(id);
   const src = isCrypto ? (cryptoNames[code] ? `/crypto/${code}.png` : `https://static.okx.com/cdn/oksupport/asset/currency/icon/${encodeURIComponent(code.toLowerCase())}.png`) : `/flags/${region(code)}.svg`;
-  return `<span class="currency-icon ${isCrypto ? 'crypto' : ''}"><img loading="${lazy ? 'lazy' : 'eager'}" decoding="${lazy ? 'async' : 'sync'}" width="32" height="32" src="${escape(src)}" alt=""></span>`;
+  return `<span class="currency-icon ${isCrypto ? 'crypto' : ''}"><img loading="${lazy ? 'lazy' : 'eager'}" decoding="${lazy ? 'async' : 'sync'}" width="32" height="32" data-icon-src="${escape(src)}" alt=""></span>`;
 }
 // Keep the already decoded image when a currency moves between a row and dock.
 const mainIcons = new Map();
@@ -135,6 +138,7 @@ function renderRows(withMotion = false) {
   }
   const baseIcon = mainIcon(base);
   if (baseButton.firstElementChild !== baseIcon) { baseButton.querySelector('.currency-icon')?.remove(); baseButton.prepend(baseIcon); }
+  hydrateIcons(main);
   updateValues(); updateStatus();
   if (moving) {
     // FLIP: measure once after layout, then animate compositor-only transforms.
@@ -212,7 +216,7 @@ function updateStatus() {
 async function refresh() {
   if (loading) return;
   loading = true; failed = false; updateStatus();
-  try { data = retainRates(data, await getRates()); failed = ['fiat','crypto'].some(source => !Object.keys(data[source]?.rates || {}).length); rates = mergeRates(data); save('exchangel.rates', data); cached = false; rebuildCatalog(); renderRows(); if (sheet && sheet !== 'calculator') renderPicker(); }
+  try { data = retainRates(data, await getRates()); failed = ['fiat','crypto'].some(source => !Object.keys(data[source]?.rates || {}).length); rates = mergeRates(data); save('exchangel.rates', data); cached = false; rebuildCatalog(); renderRows(); if (sheet && sheet !== 'calculator') renderPicker(false); }
   catch { failed = true; cached = true; }
   finally { loading = false; lastRefresh = Date.now(); updateStatus(); }
 }
@@ -227,6 +231,10 @@ function openSheet(kind) {
   if (!layer) {
     opener = document.activeElement; previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden'; main.inert = true;
+    if (tg?.disableVerticalSwipes && (!tg.isVersionAtLeast || tg.isVersionAtLeast('7.7'))) {
+      restoreSwipes = tg.isVerticalSwipesEnabled !== false;
+      tg.disableVerticalSwipes();
+    }
     layer = document.createElement('div'); layer.className = 'sheet-layer';
     layer.innerHTML = `<button class="scrim" data-action="close" aria-label="${text.close}" tabindex="-1"></button><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"></section>`;
     root.append(layer); panel = layer.querySelector('.sheet');
@@ -244,12 +252,18 @@ async function closeSheet() {
   const animation = animate(panel,[{transform:start},{transform:'translateY(110%)'}],260);
   animate(layer.querySelector('.scrim'),[{opacity:1},{opacity:0}],260);
   await animation.finished.catch(() => {});
+  pickerWindow?.destroy(); pickerWindow = null;
+  releaseIconObservers(layer);
   layer.remove(); layer = panel = sheet = null; closing = false;
   main.inert = false; document.body.style.overflow = previousOverflow;
+  if (restoreSwipes) tg?.enableVerticalSwipes?.();
+  restoreSwipes = false;
   tg?.BackButton?.hide(); tg?.BackButton?.offClick(closeSheet);
   opener?.focus({preventScroll:true});
 }
 function renderSheet() {
+  panel.style.height = ''; panel.style.transform = ''; delete panel.dataset.expanded;
+  pickerWindow?.destroy(); pickerWindow = null;
   panel.className = `sheet ${sheet === 'calculator' ? 'calculator' : 'picker'}`;
   panel.innerHTML = `<div class="sheet-handle" aria-hidden="true"><span></span></div><div class="sheet-header"><h2 id="sheet-title">${sheet === 'calculator' ? text.converter : sheet === 'manage' ? text.manage : text.choose}</h2><button class="close" data-action="close" aria-label="${text.close}">${icon('close')}</button></div>`;
   if (sheet === 'calculator') {
@@ -257,19 +271,32 @@ function renderSheet() {
     updateValues();
   } else {
     panel.insertAdjacentHTML('beforeend', `<div class="search-field">${icon('search')}<input aria-label="${text.search}" placeholder="${text.search}"><button data-action="clear-search" aria-label="${ru ? 'Очистить поиск' : 'Clear search'}" hidden>${icon('close')}</button></div><div class="currency-filter" role="group" aria-label="${text.category}">${['all','fiat','crypto'].map(type => `<button data-category="${type}" aria-pressed="${category === type}">${text[type]}</button>`).join('')}</div>${sheet === 'manage' ? `<p class="manage-hint">${text.manageHint}</p>` : ''}<div class="picker-list"></div>${sheet === 'manage' ? `<button class="editor-done" data-action="close">${text.done}</button>` : ''}`);
+    pickerWindow = createVirtualList(panel.querySelector('.picker-list'), {
+      renderRow: ({code}) => {
+        const checked = sheet === 'manage' ? selected.includes(code) : base === code;
+        const row = document.createElement('button');
+        row.className = 'picker-row'; row.dataset.action = 'choose'; row.dataset.code = code;
+        row.setAttribute('aria-pressed', String(checked));
+        row.innerHTML = `${currencyIcon(code, true)}${info(code)}<span class="check ${checked ? 'selected' : ''}">${checked ? icon('check') : sheet === 'manage' ? icon('plus') : ''}</span>`;
+        return row;
+      }, mount: hydrateIcons, release: releaseIconObservers,
+    });
     renderPicker();
   }
+  hydrateIcons(panel);
   setupDrag();
 }
-function renderPicker() {
-  // Keep the editor's opening order throughout this session, including searches.
+function renderPicker(reset = true) {
   const entries = sheet === 'manage' ? editorCatalog : catalog;
   const matches = entries.filter(item => (category === 'all' || item.crypto === (category === 'crypto')) && item.search.includes(query.trim().toLowerCase()));
-  const picked = new Set(selected);
-  panel.querySelector('.picker-list').innerHTML = matches.map(({code}) => {
-    const checked = sheet === 'manage' ? picked.has(code) : base === code;
-    return `<button class="picker-row" data-action="choose" data-code="${escape(code)}" aria-pressed="${checked}">${currencyIcon(code, true)}${info(code)}<span class="check ${checked ? 'selected' : ''}">${checked ? '✓' : sheet === 'manage' ? '+' : ''}</span></button>`;
-  }).join('') || `<p class="empty">${loading ? text.loading : text.noResults}</p>`;
+  pickerWindow.setItems(matches, reset);
+  let empty = panel.querySelector('.empty');
+  if (!matches.length && !empty) {
+    empty = document.createElement('p'); empty.className = 'empty';
+    panel.querySelector('.picker-list').append(empty);
+  }
+  if (matches.length) empty?.remove();
+  else empty.textContent = loading ? text.loading : text.noResults;
   panel.querySelector('[data-action="clear-search"]').hidden = !query;
 }
 function key(k) {
@@ -286,21 +313,46 @@ function key(k) {
 }
 function setupDrag() {
   const handle = panel.querySelector('.sheet-handle');
-  let startY, startTime, distance = 0;
+  let startY, startTime, distance = 0, expanded = false;
+  let compactHeight = panel.offsetHeight, startHeight, maximumHeight, offset = 0;
   handle.addEventListener('pointerdown', event => {
     if (closing || (event.pointerType === 'mouse' && event.button !== 0)) return;
-    startY = event.clientY; startTime = performance.now(); distance = 0;
+    event.preventDefault();
+    startHeight = panel.getBoundingClientRect().height;
+    panel.getAnimations().forEach(animation => animation.cancel());
+    if (!expanded) compactHeight = startHeight;
+    const bottom = parseFloat(getComputedStyle(panel).marginBottom) || 8;
+    const top = Math.max(12, parseFloat(getComputedStyle(main).paddingTop) || 0);
+    maximumHeight = Math.max(compactHeight, layer.clientHeight - bottom - top);
+    startY = event.clientY; startTime = performance.now(); distance = offset = 0;
+    panel.style.height = `${startHeight}px`;
+    panel.classList.add('sheet-resizing');
     handle.setPointerCapture(event.pointerId);
   });
   handle.addEventListener('pointermove', event => {
     if (!handle.hasPointerCapture(event.pointerId)) return;
-    distance = Math.max(0,event.clientY-startY); panel.style.transform = `translateY(${distance}px)`;
+    event.preventDefault();
+    distance = event.clientY - startY;
+    if (expanded || distance < 0) {
+      panel.style.height = `${Math.max(compactHeight, Math.min(maximumHeight, startHeight - distance))}px`;
+      offset = expanded ? Math.max(0, distance - (startHeight - compactHeight)) * .25 : 0;
+    } else offset = distance;
+    panel.style.transform = `translateY(${offset}px)`;
   });
   const end = event => {
     if (!handle.hasPointerCapture(event.pointerId)) return;
     handle.releasePointerCapture(event.pointerId);
-    if (event.type !== 'pointercancel' && (distance > 85 || distance > 15 && distance/(performance.now()-startTime) > .5)) closeSheet();
-    else { animate(panel,[{transform:`translateY(${distance}px)`},{transform:'translateY(0)'}]); panel.style.transform = ''; }
+    const cancelled = event.type === 'pointercancel';
+    const velocity = Math.abs(distance) / Math.max(1, performance.now() - startTime);
+    const intentional = Math.abs(distance) > 60 || (Math.abs(distance) > 15 && velocity > .5);
+    if (!cancelled && !expanded && distance > 0 && intentional) { closeSheet(); return; }
+    const targetExpanded = !cancelled && intentional ? distance < 0 : expanded;
+    const fromHeight = panel.getBoundingClientRect().height;
+    const targetHeight = targetExpanded ? maximumHeight : compactHeight;
+    expanded = targetExpanded;
+    panel.dataset.expanded = String(expanded);
+    panel.style.height = `${targetHeight}px`; panel.style.transform = '';
+    animate(panel, [{height:`${fromHeight}px`,transform:`translateY(${offset}px)`},{height:`${targetHeight}px`,transform:'translateY(0)'}],320);
   };
   handle.addEventListener('pointerup',end); handle.addEventListener('pointercancel',end);
 }
@@ -330,7 +382,7 @@ root.addEventListener('click', event => {
       button.setAttribute('aria-pressed', String(checked));
       const check = button.querySelector('.check');
       check.classList.toggle('selected', checked);
-      check.textContent = checked ? '✓' : '+';
+      check.innerHTML = icon(checked ? 'check' : 'plus');
     } else { adoptPickerIcon(button, code); setBase(code); closeSheet(); }
   }
 });

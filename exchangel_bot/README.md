@@ -65,3 +65,10 @@ to refresh the bundled icons.
 Base-currency changes reuse rows and animate their positions with native transform
 animations. Partial source failures preserve cached rates; USD indices remain
 available even when the spot catalog request fails or a USDT pair is absent.
+
+Search and editing use a fixed-height virtual list (54px rows, five-row overscan).
+Only viewport rows and a small buffer are mounted; keyboard navigation can reach
+the entire catalog. Icon requests skip queued rows outside the viewport and keep
+at most four fetch/decode operations active. Visible loading icons remain animated.
+Sheets temporarily disable Telegram vertical swipes (API 7.7+) and restore the
+previous setting on close; their larger handle supports pointer/touch dismissal.

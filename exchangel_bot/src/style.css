@@ -133,4 +133,27 @@ h1{font-size:27px;font-weight:650;letter-spacing:-.8px;line-height:1.15;margin:0
 .currency-filter button[aria-pressed="true"]{color:#f4f4f6}
 [hidden]{display:none!important}
 .currency-filter button[aria-pressed="true"]{background:#343438;box-shadow:inset 0 0 0 1px #ffffff0c}
-.picker-row{content-visibility:auto;contain-intrinsic-size:auto 54px}
+.picker-row{height:54px;contain:layout paint}
+
+.currency-icon{position:relative}
+.icon-loading{background:#ffffff09;box-shadow:inset 0 0 0 1px #ffffff08}
+.icon-loading img{opacity:0}
+.icon-loading::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 15%,#ffffff18 50%,transparent 85%);transform:translateX(-100%);animation:icon-shimmer 1.5s ease-in-out infinite}
+@keyframes icon-shimmer{0%{transform:translateX(-100%);opacity:0}25%{opacity:1}75%{opacity:1}100%{transform:translateX(100%);opacity:0}}
+@media(prefers-reduced-motion:reduce){.icon-loading::after{transform:none;opacity:.45}}
+
+.icon-loading::after{animation-play-state:paused}
+.icon-loading.icon-visible::after{animation-play-state:running}
+
+
+.picker-list{overflow-anchor:none;touch-action:pan-y}
+.list-spacer{flex-shrink:0;pointer-events:none}
+.check{line-height:1;padding:0}
+.check svg{display:block;width:14px;height:14px;stroke-width:1.8}
+.sheet-handle{height:32px;margin:0 -14px;user-select:none;-webkit-user-select:none}
+.sheet-handle span{width:34px;height:4px}
+
+.calculator.sheet-resizing{display:flex;flex-direction:column}
+.calculator.sheet-resizing .input-card,.calculator.sheet-resizing .calc-actions{flex-shrink:0}
+.calculator.sheet-resizing .keypad{flex:1;grid-template-rows:repeat(4,minmax(43px,1fr))}
+.calculator.sheet-resizing .key{height:auto;min-height:43px}
