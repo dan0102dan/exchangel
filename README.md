@@ -1,22 +1,47 @@
-### Exchangel
+# Exchangel
 
-🏆 **Award-Winning Project at the [Telegram Mini Apps Contest](https://t.me/contest/327)!**
+🏆 Award-winning project at the [Telegram Mini Apps Contest](https://t.me/contest/327).
 
-#### Description
-Exchangel is an application for collecting cryptocurrency data enabling users to quickly view information in [Telegram Mini Apps](https://core.telegram.org/bots/webapps) and calculate values of cryptocurrencies in multiple currencies, including USDT and other digital assets.
+Exchangel is a single-page currency and cryptocurrency converter hosted entirely
+on Telegram Serverless. Price subscriptions and background notifications are retired.
 
-#### Installation
-1. Download the Exchangel repository.
-2. Install the necessary dependencies for both the front-end (web) and back-end (server) components.
+**Mini App:** https://app6547657300.tgcloud.ai/
 
-   - For the front-end (web), navigate to the [web directory](./web/) and follow the instructions in the [web/README.md](./web/README.md) file.
-   - For the back-end (server), navigate to the [server directory](./server/) and follow the instructions in the [server/README.md](./server/README.md) file.
+The maintained application is in [`exchangel_bot/`](./exchangel_bot/README.md):
+Vanilla JavaScript frontend, Telegram bot handlers, and a serverless rates endpoint with SQLite
+caching. Fiat rates come from ExchangeRate-API; crypto/USD indices come from OKX.
+No private OKX API key is required. Currency selection is stored on the device.
 
+```sh
+cd exchangel_bot
+npm install
+npm run dev
+npm test
+npm run test:ui
+npm run deploy
+```
 
-#### Usage
-1. Open Telegram Mini Apps and find [@exchangel_bot](https://t.me/exchangel_bot).
-2. Enter the name of a cryptocurrency to view information about it, including the current price and other statistical data.
-3. Use the conversion function by entering the desired amount in the input field to calculate how many digital assets are needed to make the purchase.
+`tgcloud push` publishes the built frontend and backend together. Schema migrations
+are separate: `npx tgcloud migrate`. See the project README for setup and validation.
 
-#### License
-- Exchangel is licensed under the [MIT License](LICENSE).
+Licensed under [MIT](LICENSE).
+
+## GitHub and credentials
+
+The GitHub workflow validates the converter (unit tests, browser tests and build).
+It does not deploy to Telegram.
+Deploy to Telegram from `exchangel_bot/` with `npm run deploy`.
+
+The root `.gitignore` excludes dependencies, builds, local cloud state, environment
+files and private credentials across all subprojects. Keep only placeholder values
+in example configuration. `.gitignore` does not remove secrets already in history.
+
+A Gitleaks pre-commit hook is configured in `.pre-commit-config.yaml`. To enable it,
+install [pre-commit](https://pre-commit.com/), then run `pre-commit install`. Before
+publishing, review `git diff --cached` and run `pre-commit run --all-files`.
+
+Security review on 2026-10-06: the current publishable files passed Gitleaks. The
+history scan found an old Telegram bot token in `server/config.test.ts`, commit
+`930aea666131033c2aaf429d466215ac7647604f`, already reachable from the locally known
+`origin/main`. Revoke that old bot token in BotFather if it has not already been
+revoked. Its current validity was not tested. The history has not been rewritten.
