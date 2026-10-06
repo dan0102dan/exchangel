@@ -1,2 +1,36 @@
-/.DS_Store
-/.vscode
+# Dependencies and generated output (all projects)
+node_modules/
+dist/
+build/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo
+
+# Local credentials and cloud tooling state
+.env
+.env.*
+!.env.example
+!.env.sample
+.dev.vars
+.dev.vars.*
+.tgcloud/
+.wrangler/
+.mf/
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# Logs and machine-specific files
+*.log
+.DS_Store
+.vscode/
+.idea/
+.npmrc
+.netrc
+
+# Local visual references
+/ScreenRecording_*.MP4
