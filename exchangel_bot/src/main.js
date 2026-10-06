@@ -1,5 +1,5 @@
 import { calculate, convert } from './calc.js';
-import { defaults, region, currencyName, format, symbols, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates } from './data.js';
+import { defaults, region, currencyName, format, symbols, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates, migrateAssetId } from './data.js';
 import './style.css';
 
 const tg = window.Telegram?.WebApp;
@@ -28,11 +28,20 @@ function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value
 const root = document.getElementById('root');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',backspace:'<path d="M9 5h12v14H9l-7-7Z"/><path d="m11 9 6 6m0-6-6 6"/>'})[name]}</svg>`;
-let base = read('exchangel.base', 'USD');
-if (typeof base !== 'string') base = 'USD';
-let selected = read('exchangel.currencies', defaults);
-selected = Array.isArray(selected) ? [...new Set(selected.filter(c => typeof c === 'string'))] : [...defaults];
+const preferencesKey = 'exchangel.preferences.v2';
 let data = read('exchangel.rates', null), rates = mergeRates(data);
+const preferences = read(preferencesKey, null);
+let base = preferences?.base ?? read('exchangel.base', 'USD');
+if (typeof base !== 'string') base = 'USD';
+let selected = preferences?.selected ?? read('exchangel.currencies', defaults);
+selected = Array.isArray(selected) ? selected.filter(c => typeof c === 'string') : [...defaults];
+if (!preferences) {
+  base = migrateAssetId(base, data);
+  selected = selected.map(code => migrateAssetId(code, data));
+}
+selected = [...new Set(selected)];
+function savePreferences() { save(preferencesKey, { base, selected }); }
+savePreferences();
 let lastRefresh = 0;
 let loading = false, failed = false, cached = Boolean(data), expression = '1';
 let sheet = null, layer = null, panel = null, opener, previousOverflow, closing = false;
@@ -207,7 +216,7 @@ async function refresh() {
   catch { failed = true; cached = true; }
   finally { loading = false; lastRefresh = Date.now(); updateStatus(); }
 }
-function setBase(code) { base = code; expression = '1'; save('exchangel.base',base); renderRows(true); }
+function setBase(code) { base = code; expression = '1'; savePreferences(); renderRows(true); }
 function animate(element, frames, duration = 320) {
   return element.animate(frames, {duration:reduced.matches ? 0 : duration, easing:'cubic-bezier(.25,.8,.25,1)'});
 }
@@ -244,7 +253,7 @@ function renderSheet() {
   panel.className = `sheet ${sheet === 'calculator' ? 'calculator' : 'picker'}`;
   panel.innerHTML = `<div class="sheet-handle" aria-hidden="true"><span></span></div><div class="sheet-header"><h2 id="sheet-title">${sheet === 'calculator' ? text.converter : sheet === 'manage' ? text.manage : text.choose}</h2><button class="close" data-action="close" aria-label="${text.close}">${icon('close')}</button></div>`;
   if (sheet === 'calculator') {
-    panel.insertAdjacentHTML('beforeend', `<div class="input-card"><button class="input-currency" data-action="search" aria-label="${text.choose}">${currencyIcon(base)}<span class="currency-info"><strong>${escape(name(base))}</strong><span>${text.input}</span></span></button><div class="amount"><input aria-label="${ru ? 'Сумма' : 'Amount'}" inputmode="none"><span></span></div></div><div class="keypad">${['1','2','3','+','4','5','6','−','7','8','9','×','.','0','back','÷'].map(k => `<button class="key ${'+−×÷'.includes(k) ? 'operator' : ''}" data-key="${k}" aria-label="${k === 'back' ? (ru ? 'Удалить цифру' : 'Delete digit') : k}">${k === 'back' ? icon('backspace') : k}</button>`).join('')}</div><div class="calc-actions"><button data-key="clear">AC</button><button data-key="=">=</button><button data-action="close">${text.done} <span>↗</span></button></div>`);
+    panel.insertAdjacentHTML('beforeend', `<div class="input-card"><button class="input-currency" data-action="search" aria-label="${text.choose}">${currencyIcon(base)}<span class="currency-info"><strong>${escape(name(base))}</strong><span>${text.input}</span></span></button><div class="amount"><input aria-label="${ru ? 'Сумма' : 'Amount'}" inputmode="none"><span></span></div></div><div class="keypad">${['1','2','3','+','4','5','6','−','7','8','9','×','.','0','back','÷'].map(k => `<button class="key ${'+−×÷'.includes(k) ? 'operator' : ''}" data-key="${k}" aria-label="${k === 'back' ? (ru ? 'Удалить цифру' : 'Delete digit') : k}">${k === 'back' ? icon('backspace') : k}</button>`).join('')}</div><div class="calc-actions"><button data-key="clear">AC</button><button data-action="close">${text.done} <span>↗</span></button></div>`);
     updateValues();
   } else {
     panel.insertAdjacentHTML('beforeend', `<div class="search-field">${icon('search')}<input aria-label="${text.search}" placeholder="${text.search}"><button data-action="clear-search" aria-label="${ru ? 'Очистить поиск' : 'Clear search'}" hidden>${icon('close')}</button></div><div class="currency-filter" role="group" aria-label="${text.category}">${['all','fiat','crypto'].map(type => `<button data-category="${type}" aria-pressed="${category === type}">${text[type]}</button>`).join('')}</div>${sheet === 'manage' ? `<p class="manage-hint">${text.manageHint}</p>` : ''}<div class="picker-list"></div>${sheet === 'manage' ? `<button class="editor-done" data-action="close">${text.done}</button>` : ''}`);
@@ -316,7 +325,7 @@ root.addEventListener('click', event => {
       selected = selected.includes(code) ? selected.filter(c => c !== code) : [...selected,code];
       const order = new Map(editorCatalog.map((item, index) => [item.code, index]));
       selected.sort((a, b) => order.get(a) - order.get(b));
-      save('exchangel.currencies',selected); rebuildCatalog(); renderRows();
+      savePreferences(); rebuildCatalog(); renderRows();
       const checked = selected.includes(code);
       button.setAttribute('aria-pressed', String(checked));
       const check = button.querySelector('.check');

@@ -45,7 +45,9 @@ Fiat: https://www.exchangerate-api.com/docs/free.
 Crypto: OKX `/api/v5/market/index-tickers?quoteCcy=USD`; the list includes all available USD indices and active OKX spot currencies traded against USDT.
 USD indices are preferred; currencies without one are converted using the spot
 price and actual USDT/USD index. Fiat and crypto ticker collisions (RON, SCR)
-are stored as separate assets. Search and list editing support All / Currencies / Crypto filters.
+are stored as separate assets. Every crypto asset uses a stable `crypto:` ID,
+independent of source availability. Existing preferences migrate once using the
+saved rates snapshot. Search and list editing support All / Currencies / Crypto filters.
 
 In Telegram the frontend calls `Telegram.WebApp.Serverless.call('getRates', …)`;
 Telegram authenticates init data. Ordinary browsers fetch the same public data

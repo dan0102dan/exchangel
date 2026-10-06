@@ -1,7 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { fileURLToPath } from 'node:url';
+const telegramFixture = fileURLToPath(new URL('./fixtures/telegram.js', import.meta.url));
+async function mockRates(page, responses) {
+ let count = 0;
+ await page.route('**/__test/rates', route => route.fulfill({json:responses[Math.min(count++, responses.length - 1)]}));
+}
 const payload = {fiat:{rates:{USD:1,AED:3.6725,RUB:84.84,TRY:49.18,NGN:1322.04,KZT:455.28,BYN:3.2,EUR:.86,RON:4.5},updatedAt:Date.now()},crypto:{rates:{BTC:1/60000,ETH:1/3000,TON:1/3,PEPE:500000,RON:.5},updatedAt:Date.now()}};
 test.beforeEach(async ({page}) => {
-  await page.route('https://telegram.org/js/telegram-web-app.js', route => route.fulfill({contentType:'application/javascript',body:`window.Telegram={WebApp:{initData:'test',Serverless:{call:(name,input,cb)=>cb(null,${JSON.stringify(payload)})}}};`}));
+  await page.route('https://telegram.org/js/telegram-web-app.js', route => route.fulfill({contentType:'application/javascript',path:telegramFixture}));
+  await mockRates(page,[{result:payload}]);
 });
 test('conversion, keyboard, search, list customization and persistence', async ({page}) => {
   await page.goto('/');
@@ -37,7 +44,7 @@ test('mobile summary and narrow viewport fit',async({page})=>{
   await expect(page.getByRole('button',{name:'Done',exact:false})).toBeInViewport();
 });
 test('failure offers retry and does not fabricate rates', async ({page}) => {
-  await page.route('https://telegram.org/js/telegram-web-app.js', route => route.fulfill({contentType:'application/javascript',body:`window.Telegram={WebApp:{initData:'test',Serverless:{call:(n,i,cb)=>cb({message:'Unavailable'})}}};`}));
+  await mockRates(page,[{error:{message:'Unavailable'}}]);
   await page.goto('/');
   await expect(page.getByRole('alert')).toContainText('Could not refresh rates');
   await expect(page.locator('.currency-row').first()).toContainText('—');
@@ -137,33 +144,33 @@ test('switching base reuses rows and animates their movement, including rapid ta
 });
 test('Telegram partial response preserves cached BTC and TON',async({page})=>{
  await page.addInitScript(payload=>localStorage.setItem('exchangel.rates',JSON.stringify(payload)),payload);
- await page.route('https://telegram.org/js/telegram-web-app.js',route=>route.fulfill({contentType:'application/javascript',body:`window.Telegram={WebApp:{initData:'test',Serverless:{call:(n,i,cb)=>cb(null,${JSON.stringify({...payload,crypto:{rates:{},stale:true}})})}}};`}));
+ await mockRates(page,[{result:{...payload,crypto:{rates:{},stale:true}}}]);
  await page.goto('/');
- await expect(page.locator('.currency-row[data-code="BTC"]')).toContainText('0.00001667');
- await expect(page.locator('.currency-row[data-code="TON"]')).toContainText('0.33333333');
+ await expect(page.locator('.currency-row[data-code="crypto:BTC"]')).toContainText('0.00001667');
+ await expect(page.locator('.currency-row[data-code="crypto:TON"]')).toContainText('0.33333333');
  await expect(page.locator('.updated')).toContainText('Saved rates');
 });
 test('Telegram missing crypto is explicit and retry restores it',async({page})=>{
- await page.route('https://telegram.org/js/telegram-web-app.js',route=>route.fulfill({contentType:'application/javascript',body:`let count=0;window.Telegram={WebApp:{initData:'test',Serverless:{call:(n,i,cb)=>cb(null,count++ ? ${JSON.stringify(payload)} : ${JSON.stringify({...payload,crypto:{rates:{},stale:true}})})}}};`}));
+ await mockRates(page,[{result:{...payload,crypto:{rates:{},stale:true}}},{result:payload}]);
  await page.goto('/');
  await expect(page.getByRole('alert')).toContainText('Could not load crypto rates');
- await expect(page.locator('.currency-row[data-code="BTC"]')).toContainText('—');
+ await expect(page.locator('.currency-row[data-code="crypto:BTC"]')).toContainText('—');
  await page.getByRole('button',{name:'Retry'}).click();
  await expect(page.getByRole('alert')).toBeHidden();
- await expect(page.locator('.currency-row[data-code="BTC"]')).toContainText('0.00001667');
+ await expect(page.locator('.currency-row[data-code="crypto:BTC"]')).toContainText('0.00001667');
 });
 
 test('loaded flag and crypto images survive repeated moves between list and dock',async({page})=>{
  await page.goto('/');
- await expect(page.locator('.currency-row[data-code="BTC"] img')).toBeVisible();
- await page.waitForFunction(()=>['.base-button img','.currency-row[data-code="AED"] img','.currency-row[data-code="BTC"] img'].every(selector=>{const img=document.querySelector(selector);return img?.complete && img.naturalWidth>0;}));
+ await expect(page.locator('.currency-row[data-code="crypto:BTC"] img')).toBeVisible();
+ await page.waitForFunction(()=>['.base-button img','.currency-row[data-code="AED"] img','.currency-row[data-code="crypto:BTC"] img'].every(selector=>{const img=document.querySelector(selector);return img?.complete && img.naturalWidth>0;}));
  const result=await page.evaluate(()=>{
   const usd=document.querySelector('.base-button img');
   const aed=document.querySelector('.currency-row[data-code="AED"] img');
-  const btc=document.querySelector('.currency-row[data-code="BTC"] img');
+  const btc=document.querySelector('.currency-row[data-code="crypto:BTC"] img');
   document.querySelector('.currency-row[data-code="AED"]').click();
   const first=document.querySelector('.base-button img')===aed && document.querySelector('.currency-row[data-code="USD"] img')===usd;
-  document.querySelector('.currency-row[data-code="BTC"]').click();
+  document.querySelector('.currency-row[data-code="crypto:BTC"]').click();
   const second=document.querySelector('.base-button img')===btc && document.querySelector('.currency-row[data-code="AED"] img')===aed;
   document.querySelector('.currency-row[data-code="USD"]').click();
   return {first,second,back:document.querySelector('.base-button img')===usd,decoded:[usd,aed,btc].every(img=>img.complete && img.naturalWidth>0 && img.loading==='eager')};
@@ -193,7 +200,7 @@ test('editor keeps unchecked currencies in place so selection can be restored im
 test('editor keeps added currencies in place and preserves the current scroll position',async({page})=>{
  await page.goto('/');
  await page.getByRole('button',{name:'My currencies',exact:true}).click();
- const row=page.locator('.picker-row[data-code="PEPE"]');
+ const row=page.locator('.picker-row[data-code="crypto:PEPE"]');
  await row.scrollIntoViewIfNeeded();
  const before=await row.boundingBox();
  const scroll=await page.locator('.picker-list').evaluate(el=>el.scrollTop);
@@ -245,4 +252,42 @@ test('reduced motion changes amounts immediately without interpolation',async({p
  await page.locator('.base-button').click();
  await page.getByRole('textbox',{name:'Amount'}).fill('100');
  expect(await page.locator('.currency-row[data-code="AED"] .currency-value>span').textContent()).toBe('367.25');
+});
+
+test('Ronin base and saved Scroll survive fiat recovery and reload',async({page})=>{
+ const full={...payload,crypto:{...payload.crypto,rates:{...payload.crypto.rates,SCR:4}}};
+ await mockRates(page,[{result:{...full,fiat:{rates:{},stale:true}}},{result:full}]);
+ await page.goto('/');
+ await page.getByRole('button',{name:'Search currencies',exact:true}).click();
+ await page.getByRole('textbox',{name:'Search currencies'}).fill('RON');
+ await page.locator('.picker-row[data-code="crypto:RON"]').click();
+ await expect(page.locator('.base-button')).toContainText('Ronin');
+ await page.getByRole('button',{name:'My currencies',exact:true}).click();
+ await page.getByRole('textbox',{name:'Search currencies'}).fill('SCR');
+ await page.locator('.picker-row[data-code="crypto:SCR"]').click();
+ await page.getByRole('button',{name:'Done',exact:true}).click();
+ await page.getByRole('button',{name:'Refresh rates'}).click();
+ await expect(page.getByRole('alert')).toBeHidden();
+ await expect(page.locator('.base-button')).toContainText('Ronin');
+ await expect(page.locator('.currency-row[data-code="crypto:SCR"]')).toContainText('Scroll');
+ await expect(page.locator('.currency-row[data-code="crypto:SCR"] .currency-value>span')).toHaveText('8');
+ await page.reload();
+ await expect(page.locator('.base-button')).toContainText('Ronin');
+ const preferences=await page.evaluate(()=>JSON.parse(localStorage.getItem('exchangel.preferences.v2')));
+ expect(preferences.base).toBe('crypto:RON');
+ expect(preferences.selected).toContain('crypto:SCR');
+});
+
+test('existing crypto-only preferences migrate before a full refresh arrives',async({page})=>{
+ await page.addInitScript(()=>{
+  localStorage.setItem('exchangel.base','"RON"');
+  localStorage.setItem('exchangel.currencies',JSON.stringify(['RON','SCR','BTC']));
+  localStorage.setItem('exchangel.rates',JSON.stringify({crypto:{rates:{RON:.5,SCR:4,BTC:1/60000}}}));
+ });
+ await page.goto('/');
+ await expect(page.locator('.base-button')).toContainText('Ronin');
+ const preferences=await page.evaluate(()=>JSON.parse(localStorage.getItem('exchangel.preferences.v2')));
+ expect(preferences).toEqual({base:'crypto:RON',selected:['crypto:RON','crypto:SCR','crypto:BTC']});
+ await page.reload();
+ await expect(page.locator('.base-button')).toContainText('Ronin');
 });

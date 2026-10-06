@@ -20,10 +20,10 @@ test('all live USDT coins are included, USD indices preferred and USDT fallback 
 });
 test('fiat and crypto sharing a ticker remain separate',()=>{
  const data={fiat:{rates:{RON:4.5,SCR:14}},crypto:{rates:{RON:.5,SCR:4,PEPE:500000}}};
- assert.deepEqual(mergeRates(data),{RON:4.5,SCR:14,'crypto:RON':.5,'crypto:SCR':4,PEPE:500000});
+ assert.deepEqual(mergeRates(data),{RON:4.5,SCR:14,'crypto:RON':.5,'crypto:SCR':4,'crypto:PEPE':500000});
  assert.equal(isCryptoAsset('RON',data),false);
  assert.equal(isCryptoAsset('crypto:RON',data),true);
- assert.equal(isCryptoAsset('PEPE',data),true);
+ assert.equal(isCryptoAsset('crypto:PEPE',data),true);
  assert.equal(currencyName('crypto:RON','en-US',true),'Ronin');
  assert.equal(currencyName('RON','en-US',false),'Romanian Leu');
  assert.equal(currencyName('NEWCOIN','en-US',true),'NEWCOIN');
@@ -66,4 +66,27 @@ test('TON USD index is available even when TON has no live USDT spot pair', asyn
  const data=await loadCrypto(async url=>({ok:true,json:async()=>({code:'0',data:fixtures[url]})}));
  assert.equal(data.rates.TON,1/1.7);
  assert.equal(data.partial,undefined);
+});
+
+test('crypto IDs and classification do not change when fiat fails or recovers',()=>{
+ const crypto={rates:{RON:.5,SCR:4,BTC:1/60000}};
+ for(const fiat of [undefined,{rates:{}},{rates:{RON:4.5,SCR:14}}]) {
+  const data={crypto,fiat};
+  const merged=mergeRates(data);
+  assert.equal(merged['crypto:RON'],.5);
+  assert.equal(merged['crypto:SCR'],4);
+  assert.equal(merged['crypto:BTC'],1/60000);
+  assert.equal(isCryptoAsset('RON',data),false);
+  assert.equal(isCryptoAsset('crypto:RON',data),true);
+ }
+});
+test('legacy preferences migrate using their saved source snapshot',async()=>{
+ const {migrateAssetId}=await import('../src/data.js');
+ const onlyCrypto={crypto:{rates:{RON:.5,SCR:4}}};
+ assert.equal(migrateAssetId('RON',onlyCrypto),'crypto:RON');
+ assert.equal(migrateAssetId('SCR',onlyCrypto),'crypto:SCR');
+ assert.equal(migrateAssetId('RON',{...onlyCrypto,fiat:{rates:{RON:4.5}}}),'RON');
+ assert.equal(migrateAssetId('crypto:RON',null),'crypto:RON');
+ assert.equal(migrateAssetId('BTC',null),'crypto:BTC');
+ assert.equal(migrateAssetId('USD',null),'USD');
 });

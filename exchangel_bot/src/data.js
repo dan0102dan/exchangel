@@ -1,18 +1,21 @@
 import { cryptoNames, loadFiat, loadCrypto } from '../tgcloud/lib/providers.js';
 export { cryptoNames };
 const regions = { USD: 'us', AED: 'ae', RUB: 'ru', TRY: 'tr', NGN: 'ng', KZT: 'kz', BYN: 'by', EUR: 'eu', GBP: 'gb', CNY: 'cn', JPY: 'jp', CHF: 'ch', GEL: 'ge', THB: 'th', KRW: 'kr', VND: 'vn', INR: 'in', IDR: 'id', UAH: 'ua', XAF: 'cm', XOF: 'sn', XCD: 'ag', XCG: 'cw', XPF: 'pf', ANG: 'cw', CNH: 'cn', USDT: null };
-export const defaults = ['USD', 'AED', 'RUB', 'TRY', 'NGN', 'KZT', 'BYN', 'EUR', 'BTC', 'ETH', 'TON'];
+export const defaults = ['USD', 'AED', 'RUB', 'TRY', 'NGN', 'KZT', 'BYN', 'EUR', 'crypto:BTC', 'crypto:ETH', 'crypto:TON'];
 export const assetCode = id => id.startsWith('crypto:') ? id.slice(7) : id;
-export const isCrypto = code => code.startsWith('crypto:') || Boolean(cryptoNames[code]);
+export const isCrypto = code => code.startsWith('crypto:');
 export function mergeRates(data) {
   const fiat = data?.fiat?.rates || {};
   const crypto = data?.crypto?.rates || {};
   return { ...fiat, ...Object.fromEntries(Object.entries(crypto).map(([code, rate]) =>
-    [Object.hasOwn(fiat, code) ? `crypto:${code}` : code, rate])) };
+    [`crypto:${code}`, rate])) };
 }
-export function isCryptoAsset(code, data) {
-  return code.startsWith('crypto:') || (!Object.hasOwn(data?.fiat?.rates || {}, code) &&
-    (Object.hasOwn(data?.crypto?.rates || {}, code) || isCrypto(code)));
+export const isCryptoAsset = isCrypto;
+// Interpret old IDs using the snapshot with which they were saved, once only.
+export function migrateAssetId(id, snapshot) {
+  if (isCrypto(id) || Object.hasOwn(snapshot?.fiat?.rates || {}, id)) return id;
+  return Object.hasOwn(snapshot?.crypto?.rates || {}, id) || Object.hasOwn(cryptoNames, id)
+    ? `crypto:${id}` : id;
 }
 export const region = code => regions[code] || code.slice(0, 2).toLowerCase();
 const extraNames = { RON: 'Ronin', SCR: 'Scroll', SUI: 'Sui', SHIB: 'Shiba Inu', PEPE: 'Pepe', AAVE: 'Aave', UNI: 'Uniswap', OKB: 'OKB', ARB: 'Arbitrum', OP: 'Optimism', ATOM: 'Cosmos', NEAR: 'NEAR Protocol', XLM: 'Stellar', ALGO: 'Algorand', FIL: 'Filecoin', APT: 'Aptos', INJ: 'Injective' };
