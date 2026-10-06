@@ -1,74 +1,79 @@
-# Exchangel converter
+# Development guide
 
-One screen for fiat and crypto conversion, deployed at
-https://app6547657300.tgcloud.ai/ with Telegram Serverless CLI 0.2.
+Exchangel runs entirely on Telegram Serverless. The frontend uses plain JavaScript
+and CSS, built with Vite. Node.js 24 is used in CI.
 
-- Tap a currency to change the base; tap the bottom card to open the calculator.
-- Search selects a base currency. The Edit button opens your currency list directly.
-- The calculator supports decimals, +, −, ×, ÷ and normal operator precedence.
-- Language follows Telegram (Russian/English). Preferences are stored locally.
-- There are no price subscriptions or background notification jobs.
+## Local development
 
-The frontend uses plain JavaScript and CSS, with no UI runtime dependencies.
-Panel transitions use the browser animation API (transform and opacity only),
-respect reduced motion, and avoid backdrop blur. Amount edits update existing
-text nodes without rebuilding currency rows. Vite, Playwright and the Telegram
-CLI are development tools only.
-
-## Development and publishing
+Run these commands from `exchangel_bot/`:
 
 ```sh
-npm install
+npm ci
 npm run dev
+```
+
+The browser preview fetches public rates directly. Inside Telegram, the app calls
+`getRates` through `Telegram.WebApp.Serverless.call`.
+
+## Testing
+
+```sh
 npm test
+npx playwright install chromium
 npm run test:ui
 npm run build
+```
+
+## Deployment
+
+Link the project and initialize its database on first setup:
+
+```sh
 npx tgcloud login
 npx tgcloud migrate --local --safe
+```
+
+Publish the app:
+
+```sh
 npm run deploy
 ```
 
-Credentials live only in CLI-managed, Git-ignored `.tgcloud/`. Never copy them into
-source files. `npm run deploy` builds into `dist/`, then publishes the frontend and
-all `tgcloud/` modules. The /start button uses the same hosted Mini App URL.
+This builds `dist/` and publishes it with the modules in `tgcloud/`. Database schema
+changes require a separate migration. Preview them with
+`npx tgcloud migrate --local --dry-run`.
 
-## Rates
+Live app: https://app6547657300.tgcloud.ai/
 
-`tgcloud/endpoints/getRates.js` uses the SDK HTTP client and stores source snapshots
-in `converter_rate_cache`. Fiat results are cached for an hour (the provider updates
-daily); OKX results for a minute. Requests trigger refresh, with no cron needed.
-Each source retains its own timestamp and stale flag; a failed refresh can serve
-cached data, visibly marked in the UI. An unavailable rate displays a dash, never a
-fabricated conversion. Rates are indicative and do not include trading fees.
+## Project structure
 
-Fiat: https://www.exchangerate-api.com/docs/free.
-Crypto: OKX `/api/v5/market/index-tickers?quoteCcy=USD`; the list includes all available USD indices and active OKX spot currencies traded against USDT.
-USD indices are preferred; currencies without one are converted using the spot
-price and actual USDT/USD index. Fiat and crypto ticker collisions (RON, SCR)
-are stored as separate assets. Every crypto asset uses a stable `crypto:` ID,
-independent of source availability. Existing preferences migrate once using the
-saved rates snapshot. Search and list editing support All / Currencies / Crypto filters.
+| Path | Purpose |
+| --- | --- |
+| `src/` | Converter UI, calculator, virtual list, and icon cache |
+| `public/` | Flags and bundled cryptocurrency icons |
+| `tgcloud/endpoints/getRates.js` | Rates endpoint and SQLite cache |
+| `tgcloud/lib/providers.js` | ExchangeRate-API and OKX clients |
+| `tgcloud/handlers/` | Telegram bot handlers |
+| `tgcloud/schema.js` | Database schema |
+| `tests/` | Unit and browser tests |
 
-In Telegram the frontend calls `Telegram.WebApp.Serverless.call('getRates', …)`;
-Telegram authenticates init data. Ordinary browsers fetch the same public data
-sources directly for preview. No user data is sent to those providers.
+See the [Telegram Serverless SDK reference](docs/tgcloud-sdk.md) for backend APIs.
 
-The tests use fixed market fixtures to verify arithmetic, conversion, search,
-preferences, error states and mobile sizing. Runtime verification uses
-`npx tgcloud run endpoints/getRates '{}'` against real providers and the cloud DB.
+## Rates and assets
 
+Fiat rates use ExchangeRate-API and are cached server-side for one hour.
+Cryptocurrency rates use OKX USD indices, supplemented by active USDT spot pairs,
+and are cached for one minute. Spot prices use the actual USDT/USD index.
 
-Cryptocurrency icons come from the official OKX CDN. The original 16 icons are
-bundled locally; other coins load their OKX images lazily. Run `npm run icons:sync`
-to refresh the bundled icons.
+A failed refresh preserves available cached rates and marks them as stale.
+Unavailable rates display a dash. Rates do not include trading fees.
 
-Base-currency changes reuse rows and animate their positions with native transform
-animations. Partial source failures preserve cached rates; USD indices remain
-available even when the spot catalog request fails or a USDT pair is absent.
+Crypto assets always use `crypto:` IDs, such as `crypto:RON`, to distinguish them
+from fiat currencies with the same ticker. Currency preferences are stored locally.
 
-Search and editing use a fixed-height virtual list (54px rows, five-row overscan).
-Only viewport rows and a small buffer are mounted; keyboard navigation can reach
-the entire catalog. Icon requests skip queued rows outside the viewport and keep
-at most four fetch/decode operations active. Visible loading icons remain animated.
-Sheets temporarily disable Telegram vertical swipes (API 7.7+) and restore the
-previous setting on close; their larger handle supports pointer/touch dismissal.
+Icons use a shared memory cache and, where supported, a seven-day persistent cache.
+To update the bundled OKX icons:
+
+```sh
+npm run icons:sync
+```
