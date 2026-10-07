@@ -24,7 +24,6 @@ h1{font-size:27px;font-weight:650;letter-spacing:-.8px;line-height:1.15;margin:0
 .currency-info>span{font-size:11px;color:#85858c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.25}
 .currency-value{display:flex;align-items:baseline;gap:2px;font-size:16px;font-weight:550;letter-spacing:-.35px;white-space:nowrap;font-variant-numeric:tabular-nums;flex-shrink:0;max-width:52%;overflow:hidden;text-overflow:ellipsis}
 .currency-value small{font-size:13px;color:#b0b0b5;unicode-bidi:isolate}
-.currency-symbol-byn{display:inline-block;width:.75em;height:.75em;background:currentColor;-webkit-mask:url('./assets/byn-symbol.svg') center/contain no-repeat;mask:url('./assets/byn-symbol.svg') center/contain no-repeat}
 .hint{font-size:11px;line-height:1.5;color:#77777d;padding:0 4px;margin:12px 0 16px}
 .bottom-dock{position:fixed;z-index:3;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,480px);padding:16px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(transparent,#000 15%)}
 .dock-actions{display:flex;gap:8px}

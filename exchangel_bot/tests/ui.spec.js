@@ -460,18 +460,43 @@ test('BYN uses a bundled vector symbol in the list and calculator',async({page})
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.goto('/');
  const row=page.locator('.currency-row[data-code="BYN"]');
- const symbol=row.locator('.currency-value .currency-symbol-byn');
+ const symbol=row.locator('.currency-value svg');
  await expect(symbol).toBeVisible();
  await expect(symbol).toHaveAttribute('aria-hidden','true');
- expect(await symbol.evaluate(el=>getComputedStyle(el).webkitMaskImage)).toContain('byn-symbol');
+ expect(await symbol.evaluate(el=>el.namespaceURI)).toBe('http://www.w3.org/2000/svg');
+ expect(await symbol.evaluate(el=>getComputedStyle(el.querySelector('path')).fill===getComputedStyle(el.parentElement).color)).toBe(true);
+ expect(await symbol.evaluate(el=>el.getBoundingClientRect().height)).toBeLessThan(14);
+ await expect(symbol).not.toHaveAttribute('style');
+ await expect(symbol).not.toHaveAttribute('class');
  await expect(page.locator('.currency-row[data-code="EUR"] .currency-value small')).toHaveText('€');
  await row.click();
  await page.locator('.base-button').click();
  const preview=page.locator('.amount>span');
- await expect(preview.locator('.currency-symbol-byn')).toBeVisible();
+ await expect(preview.locator('svg')).toBeVisible();
+ await preview.locator('svg').evaluate(el=>{window.previousBynSymbol=el;});
  await page.getByRole('textbox',{name:'Amount',exact:true}).fill('1000+32.95');
  await expect(preview).toHaveText('1,032.95');
+ expect(await preview.locator('svg').evaluate(el=>el===window.previousBynSymbol)).toBe(true);
  await page.getByRole('textbox',{name:'Amount',exact:true}).fill('1/0');
  await expect(preview).toHaveText('Check the expression');
- await expect(preview.locator('.currency-symbol-byn')).toHaveCount(0);
+ await expect(preview.locator('svg')).toHaveCount(0);
+});
+
+
+test('BYN symbol is absent for missing rates and for a crypto ticker named BYN',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:320,height:568});
+ await page.addInitScript(()=>localStorage.setItem('exchangel.preferences.v2',JSON.stringify({base:'USD',selected:['USD','BYN','crypto:BYN','EUR']})));
+ await mockRates(page,[{error:{message:'Unavailable'}},{result:{...payload,crypto:{...payload.crypto,rates:{...payload.crypto.rates,BYN:.25}}}}]);
+ await page.goto('/');
+ const fiat=page.locator('.currency-row[data-code="BYN"]');
+ await expect(page.getByRole('alert')).toBeVisible();
+ await expect(fiat.locator('.currency-value>span')).toHaveText('—');
+ await expect(fiat.locator('svg')).toHaveCount(0);
+ await page.getByRole('button',{name:'Retry'}).click();
+ await expect(fiat.locator('svg')).toBeVisible();
+ await expect(page.locator('.currency-row[data-code="crypto:BYN"] .currency-value small')).toBeEmpty();
+ const row=await fiat.boundingBox(),symbol=await fiat.locator('svg').boundingBox();
+ expect(symbol.x+symbol.width).toBeLessThan(row.x+row.width);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

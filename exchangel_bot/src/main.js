@@ -1,6 +1,7 @@
 import { calculate, convert } from './calc.js';
 import { defaults, region, currencyName, format, symbols, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates, migrateAssetId } from './data.js';
 import './style.css';
+import bynSymbol from './assets/byn-symbol.svg?raw';
 import { createVirtualList } from './virtual-list.js';
 import { hydrateIcons, releaseIconObservers } from './icon-cache.js';
 
@@ -29,10 +30,8 @@ function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value
 
 const root = document.getElementById('root');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-// Use the locally bundled SVG as a CSS mask; currency amounts remain plain text.
-const bynSvg = document.createElement('span');
-bynSvg.className = 'currency-symbol-byn';
-bynSvg.setAttribute('aria-hidden', 'true');
+// Parse only the bundled vector asset; amounts and text symbols stay text nodes.
+const bynSvg = new DOMParser().parseFromString(bynSymbol, 'image/svg+xml').documentElement;
 const currencySymbol = code => symbols[assetCode(code)] || '';
 function renderCurrencySymbol(slot, code) {
   if (code === 'BYN') {
@@ -217,7 +216,10 @@ function updateValues() {
     if (input.value !== expression) input.value = expression;
     const preview = panel.querySelector('.amount>span');
     if (value === null) preview.textContent = text.invalid;
-    else if (base === 'BYN') preview.replaceChildren(bynSvg.cloneNode(true), number(value, base));
+    else if (base === 'BYN') {
+      if (!preview.firstElementChild) preview.replaceChildren(bynSvg.cloneNode(true), document.createTextNode(''));
+      preview.lastChild.textContent = number(value, base);
+    }
     else preview.textContent = currencySymbol(base) + number(value, base);
   }
 }
