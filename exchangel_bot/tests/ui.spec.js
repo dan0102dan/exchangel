@@ -455,3 +455,23 @@ for (const kind of ['picker', 'calculator']) test(`handle expands upward, collap
  await expect(dialog).toHaveCount(0);
  expect(await page.evaluate(()=>window.Telegram.WebApp.isVerticalSwipesEnabled)).toBe(true);
 });
+
+test('BYN uses a bundled vector symbol in the list and calculator',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.goto('/');
+ const row=page.locator('.currency-row[data-code="BYN"]');
+ const symbol=row.locator('.currency-value .currency-symbol-byn');
+ await expect(symbol).toBeVisible();
+ await expect(symbol).toHaveAttribute('aria-hidden','true');
+ expect(await symbol.evaluate(el=>getComputedStyle(el).webkitMaskImage)).toContain('byn-symbol');
+ await expect(page.locator('.currency-row[data-code="EUR"] .currency-value small')).toHaveText('€');
+ await row.click();
+ await page.locator('.base-button').click();
+ const preview=page.locator('.amount>span');
+ await expect(preview.locator('.currency-symbol-byn')).toBeVisible();
+ await page.getByRole('textbox',{name:'Amount',exact:true}).fill('1000+32.95');
+ await expect(preview).toHaveText('1,032.95');
+ await page.getByRole('textbox',{name:'Amount',exact:true}).fill('1/0');
+ await expect(preview).toHaveText('Check the expression');
+ await expect(preview.locator('.currency-symbol-byn')).toHaveCount(0);
+});
