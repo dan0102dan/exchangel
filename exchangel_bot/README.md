@@ -50,7 +50,8 @@ Live app: https://app6547657300.tgcloud.ai/
 | Path | Purpose |
 | --- | --- |
 | `src/` | Converter UI, calculator, virtual list, and icon cache |
-| `public/` | Flags and bundled cryptocurrency icons |
+| `src/assets/` | Interface SVGs, flags and bundled cryptocurrency icons |
+| `src/assets/currencies/` | SVG symbols for fiat currencies, sources and crypto text symbols |
 | `tgcloud/endpoints/getRates.js` | Rates endpoint and SQLite cache |
 | `tgcloud/lib/providers.js` | ExchangeRate-API and OKX clients |
 | `tgcloud/handlers/` | Telegram bot handlers |

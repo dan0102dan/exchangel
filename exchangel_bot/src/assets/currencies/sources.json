@@ -1,0 +1,744 @@
+{
+  "USD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "AFN": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-afghani"
+  },
+  "ALL": {
+    "source": "Noto glyph outlines",
+    "symbol": "Lekë",
+    "font": "NotoSans-Regular"
+  },
+  "AMD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dram"
+  },
+  "ANG": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-florin"
+  },
+  "AOA": {
+    "source": "Noto glyph outlines",
+    "symbol": "Kz",
+    "font": "NotoSans-Regular"
+  },
+  "ARS": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "AUD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "AWG": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-florin"
+  },
+  "AZN": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-manat"
+  },
+  "BAM": {
+    "source": "Noto glyph outlines",
+    "symbol": "KM",
+    "font": "NotoSans-Regular"
+  },
+  "BBD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "BDT": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-taka"
+  },
+  "BGN": {
+    "source": "Noto glyph outlines",
+    "symbol": "лв.",
+    "font": "NotoSans-Regular"
+  },
+  "BHD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-bahraini"
+  },
+  "BIF": {
+    "source": "Noto glyph outlines",
+    "symbol": "FBu",
+    "font": "NotoSans-Regular"
+  },
+  "BMD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "BND": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "BOB": {
+    "source": "Noto glyph outlines",
+    "symbol": "Bs",
+    "font": "NotoSans-Regular"
+  },
+  "BRL": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-real"
+  },
+  "BSD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "BTN": {
+    "source": "Noto glyph outlines",
+    "symbol": "Nu.",
+    "font": "NotoSans-Regular"
+  },
+  "BWP": {
+    "source": "Noto glyph outlines",
+    "symbol": "P",
+    "font": "NotoSans-Regular"
+  },
+  "BZD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "CAD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "CDF": {
+    "source": "Noto glyph outlines",
+    "symbol": "FC",
+    "font": "NotoSans-Regular"
+  },
+  "CHF": {
+    "source": "Noto glyph outlines",
+    "symbol": "Fr",
+    "font": "NotoSans-Regular"
+  },
+  "CLF": {
+    "source": "Noto glyph outlines",
+    "symbol": "UF",
+    "font": "NotoSans-Regular"
+  },
+  "CLP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "CNH": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-yen"
+  },
+  "CNY": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-yen"
+  },
+  "COP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "CRC": {
+    "source": "Noto glyph outlines",
+    "symbol": "₡",
+    "font": "NotoSans-Regular"
+  },
+  "CUP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "CVE": {
+    "source": "Noto glyph outlines",
+    "symbol": "Esc",
+    "font": "NotoSans-Regular"
+  },
+  "CZK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-czech"
+  },
+  "DJF": {
+    "source": "Noto glyph outlines",
+    "symbol": "Fdj",
+    "font": "NotoSans-Regular"
+  },
+  "DKK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-danish"
+  },
+  "DOP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "DZD": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.ج.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "EGP": {
+    "source": "Noto glyph outlines",
+    "symbol": "E£",
+    "font": "NotoSans-Regular"
+  },
+  "ERN": {
+    "source": "Noto glyph outlines",
+    "symbol": "Nkf",
+    "font": "NotoSans-Regular"
+  },
+  "ETB": {
+    "source": "Noto glyph outlines",
+    "symbol": "ብር",
+    "font": "NotoSansEthiopic-Regular"
+  },
+  "EUR": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-euro"
+  },
+  "FJD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "FKP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "FOK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-swedish"
+  },
+  "GBP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "GEL": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-lari"
+  },
+  "GGP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "GHS": {
+    "source": "Noto glyph outlines",
+    "symbol": "GH₵",
+    "font": "NotoSans-Regular"
+  },
+  "GIP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "GMD": {
+    "source": "Noto glyph outlines",
+    "symbol": "D",
+    "font": "NotoSans-Regular"
+  },
+  "GNF": {
+    "source": "Noto glyph outlines",
+    "symbol": "FG",
+    "font": "NotoSans-Regular"
+  },
+  "GTQ": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-quetzal"
+  },
+  "GYD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "HKD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "HNL": {
+    "source": "Noto glyph outlines",
+    "symbol": "L",
+    "font": "NotoSans-Regular"
+  },
+  "HRK": {
+    "source": "Noto glyph outlines",
+    "symbol": "kn",
+    "font": "NotoSans-Regular"
+  },
+  "HTG": {
+    "source": "Noto glyph outlines",
+    "symbol": "G",
+    "font": "NotoSans-Regular"
+  },
+  "HUF": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-forint"
+  },
+  "IDR": {
+    "source": "Noto glyph outlines",
+    "symbol": "Rp",
+    "font": "NotoSans-Regular"
+  },
+  "ILS": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-shekel"
+  },
+  "IMP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "INR": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-rupee"
+  },
+  "IQD": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.ع.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "IRR": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-iranian-rial"
+  },
+  "ISK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-swedish"
+  },
+  "JEP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "JMD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "JOD": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.أ.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "JPY": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-yen"
+  },
+  "KES": {
+    "source": "Noto glyph outlines",
+    "symbol": "Ksh",
+    "font": "NotoSans-Regular"
+  },
+  "KHR": {
+    "source": "Noto glyph outlines",
+    "symbol": "៛",
+    "font": "NotoSansKhmer-Regular"
+  },
+  "KID": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "KMF": {
+    "source": "Noto glyph outlines",
+    "symbol": "CF",
+    "font": "NotoSans-Regular"
+  },
+  "KRW": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-won"
+  },
+  "KWD": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.ك.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "KYD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "KZT": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-tenge"
+  },
+  "LAK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-kip"
+  },
+  "LBP": {
+    "source": "Noto glyph outlines",
+    "symbol": "L£",
+    "font": "NotoSans-Regular"
+  },
+  "LKR": {
+    "source": "Noto glyph outlines",
+    "symbol": "Rs",
+    "font": "NotoSans-Regular"
+  },
+  "LRD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "LSL": {
+    "source": "Noto glyph outlines",
+    "symbol": "L",
+    "font": "NotoSans-Regular"
+  },
+  "LYD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-lyd"
+  },
+  "MAD": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.م.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "MDL": {
+    "source": "Noto glyph outlines",
+    "symbol": "L",
+    "font": "NotoSans-Regular"
+  },
+  "MGA": {
+    "source": "Noto glyph outlines",
+    "symbol": "Ar",
+    "font": "NotoSans-Regular"
+  },
+  "MKD": {
+    "source": "Noto glyph outlines",
+    "symbol": "ден.",
+    "font": "NotoSans-Regular"
+  },
+  "MMK": {
+    "source": "Noto glyph outlines",
+    "symbol": "K",
+    "font": "NotoSans-Regular"
+  },
+  "MNT": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-tugrik"
+  },
+  "MOP": {
+    "source": "Noto glyph outlines",
+    "symbol": "MOP$",
+    "font": "NotoSans-Regular"
+  },
+  "MRU": {
+    "source": "Noto glyph outlines",
+    "symbol": "أ.م.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "MUR": {
+    "source": "Noto glyph outlines",
+    "symbol": "Rs",
+    "font": "NotoSans-Regular"
+  },
+  "MVR": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-rufiyaa"
+  },
+  "MWK": {
+    "source": "Noto glyph outlines",
+    "symbol": "K",
+    "font": "NotoSans-Regular"
+  },
+  "MXN": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "MYR": {
+    "source": "Noto glyph outlines",
+    "symbol": "RM",
+    "font": "NotoSans-Regular"
+  },
+  "MZN": {
+    "source": "Noto glyph outlines",
+    "symbol": "MT",
+    "font": "NotoSans-Regular"
+  },
+  "NAD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "NGN": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-naira"
+  },
+  "NIO": {
+    "source": "Noto glyph outlines",
+    "symbol": "C$",
+    "font": "NotoSans-Regular"
+  },
+  "NOK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-swedish"
+  },
+  "NPR": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-rupee-nepalese"
+  },
+  "NZD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "OMR": {
+    "source": "Noto glyph outlines",
+    "symbol": "ر.ع.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "PAB": {
+    "source": "Noto glyph outlines",
+    "symbol": "B/.",
+    "font": "NotoSans-Regular"
+  },
+  "PEN": {
+    "source": "Noto glyph outlines",
+    "symbol": "S/",
+    "font": "NotoSans-Regular"
+  },
+  "PGK": {
+    "source": "Noto glyph outlines",
+    "symbol": "K",
+    "font": "NotoSans-Regular"
+  },
+  "PHP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-peso"
+  },
+  "PKR": {
+    "source": "Noto glyph outlines",
+    "symbol": "Rs",
+    "font": "NotoSans-Regular"
+  },
+  "PLN": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-zloty"
+  },
+  "PYG": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-guarani"
+  },
+  "QAR": {
+    "source": "Noto glyph outlines",
+    "symbol": "ر.ق.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "RON": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-leu"
+  },
+  "RSD": {
+    "source": "Noto glyph outlines",
+    "symbol": "дин",
+    "font": "NotoSans-Regular"
+  },
+  "RUB": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-ruble"
+  },
+  "RWF": {
+    "source": "Noto glyph outlines",
+    "symbol": "RF",
+    "font": "NotoSans-Regular"
+  },
+  "SBD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "SCR": {
+    "source": "Noto glyph outlines",
+    "symbol": "₨",
+    "font": "NotoSans-Regular"
+  },
+  "SDG": {
+    "source": "Noto glyph outlines",
+    "symbol": "ج.س.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "SEK": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-krone-swedish"
+  },
+  "SGD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "SHP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "SLE": {
+    "source": "Noto glyph outlines",
+    "symbol": "Le",
+    "font": "NotoSans-Regular"
+  },
+  "SLL": {
+    "source": "Noto glyph outlines",
+    "symbol": "Le",
+    "font": "NotoSans-Regular"
+  },
+  "SOS": {
+    "source": "Noto glyph outlines",
+    "symbol": "S",
+    "font": "NotoSans-Regular"
+  },
+  "SRD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "SSP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "STN": {
+    "source": "Noto glyph outlines",
+    "symbol": "Db",
+    "font": "NotoSans-Regular"
+  },
+  "SYP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-pound"
+  },
+  "SZL": {
+    "source": "Noto glyph outlines",
+    "symbol": "L",
+    "font": "NotoSans-Regular"
+  },
+  "THB": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-baht"
+  },
+  "TJS": {
+    "source": "Noto glyph outlines",
+    "symbol": "сом.",
+    "font": "NotoSans-Regular"
+  },
+  "TMT": {
+    "source": "Noto glyph outlines",
+    "symbol": "m",
+    "font": "NotoSans-Regular"
+  },
+  "TND": {
+    "source": "Noto glyph outlines",
+    "symbol": "د.ت.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "TOP": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-paanga"
+  },
+  "TRY": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-lira"
+  },
+  "TTD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "TVD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "TWD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "TZS": {
+    "source": "Noto glyph outlines",
+    "symbol": "TSh",
+    "font": "NotoSans-Regular"
+  },
+  "UAH": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-hryvnia"
+  },
+  "UGX": {
+    "source": "Noto glyph outlines",
+    "symbol": "USh",
+    "font": "NotoSans-Regular"
+  },
+  "UYU": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "UZS": {
+    "source": "Noto glyph outlines",
+    "symbol": "soʻm",
+    "font": "NotoSans-Regular"
+  },
+  "VES": {
+    "source": "Noto glyph outlines",
+    "symbol": "Bs.S",
+    "font": "NotoSans-Regular"
+  },
+  "VND": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dong"
+  },
+  "VUV": {
+    "source": "Noto glyph outlines",
+    "symbol": "VT",
+    "font": "NotoSans-Regular"
+  },
+  "WST": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "XAF": {
+    "source": "Noto glyph outlines",
+    "symbol": "FCFA",
+    "font": "NotoSans-Regular"
+  },
+  "XCD": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar"
+  },
+  "XCG": {
+    "source": "Noto glyph outlines",
+    "symbol": "Cg.",
+    "font": "NotoSans-Regular"
+  },
+  "XDR": {
+    "source": "Noto glyph outlines",
+    "symbol": "SDR",
+    "font": "NotoSans-Regular"
+  },
+  "XOF": {
+    "source": "Noto glyph outlines",
+    "symbol": "F CFA",
+    "font": "NotoSans-Regular"
+  },
+  "XPF": {
+    "source": "Noto glyph outlines",
+    "symbol": "CFPF",
+    "font": "NotoSans-Regular"
+  },
+  "YER": {
+    "source": "Noto glyph outlines",
+    "symbol": "ر.ي.",
+    "font": "NotoSansArabic-Regular"
+  },
+  "ZAR": {
+    "source": "Noto glyph outlines",
+    "symbol": "R",
+    "font": "NotoSans-Regular"
+  },
+  "ZMW": {
+    "source": "Noto glyph outlines",
+    "symbol": "ZK",
+    "font": "NotoSans-Regular"
+  },
+  "ZWG": {
+    "source": "Noto glyph outlines",
+    "symbol": "ZiG",
+    "font": "NotoSans-Regular"
+  },
+  "ZWL": {
+    "source": "Tabler Icons 3.49.0",
+    "icon": "currency-dollar-zimbabwean"
+  },
+  "AED": {
+    "source": "dirham 1.5.3 (MIT)",
+    "reference": "https://centralbank.ae/en/our-operations/currency-and-coins/"
+  },
+  "SAR": {
+    "source": "SAMA glyph (public domain)",
+    "mirror": "https://github.com/pooyagolchian/riyal/blob/main/riyal.svg",
+    "reference": "https://www.sama.gov.sa/ar-sa/Currency/Documents/Saudi_Riyal_Symbol-2.svg"
+  },
+  "KGS": {
+    "source": "NotoSans outline of Cyrillic С with underline",
+    "reference": "https://www.nbkr.kg/printver.jsp?item=143&lang=RUS"
+  },
+  "BYN": {
+    "source": "Existing bundled Belarusian ruble vector"
+  }
+}

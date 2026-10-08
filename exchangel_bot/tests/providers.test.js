@@ -1,7 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCrypto, CRYPTO_URL, INSTRUMENTS_URL, TICKERS_URL } from '../tgcloud/lib/providers.js';
-import { mergeRates, isCryptoAsset, currencyName } from '../src/data.js';
+import { mergeRates, isCryptoAsset, currencyName, currencySymbol } from '../src/data.js';
+
+test('currency symbols cover additional fiat and keep crypto tickers separate',()=>{
+ for (const [code,symbol] of Object.entries({INR:'₹',UAH:'₴',KRW:'₩',GEL:'₾',RON:'lei',CHF:'CHF',XDR:'XDR'})) {
+  assert.equal(currencySymbol(code),symbol);
+ }
+ assert.equal(currencySymbol('crypto:BTC'),'₿');
+ assert.equal(currencySymbol('crypto:RON'),'');
+ assert.equal(currencySymbol('crypto:BYN'),'');
+ assert.equal(currencySymbol('NEW'),'NEW');
+});
 
 test('all live USDT coins are included, USD indices preferred and USDT fallback calibrated',async()=>{
  const instrument=(code,state='live')=>({baseCcy:code,quoteCcy:'USDT',instType:'SPOT',instId:code+'-USDT',state});
