@@ -53,7 +53,7 @@ test('failure offers retry and does not fabricate rates', async ({page}) => {
 test('calculator evaluates operations and blocks division by zero', async ({page}) => {
   await page.goto('/');await page.locator('.base-button').click();
   await page.getByRole('textbox',{name:'Amount'}).fill('2+3*4');
-  await expect(page.locator('.amount span')).toHaveText('$14');
+  await expect(page.locator('.amount span')).toHaveText('14');
   await page.getByRole('textbox',{name:'Amount'}).fill('1/0');
   await expect(page.locator('.amount span')).toHaveText('Check the expression');
   await expect(page.locator('.currency-row').first()).toContainText('—');
@@ -295,7 +295,7 @@ test('existing crypto-only preferences migrate before a full refresh arrives',as
 
 test('icons share one fetch across calculator, search, editor and page reload',async({page})=>{
  let requests=0;
- await page.route('**/flags/us.svg',route=>{
+ await page.route(/\/flags\/us\.svg(?:\?no-inline)?$/,route=>{
   requests++;
   return route.fulfill({contentType:'image/svg+xml',headers:{'cache-control':'no-store'},body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
  });
@@ -328,7 +328,7 @@ test('icons still load when the WebView denies persistent cache access',async({p
 
 test('pending icons shimmer, reveal on load and skip waiting animation when cached',async({page})=>{
  let release;
- await page.route('**/flags/us.svg',async route=>{
+ await page.route(/\/flags\/us\.svg(?:\?no-inline)?$/,async route=>{
   await new Promise(resolve=>{release=resolve;});
   await route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
  });
@@ -348,7 +348,7 @@ test('pending icons shimmer, reveal on load and skip waiting animation when cach
 });
 
 test('failed icons stop their loading animation',async({page})=>{
- await page.route('**/flags/us.svg',route=>route.fulfill({status:404,body:''}));
+ await page.route(/\/flags\/us\.svg(?:\?no-inline)?$/,route=>route.fulfill({status:404,body:''}));
  await page.goto('/');
  await expect(page.locator('.base-button .icon-unavailable')).toBeVisible();
  await expect(page.locator('.base-button .currency-icon')).not.toHaveClass(/icon-loading/);
@@ -362,6 +362,7 @@ test('virtual scrolling keeps DOM bounded and shimmer active without row-height 
  const gate=new Promise(resolve=>{release=resolve;});
  let active=0,peak=0;
  await page.route(/\/(?:flags\/.*\.svg|crypto\/.*\.png|currency\/icon\/.*\.png)/,async route=>{
+  if (route.request().resourceType() === 'script') return route.continue();
   active++;peak=Math.max(peak,active);
   await gate;
   await route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="24"><rect width="32" height="24" fill="red"/></svg>'});
@@ -468,7 +469,7 @@ test('BYN uses a bundled vector symbol in the list and calculator',async({page})
  expect(await symbol.evaluate(el=>el.getBoundingClientRect().height)).toBeLessThan(14);
  await expect(symbol).not.toHaveAttribute('style');
  await expect(symbol).not.toHaveAttribute('class');
- await expect(page.locator('.currency-row[data-code="EUR"] .currency-value small')).toHaveText('€');
+ await expect(page.locator('.currency-row[data-code="EUR"] .currency-value small svg')).toBeVisible();
  await row.click();
  await page.locator('.base-button').click();
  const preview=page.locator('.amount>span');
@@ -499,4 +500,23 @@ test('BYN symbol is absent for missing rates and for a crypto ticker named BYN',
  const row=await fiat.boundingBox(),symbol=await fiat.locator('svg').boundingBox();
  expect(symbol.x+symbol.width).toBeLessThan(row.x+row.width);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+test('additional fiat symbols appear in rows and calculator on a narrow screen',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:320,height:568});
+ await page.addInitScript(()=>localStorage.setItem('exchangel.preferences.v2',JSON.stringify({base:'USD',selected:['USD','INR','UAH','CHF','BHD','RON','crypto:RON']})));
+ await mockRates(page,[{result:{...payload,fiat:{...payload.fiat,rates:{...payload.fiat.rates,INR:96,UAH:44,CHF:.83,BHD:.376}}}}]);
+ await page.goto('/');
+ for (const code of ['INR','UAH','CHF','BHD','RON']) {
+  const symbol = page.locator(`.currency-row[data-code="${code}"] .currency-value small svg`);
+  await expect(symbol).toBeVisible();
+  await expect(symbol).toHaveAttribute('data-currency',code);
+ }
+ await expect(page.locator('.currency-row[data-code="crypto:RON"] .currency-value small')).toBeEmpty();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.locator('.currency-row[data-code="INR"]').click();
+ await page.locator('.base-button').click();
+ await expect(page.locator('.amount>span')).toHaveText('1');
+ await expect(page.locator('.amount>span svg')).toHaveAttribute('data-currency','INR');
 });

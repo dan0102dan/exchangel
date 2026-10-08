@@ -1,7 +1,6 @@
 import { calculate, convert } from './calc.js';
-import { defaults, region, currencyName, format, symbols, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates, migrateAssetId } from './data.js';
+import { defaults, region, currencyName, format, currencySymbol, isCryptoAsset, assetCode, mergeRates, cryptoNames, getRates, retainRates, migrateAssetId } from './data.js';
 import './style.css';
-import bynSymbol from './assets/byn-symbol.svg?raw';
 import { createVirtualList } from './virtual-list.js';
 import { hydrateIcons, releaseIconObservers } from './icon-cache.js';
 
@@ -30,18 +29,25 @@ function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value
 
 const root = document.getElementById('root');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-// Parse only the bundled vector asset; amounts and text symbols stay text nodes.
-const bynSvg = new DOMParser().parseFromString(bynSymbol, 'image/svg+xml').documentElement;
-const currencySymbol = code => symbols[assetCode(code)] || '';
+const currencySymbolIcons = import.meta.glob('./assets/currencies/*.svg', { eager: true, query: '?raw', import: 'default' });
+const currencySymbolIcon = code => currencySymbolIcons[`./assets/currencies/${code}.svg`];
 function renderCurrencySymbol(slot, code) {
-  if (code === 'BYN') {
-    if (!slot.firstElementChild) slot.replaceChildren(bynSvg.cloneNode(true));
+  const svg = currencySymbolIcon(code);
+  if (svg) {
+    if (slot.firstElementChild?.dataset.currency !== code) {
+      slot.innerHTML = svg;
+      slot.firstElementChild.dataset.currency = code;
+    }
   } else {
     const symbol = currencySymbol(code);
     if (slot.textContent !== symbol || slot.childElementCount) slot.textContent = symbol;
   }
 }
-const icon = name => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="m5 12 4 4 10-10"/>',backspace:'<path d="M9 5h12v14H9l-7-7Z"/><path d="m11 9 6 6m0-6-6 6"/>'})[name]}</svg>`;
+const icons = import.meta.glob('./assets/*.svg', { eager: true, query: '?raw', import: 'default' });
+const icon = name => icons[`./assets/${name}.svg`];
+const currencyIcons = import.meta.glob(['./assets/flags/*.svg', './assets/crypto/*.png'], {
+  eager: true, query: '?url&no-inline', import: 'default',
+});
 const preferencesKey = 'exchangel.preferences.v2';
 let data = read('exchangel.rates', null), rates = mergeRates(data);
 const preferences = read(preferencesKey, null);
@@ -68,7 +74,7 @@ const name = code => currencyName(code, locale, crypto(code));
 const number = (value, code) => format(value, code, locale, crypto(code));
 function currencyIcon(id, lazy = false) {
   const code = assetCode(id), isCrypto = crypto(id);
-  const src = isCrypto ? (cryptoNames[code] ? `/crypto/${code}.png` : `https://static.okx.com/cdn/oksupport/asset/currency/icon/${encodeURIComponent(code.toLowerCase())}.png`) : `/flags/${region(code)}.svg`;
+  const src = isCrypto ? (cryptoNames[code] ? currencyIcons[`./assets/crypto/${code}.png`] : `https://static.okx.com/cdn/oksupport/asset/currency/icon/${encodeURIComponent(code.toLowerCase())}.png`) : currencyIcons[`./assets/flags/${region(code)}.svg`];
   return `<span class="currency-icon ${isCrypto ? 'crypto' : ''}"><img loading="${lazy ? 'lazy' : 'eager'}" decoding="${lazy ? 'async' : 'sync'}" width="32" height="32" data-icon-src="${escape(src)}" alt=""></span>`;
 }
 // Keep the already decoded image when a currency moves between a row and dock.
@@ -216,8 +222,11 @@ function updateValues() {
     if (input.value !== expression) input.value = expression;
     const preview = panel.querySelector('.amount>span');
     if (value === null) preview.textContent = text.invalid;
-    else if (base === 'BYN') {
-      if (!preview.firstElementChild) preview.replaceChildren(bynSvg.cloneNode(true), document.createTextNode(''));
+    else if (currencySymbolIcon(base)) {
+      if (preview.firstElementChild?.dataset.currency !== base) {
+        renderCurrencySymbol(preview, base);
+        preview.append(document.createTextNode(''));
+      }
       preview.lastChild.textContent = number(value, base);
     }
     else preview.textContent = currencySymbol(base) + number(value, base);

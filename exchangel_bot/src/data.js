@@ -1,4 +1,5 @@
 import { cryptoNames, loadFiat, loadCrypto } from '../tgcloud/lib/providers.js';
+import { fiatSymbols, cryptoSymbols } from './assets/currencies/symbols.js';
 export { cryptoNames };
 const regions = { USD: 'us', AED: 'ae', RUB: 'ru', TRY: 'tr', NGN: 'ng', KZT: 'kz', BYN: 'by', EUR: 'eu', GBP: 'gb', CNY: 'cn', JPY: 'jp', CHF: 'ch', GEL: 'ge', THB: 'th', KRW: 'kr', VND: 'vn', INR: 'in', IDR: 'id', UAH: 'ua', XAF: 'cm', XOF: 'sn', XCD: 'ag', XCG: 'cw', XPF: 'pf', ANG: 'cw', CNH: 'cn', USDT: null };
 export const defaults = ['USD', 'AED', 'RUB', 'TRY', 'NGN', 'KZT', 'BYN', 'EUR', 'crypto:BTC', 'crypto:ETH', 'crypto:TON'];
@@ -36,7 +37,10 @@ export function format(value, code, locale, crypto = isCrypto(code)) {
   if (!numberFormats.has(key)) numberFormats.set(key, new Intl.NumberFormat(locale, { maximumFractionDigits: digits }));
   return numberFormats.get(key).format(value);
 }
-export const symbols = { USD: '$', EUR: '€', GBP: '£', RUB: '₽', TRY: '₺', NGN: '₦', KZT: '₸', CNY: '¥', JPY: '¥', AED: 'د.إ', BTC: '₿', ETH: 'Ξ', TON: 'TON', USDT: '₮' };
+export function currencySymbol(id) {
+  const code = assetCode(id);
+  return isCrypto(id) ? cryptoSymbols[code] || '' : fiatSymbols[code] || code;
+}
 export async function getRates() {
   const tg = window.Telegram?.WebApp;
   if (tg?.initData) {

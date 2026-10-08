@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { cryptoNames } from '../tgcloud/lib/providers.js';
 
 // Official OKX public currency icons; no private asset API key is needed.
-const directory = new URL('../public/crypto/', import.meta.url);
+const directory = new URL('../src/assets/crypto/', import.meta.url);
 await mkdir(directory, { recursive: true });
 for (const code of Object.keys(cryptoNames)) {
   const url = `https://static.okx.com/cdn/oksupport/asset/currency/icon/${code.toLowerCase()}.png`;
